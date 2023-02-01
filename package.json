@@ -1,0 +1,30 @@
+{
+    "name": "thunder-server-lab",
+    "version": "1.0.0",
+    "private": true,
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "dev": "nodemon",
+        "build": "tsc && node dist"
+    },
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "@types/express": "^4.17.15",
+        "@types/mongoose": "^5.11.97",
+        "@types/node": "^18.11.18",
+        "nodemon": "^2.0.20",
+        "ts-node": "^10.7.0",
+        "typescript": "^4.6.3"
+    },
+    "dependencies": {
+        "dotenv": "^16.0.3",
+        "express": "^4.18.2",
+        "express-validator": "^6.14.0",
+        "moment": "^2.29.4",
+        "moment-timezone": "^0.5.40",
+        "mongoose": "^6.3.1",
+        "mongoose-auto-increment": "^5.0.1"
+    }
+}
