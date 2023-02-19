@@ -1,4 +1,4 @@
-import express, { Request, Response, NextFunction } from 'express';
+import express, { Request, Response } from 'express';
 const app = express();
 import connectDB from './loaders/db';
 import routes from './routes';
@@ -10,7 +10,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.use(routes); //라우터
-app.use(function (req: Request, res: Response, next: NextFunction) {
+app.use(function (req: Request, res: Response) {
   res.status(404);
   res.render('error');
 });
@@ -20,12 +20,7 @@ interface ErrorType {
   status: number;
 }
 
-app.use(function (
-  err: ErrorType,
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) {
+app.use(function (err: ErrorType, req: Request, res: Response) {
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'production' ? err : {};
 

@@ -1,6 +1,6 @@
 export interface UserInfo {
-    name:string;
-    introduction:string;
-    temperature:number;
-    hashtags: string[];
+  name: string;
+  introduction: string;
+  mannerTemperature: number;
+  hashtags: string[];
 }

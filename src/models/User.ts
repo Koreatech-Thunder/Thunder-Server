@@ -10,7 +10,7 @@ const UserSchema = new mongoose.Schema({
     type: String,
     default: '',
   },
-  temperature: {
+  mannerTemperature: {
     type: Number,
     default: 36.5,
   },
