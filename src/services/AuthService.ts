@@ -2,11 +2,10 @@ import axios from 'axios';
 import jwt from 'jsonwebtoken';
 import UserService from './UserService';
 import firebase from 'firebase-admin';
-import message from '../modules/responseMessage';
 
 
 
-const login = async (kakaoToken: any) => {
+const login = async (kakaoToken: any, fcmToken: any) => {
     const result = await axios.get("https://kapi.kakao.com/v2/user/me", {
         headers: {
             Authorization: `Bearer ${kakaoToken}`,
@@ -15,13 +14,7 @@ const login = async (kakaoToken: any) => {
 
     const {data} = result;
     const kakaoId = data.id;
-    const firebaseKey = require('./koreatechthunder-80a11-firebase-adminsdk-we3dy-ba336957d9.json');
-
-    firebase.initializeApp({
-        credential: firebase.credential.cert(firebaseKey),
-    });
-
-    const fcmToken = '여기에 fcm 토큰 입력';
+    
     const fcmMessage = {
         notification: {
             title: 'test data',
@@ -54,7 +47,7 @@ const login = async (kakaoToken: any) => {
                 return new Error('No User Found');
             }
 
-
+            
             const token = jwt.sign({kakao_Id: user.kakaoId, fcm_token: fcmToken}, process.env.JWT_SECRET as string, {});
 
             return token;
@@ -86,7 +79,40 @@ const verifyToken = async (req: any, res: any, next: any) => {
     }
 }
 
+const refresh = async (refreshToken: any) => {
+
+    const result = await axios.post("https://kauth.kakao.com/oauth/token", {
+        headers: {
+            "client_id" : process.env.REST_API_KEY,
+            "refresh_token" : refreshToken
+        },
+    });    
+
+    try {
+        return result;
+    } catch (error) {
+        throw(error);
+    }
+
+}
+
+const logout = async (accessToken: any) => {
+    const result = await axios.post( "https://kapi.kakao.com/v1/user/logout", {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        }
+    });
+    
+    try {
+        return result;
+    } catch (error) {
+        throw(error);
+    }
+}
+
 export default {
     login,
-    verifyToken
+    verifyToken,
+    refresh,
+    logout
 }
