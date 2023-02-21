@@ -1,6 +1,6 @@
-import express, { Request, Response } from 'express';
+import { Request, Response } from 'express';
 import { UserCreateDto } from '../interfaces/user/UserCreateDto';
-import { UserResponseDto } from '../interfaces/user/UserResponseDto';
+//import { UserResponseDto } from '../interfaces/user/UserResponseDto';
 import { PostBaseResponseDto } from '../interfaces/common/PostBaseResponseDto';
 import statusCode from '../modules/statusCode';
 import UserService from '../services/UserService';
@@ -36,7 +36,7 @@ const findUserHashtag = async (req: Request, res: Response): Promise<void> => {
   const { userId } = req.params;
 
   try {
-    const data: string[] | null = await UserService.findUserHashtag(userId);
+    const data: string[] = await UserService.findUserHashtag(userId);
 
     res.status(statusCode.OK).send(data);
   } catch (error) {

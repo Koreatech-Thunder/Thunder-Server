@@ -3,4 +3,5 @@ export interface UserInfo {
   introduction: string;
   mannerTemperature: number;
   hashtags: string[];
+  isLogout: boolean;
 }

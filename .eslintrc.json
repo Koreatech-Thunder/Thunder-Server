@@ -18,5 +18,10 @@
     "project": "./tsconfig.json"
   },
   "plugins": ["@typescript-eslint", "import"],
-  "rules": {}
+  "rules": {
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": "warn",
+    "object-curly-spacing": "off",
+    "@typescript-eslint/object-curly-spacing": "warn"
+  }
 }

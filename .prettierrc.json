@@ -13,5 +13,11 @@
 
   "arrowParens": "avoid",
 
-  "endOfLine": "auto"
+  "endOfLine": "auto",
+  "bracketSpacing": false,
+  "htmlWhitespaceSensitivity": "css",
+  "jsxBracketSameLine": false,
+  "jsxSingleQuote": false,
+  "proseWrap": "preserve",
+  "quoteProps": "as-needed"
 }

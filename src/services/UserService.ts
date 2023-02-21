@@ -1,6 +1,6 @@
-import { PostBaseResponseDto } from '../interfaces/common/PostBaseResponseDto';
-import { UserCreateDto } from '../interfaces/user/UserCreateDto';
-import { UserResponseDto } from '../interfaces/user/UserResponseDto';
+import {PostBaseResponseDto} from '../interfaces/common/PostBaseResponseDto';
+import {UserCreateDto} from '../interfaces/user/UserCreateDto';
+import {UserResponseDto} from '../interfaces/user/UserResponseDto';
 import User from '../models/User';
 import statusCode from '../modules/statusCode';
 //import message from '../modules/statusCode';
@@ -41,9 +41,16 @@ const createUser = async (
 
 const findUserHashtag = async (userId: string) => {
   try {
-    const user: UserResponseDto | null = await User.findById(userId);
+    const user: UserResponseDto = await User.findById(userId)!;
+    if (!user) {
+      // eslint-disable-next-line @typescript-eslint/no-throw-literal
+      throw errorGenerator({
+        msg: '사용자 없음',
+        statusCode: statusCode.BAD_REQUEST,
+      });
+    }
 
-    return user?.hashtags;
+    return user.hashtags;
   } catch (error) {
     console.log(error);
     throw error;
