@@ -3,4 +3,6 @@ export interface UserUpdateDto {
     introduction?: String;
     mannerTemperature?: Number;
     hashtags?: [String];
+    kakaoId?: Number;
+    fcmToken?: String;
 }

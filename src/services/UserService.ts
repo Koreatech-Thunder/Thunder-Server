@@ -11,7 +11,8 @@ const createUser = async (userCreateDto: UserCreateDto) => {
             introduction: userCreateDto.introduction,
             mannerTemperature: userCreateDto.mannerTemperature,
             hashtags: userCreateDto.hashtags,
-            kakaoId: userCreateDto.kakaoId
+            kakaoId: userCreateDto.kakaoId,
+            fcmToken: userCreateDto.fcmToken
         });
 
         await user.save();
@@ -33,7 +34,9 @@ const updateUser = async (userId: string, userUpdateDto: UserUpdateDto) => {
             name: userUpdateDto.name,
             introduction: userUpdateDto.introduction,
             mannerTemperature: userUpdateDto.mannerTemperature,
-            hashtags: userUpdateDto.hashtags
+            hashtags: userUpdateDto.hashtags,
+            kakaoId: userUpdateDto.kakaoId,
+            fcmToken: userUpdateDto.fcmToken
         }
 
         await User.findByIdAndUpdate(userId, updatedUser);
