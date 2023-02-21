@@ -39,18 +39,18 @@ const createUser = async (
   }
 };
 
-const findUserHashtag = async (userId: string) => {
+const findUserHashtag = async (userId: string): Promise<string[] | []> => {
   try {
-    const user: UserResponseDto = await User.findById(userId)!;
-    if (!user) {
-      // eslint-disable-next-line @typescript-eslint/no-throw-literal
-      throw errorGenerator({
-        msg: '사용자 없음',
-        statusCode: statusCode.BAD_REQUEST,
-      });
+    const user: UserResponseDto = await User.findById(userId);
+
+    let data: string[] | [];
+    if (user.hashtags != undefined && user.hashtags != null) {
+      data = user.hashtags;
+    } else {
+      data = [];
     }
 
-    return user.hashtags;
+    return data;
   } catch (error) {
     console.log(error);
     throw error;

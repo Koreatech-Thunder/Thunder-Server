@@ -1,15 +1,16 @@
-/**
- *
- * @route POST / thunder
- * @desc Create Thunder
- * @access Public
- */
 import {Request, Response} from 'express';
-import {ThunderCreateDto} from '../interfaces/thunder/ThunderCreateDto';
+import {ThunderCreateDto} from '../interfaces/thunder/request/ThunderCreateDto';
+import {ThunderAllResponseDto} from '../interfaces/thunder/response/ThunderAllResponseDto';
 import {PostBaseResponseDto} from '../interfaces/common/PostBaseResponseDto';
 import statusCode from '../modules/statusCode';
 import ThunderService from '../services/ThunderService';
 
+/**
+ *
+ * @route POST / thunder/:userId
+ * @desc Create Thunder
+ * @access Public
+ */
 const createThunder = async (req: Request, res: Response): Promise<void> => {
   const thunderCreateDto: ThunderCreateDto = req.body; //key:value
   const {userId} = req.params;
@@ -28,6 +29,25 @@ const createThunder = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
+/**
+ *
+ * @route GET / thunder
+ * @desc Get Thunder
+ * @access Public
+ */
+const findThunderAll = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const data: ThunderAllResponseDto[] | null =
+      await ThunderService.findThunderAll();
+
+    res.status(statusCode.OK).send(data);
+  } catch (error) {
+    console.log(error);
+    res.status(statusCode.INTERNAL_SERVER_ERROR).send();
+  }
+};
+
 export default {
   createThunder,
+  findThunderAll,
 };

@@ -41,6 +41,9 @@ const ThunderSchema = new mongoose.Schema({
   updateAt: {
     type: Date,
   },
+  thunderState: {
+    type: String,
+  },
 });
 
 export default mongoose.model<ThunderInfo & mongoose.Document>(

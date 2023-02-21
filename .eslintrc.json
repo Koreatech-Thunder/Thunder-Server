@@ -19,9 +19,7 @@
   },
   "plugins": ["@typescript-eslint", "import"],
   "rules": {
-    "no-unused-vars": "off",
-    "@typescript-eslint/no-unused-vars": "warn",
     "object-curly-spacing": "off",
-    "@typescript-eslint/object-curly-spacing": "warn"
+    "@typescript-eslint/object-curly-spacing": ["error", "never"]
   }
 }

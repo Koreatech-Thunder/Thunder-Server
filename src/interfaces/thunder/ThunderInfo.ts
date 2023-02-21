@@ -1,4 +1,11 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import mongoose from 'mongoose';
+
+export enum thunderState_Enum {
+  MEMBER = 'MEMBER',
+  NON_MEMBER = 'NON_MEMBER',
+  HOST = 'HOST',
+}
 
 export interface ThunderInfo {
   title: string;
@@ -9,5 +16,5 @@ export interface ThunderInfo {
   limitMembersCnt: number;
   ceatedAt: Date;
   updateAt: Date;
-  //thunderState :string;
+  thunderState: thunderState_Enum;
 }
