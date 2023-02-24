@@ -12,16 +12,29 @@ const message = {
 
   // etc
   NULL_VALUE: '필요한 값이 없습니다.',
+  NULL_VALUE_TOKEN: '토큰이 없습니다.',
+  EXPIRED_TOKEN: '만료된 토큰입니다.',
+  INVALID_TOKEN: '존재하지 않는 토큰입니다.',
+  INVALID_PASSWORD: '잘못된 비밀번호입니다.',
+  INVALID_ID: '유효하지 않은 id입니다.',
+  INVALID_HASHTAG: '유효하지 않은 hashtsg입니다.',
+
+  SIGNUP_SUCCESS: '회원가입 성공입니다.',
+  LOGIN_SUCCESS: '로그인 성공입니다.',
 
   //user
-  NOT_FOUND_USER_EMAIL: '가입되지 않은 사용자입니다.',
-  CONFLICT_USER: '사용자 중복입니다.',
-  CREATED_USER_SUCCESS: '사용자 정상 생성',
-  READ_USER_SUCCESS: '사용자 정상 불러옴',
+  NOT_FOUND_USER: '조회할 사용자 정보가 없습니다.',
+  CONFLICT_USER: '이미 가입한 사용자입니다.',
+  READ_USER_SUCCESS: '사용자 정보 조회 성공입니다.',
+  UPDATE_USER_SUCCESS: '사용자 정보 수정 성공입니다.',
+  DELETE_USER_SUCCESS: '사용자 탈퇴 성공입니다.',
 
   //thunder
-  CREATED_THUNDER_SUCCESS: '번개 정상 생성',
-  READ_THUNDER_SUCCESS: '번개 정상 불러옴',
+  NOT_FOUND_ROOM: '존재하지 않는 방입니다.',
+  CREATE_THUNDER_SUCCESS: '번개 정상 생성 성공입니다.',
+  READ_THUNDER_SUCCESS: '번개 정보 조회 성공입니다',
+  JOIN_ROOM_SUCCESS: '번개 참가 성공입니다.',
+  LEAVE_ROOM_SUCCESS: '번개 나가기 성공입니다.',
 };
 
 export default message;
