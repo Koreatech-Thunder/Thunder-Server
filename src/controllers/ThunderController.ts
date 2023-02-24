@@ -47,7 +47,38 @@ const findThunderAll = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
+/**
+ *
+ * @route GET / thunder/hashtags/?hashtag=
+ * @desc Get Thunder
+ * @access Public
+ */
+const findThunderByHashtag = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  const {hashtag} = req.query;
+  if (!hashtag) {
+    res.status(404).json({error: 'hashtag not found'});
+    return;
+  }
+  if (typeof hashtag !== 'string') {
+    res.status(500).json({error: 'Invalid hashtag'});
+    return;
+  }
+  try {
+    const data: ThunderAllResponseDto[] | null =
+      await ThunderService.findThunderByHashtag(hashtag);
+
+    res.status(statusCode.OK).send(data);
+  } catch (error) {
+    console.log(error);
+    res.status(statusCode.INTERNAL_SERVER_ERROR).send();
+  }
+};
+
 export default {
   createThunder,
   findThunderAll,
+  findThunderByHashtag,
 };

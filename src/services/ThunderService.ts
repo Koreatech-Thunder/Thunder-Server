@@ -60,7 +60,39 @@ const findThunderAll = async (): Promise<ThunderAllResponseDto[] | null> => {
   }
 };
 
+const findThunderByHashtag = async (hashtag: string) => {
+  try {
+    const thunderlist = await Thunder.find({hashtags: hashtag}).sort({
+      createdAt: 'asc',
+    });
+
+    if (!thunderlist) {
+      return null;
+    }
+
+    const Hashtagthunder: ThunderAllResponseDto[] = [];
+    await Promise.all(
+      thunderlist.map(async (hashtagthunder: any) => {
+        Hashtagthunder.push({
+          title: hashtagthunder.title,
+          deadline: hashtagthunder.deadline.toString(),
+          content: hashtagthunder.content,
+          hashtags: hashtagthunder.hashtags,
+          members: hashtagthunder.members, //id<Object>
+          limitMembersCnt: hashtagthunder.limitMembersCnt,
+        });
+      }),
+    );
+
+    return Hashtagthunder;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
 export default {
   createThunder,
   findThunderAll,
+  findThunderByHashtag,
 };
