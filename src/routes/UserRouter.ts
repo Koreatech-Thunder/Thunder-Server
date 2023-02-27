@@ -4,7 +4,7 @@ import UserController from '../controllers/UserController';
 
 const router: Router = Router();
 
-router.put('/', UserController.createUser);
+router.put('/:userId', UserController.createUser);
 router.get('/hashtags/:userId', UserController.findUserHashtag);
 
 export default router;

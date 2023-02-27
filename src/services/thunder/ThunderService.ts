@@ -1,7 +1,7 @@
-import {PostBaseResponseDto} from '../interfaces/common/PostBaseResponseDto';
-import {ThunderCreateDto} from '../interfaces/thunder/request/ThunderCreateDto';
-import {ThunderAllResponseDto} from '../interfaces/thunder/response/ThunderAllResponseDto';
-import Thunder from '../models/Thunder';
+import {PostBaseResponseDto} from '../../interfaces/common/PostBaseResponseDto';
+import {ThunderCreateDto} from '../../interfaces/thunder/request/ThunderCreateDto';
+import {ThunderAllResponseDto} from '../../interfaces/thunder/response/ThunderAllResponseDto';
+import Thunder from '../../models/Thunder';
 
 const createThunder = async (
   thunderCreateDto: ThunderCreateDto,

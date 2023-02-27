@@ -7,19 +7,16 @@
   "extends": [
     "airbnb-typescript/base",
     "eslint:recommended",
-    "plugin:@typescript-eslint/eslint-recommended"
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended"
   ],
   "parser": "@typescript-eslint/parser",
   "ignorePatterns": ["dist/", "node_modules/"],
-  "overrides": [],
   "parserOptions": {
     "ecmaVersion": "latest",
     "sourceType": "module",
     "project": "./tsconfig.json"
   },
-  "plugins": ["@typescript-eslint", "import"],
-  "rules": {
-    "object-curly-spacing": "off",
-    "@typescript-eslint/object-curly-spacing": ["error", "never"]
-  }
+  "plugins": ["@typescript-eslint"],
+  "rules": {}
 }

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import mongoose from 'mongoose';
 
 export enum thunderState_Enum {

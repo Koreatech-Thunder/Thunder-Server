@@ -1,4 +1,4 @@
-import UserService from './UserService';
-import ThunderService from './ThunderService';
+import UserService from './user/UserService';
+import ThunderService from './thunder/ThunderService';
 
 export {UserService, ThunderService};

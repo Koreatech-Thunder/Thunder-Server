@@ -1,6 +1,5 @@
 import message from '../modules/message';
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
 type statusMessage = {
   [key: number]: string;
 };

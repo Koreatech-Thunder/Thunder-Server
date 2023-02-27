@@ -3,7 +3,7 @@ import {ThunderCreateDto} from '../interfaces/thunder/request/ThunderCreateDto';
 import {ThunderAllResponseDto} from '../interfaces/thunder/response/ThunderAllResponseDto';
 import {PostBaseResponseDto} from '../interfaces/common/PostBaseResponseDto';
 import statusCode from '../modules/statusCode';
-import ThunderService from '../services/ThunderService';
+import ThunderService from '../services/thunder/ThunderService';
 
 /**
  *
