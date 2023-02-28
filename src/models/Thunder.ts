@@ -35,14 +35,13 @@ const ThunderSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  ceatedAt: {
+  createdAt: {
     type: Date,
+    defalut: Date.now,
   },
-  updateAt: {
+  updatedAt: {
     type: Date,
-  },
-  thunderState: {
-    type: String,
+    defalut: Date.now,
   },
 });
 

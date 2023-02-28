@@ -1,9 +1,11 @@
 import {Request, Response} from 'express';
+import {Result, ValidationError, validationResult} from 'express-validator';
 import {ThunderCreateDto} from '../interfaces/thunder/request/ThunderCreateDto';
 import {ThunderAllResponseDto} from '../interfaces/thunder/response/ThunderAllResponseDto';
 import {PostBaseResponseDto} from '../interfaces/common/PostBaseResponseDto';
 import statusCode from '../modules/statusCode';
 import ThunderService from '../services/thunder/ThunderService';
+import message from '../modules/message';
 
 /**
  *
@@ -11,21 +13,28 @@ import ThunderService from '../services/thunder/ThunderService';
  * @desc Create Thunder
  * @access Public
  */
-const createThunder = async (req: Request, res: Response): Promise<void> => {
+const createThunder = async (
+  req: Request,
+  res: Response,
+): Promise<void | Response> => {
+  const errors: Result<ValidationError> = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(statusCode.BAD_REQUEST).send(statusCode.BAD_REQUEST);
+  }
+
   const thunderCreateDto: ThunderCreateDto = req.body; //key:value
   const {userId} = req.params;
 
   try {
     //data is _id(IdObject)
-    const data: PostBaseResponseDto = await ThunderService.createThunder(
-      thunderCreateDto,
-      userId,
-    );
+    await ThunderService.createThunder(thunderCreateDto, userId);
 
-    res.status(statusCode.CREATED).send(data);
+    res.status(statusCode.CREATED).send(statusCode.CREATED);
   } catch (error) {
     console.log(error);
-    res.status(statusCode.INTERNAL_SERVER_ERROR).send();
+    res
+      .status(statusCode.INTERNAL_SERVER_ERROR)
+      .send(statusCode.INTERNAL_SERVER_ERROR);
   }
 };
 

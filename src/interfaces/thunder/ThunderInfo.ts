@@ -13,7 +13,7 @@ export interface ThunderInfo {
   hashtags: string[];
   members: mongoose.Types.ObjectId[]; //id<Object>
   limitMembersCnt: number;
-  ceatedAt: Date;
-  updateAt: Date;
+  createdAt: Date;
+  updatedAt: Date;
   thunderState: thunderState_Enum;
 }

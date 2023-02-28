@@ -2,11 +2,14 @@ import {PostBaseResponseDto} from '../../interfaces/common/PostBaseResponseDto';
 import {ThunderCreateDto} from '../../interfaces/thunder/request/ThunderCreateDto';
 import {ThunderAllResponseDto} from '../../interfaces/thunder/response/ThunderAllResponseDto';
 import Thunder from '../../models/Thunder';
+import UserServiceUtils from '../user/UserServiceUtils';
 
 const createThunder = async (
   thunderCreateDto: ThunderCreateDto,
   userId: string,
-): Promise<PostBaseResponseDto> => {
+): Promise<void> => {
+  await UserServiceUtils.findUserById(userId);
+
   try {
     const thunder = new Thunder({
       title: thunderCreateDto.title,
@@ -15,16 +18,11 @@ const createThunder = async (
       content: thunderCreateDto.content,
       limitMembersCnt: thunderCreateDto.limitMembersCnt,
       members: [userId],
-      thunderState: 'HOST',
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
     });
 
     await thunder.save();
-
-    const data = {
-      _id: thunder._id,
-    };
-
-    return data;
   } catch (error) {
     console.log(error);
     throw error;
