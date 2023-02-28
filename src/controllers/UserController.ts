@@ -1,6 +1,6 @@
 import {Request, Response} from 'express';
 import {Result, ValidationError, validationResult} from 'express-validator';
-import {UserCreateDto} from '../interfaces/user/UserCreateDto';
+import {UserCreateDto} from '../interfaces/user/request/UserCreateDto';
 //import { UserResponseDto } from '../interfaces/user/UserResponseDto';
 import {PostBaseResponseDto} from '../interfaces/common/PostBaseResponseDto';
 import statusCode from '../modules/statusCode';
@@ -50,12 +50,14 @@ const findUserHashtag = async (req: Request, res: Response): Promise<void> => {
   const {userId} = req.params;
 
   try {
-    const data: string[] | [] = await UserService.findUserHashtag(userId);
+    const data: string[] = await UserService.findUserHashtag(userId);
 
     res.status(statusCode.OK).send(data);
   } catch (error) {
     console.log(error);
-    res.status(statusCode.INTERNAL_SERVER_ERROR).send();
+    res
+      .status(statusCode.INTERNAL_SERVER_ERROR)
+      .send(statusCode.INTERNAL_SERVER_ERROR);
   }
 };
 

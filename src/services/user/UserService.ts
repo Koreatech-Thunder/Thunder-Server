@@ -1,6 +1,6 @@
 import {PostBaseResponseDto} from '../../interfaces/common/PostBaseResponseDto';
-import {UserCreateDto} from '../../interfaces/user/UserCreateDto';
-import {UserResponseDto} from '../../interfaces/user/UserResponseDto';
+import {UserCreateDto} from '../../interfaces/user/request/UserCreateDto';
+import {UserResponseDto} from '../../interfaces/user/response/UserResponseDto';
 import User from '../../models/User';
 import statusCode from '../../modules/statusCode';
 import message from '../../modules/statusCode';
@@ -42,18 +42,20 @@ const createUser = async (
   }
 };
 
-const findUserHashtag = async (userId: string): Promise<string[] | []> => {
+const findUserHashtag = async (userId: string): Promise<string[]> => {
   try {
-    const user: UserResponseDto = await User.findById(userId);
+    await UserServiceUtils.findUserById(userId);
 
-    let data: string[] | [];
-    if (user.hashtags != undefined && user.hashtags != null) {
-      data = user.hashtags;
-    } else {
-      data = [];
+    const user: UserResponseDto = await User.findById(userId)!;
+
+    if (!user) {
+      throw errorGenerator({
+        msg: '조회할 사용자 정보가 없습니다.',
+        statusCode: statusCode.NOT_FOUND,
+      });
     }
 
-    return data;
+    return user.hashtags;
   } catch (error) {
     console.log(error);
     throw error;
