@@ -8,6 +8,5 @@ router.put('/:userId', UserController.updateUser);
 router.get('/:userId', UserController.findUserById);
 router.get('/', UserController.findUserList);
 router.delete('/:userId', UserController.deleteUser);
-router.get('/profile/:userId', UserController.getUserForProfileUpdate);
 
 export default router;
