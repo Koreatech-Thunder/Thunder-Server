@@ -5,5 +5,6 @@ export interface UserCreateDto {
     hashtags?: [String];
     isLogOut: Boolean;
     kakaoId: Number;
+    kakaoToken: String;
     fcmToken: String;
 }
