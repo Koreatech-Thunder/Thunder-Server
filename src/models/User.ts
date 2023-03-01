@@ -27,6 +27,9 @@ const UserSchema = new mongoose.Schema( {
     kakaoId: {
         type: Number
     },
+    kakaoToken: {
+        type: String
+    },
     fcmToken: {
         type: String
     }

@@ -12,6 +12,7 @@ const createUser = async (userCreateDto: UserCreateDto) => {
             mannerTemperature: userCreateDto.mannerTemperature,
             hashtags: userCreateDto.hashtags,
             kakaoId: userCreateDto.kakaoId,
+            kakaoToken: userCreateDto.kakaoToken,
             fcmToken: userCreateDto.fcmToken
         });
 
@@ -35,7 +36,9 @@ const updateUser = async (userId: string, userUpdateDto: UserUpdateDto) => {
             introduction: userUpdateDto.introduction,
             mannerTemperature: userUpdateDto.mannerTemperature,
             hashtags: userUpdateDto.hashtags,
+            isLogout: userUpdateDto.isLogout,
             kakaoId: userUpdateDto.kakaoId,
+            kakaoToken: userUpdateDto.kakaoToken,
             fcmToken: userUpdateDto.fcmToken
         }
 

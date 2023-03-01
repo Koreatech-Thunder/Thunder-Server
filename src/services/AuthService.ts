@@ -5,6 +5,7 @@ import firebase from 'firebase-admin';
 
 
 
+
 const login = async (kakaoToken: any, fcmToken: any) => {
     const result = await axios.get("https://kapi.kakao.com/v2/user/me", {
         headers: {
@@ -38,19 +39,18 @@ const login = async (kakaoToken: any, fcmToken: any) => {
     }
     else { 
         try {
-            console.log(kakaoId);
+            // console.log(kakaoId);
             const user = await UserService.findUserByKakao(kakaoId);
 
-            console.log(user);
+            // console.log(user);
 
-            if (!user) {
-                return new Error('No User Found');
+            if (user) {
+                return new Error('User Already Exists');
             }
-
-            
-            const token = jwt.sign({kakao_Id: user.kakaoId, fcm_token: fcmToken}, process.env.JWT_SECRET as string, {});
-
-            return token;
+            else {
+                const token = jwt.sign({kakaoToken: kakaoToken, fcmtoken: fcmToken}, process.env.JWT_SECRET as string, {});
+                return token;
+            }
 
         }
 
@@ -67,8 +67,8 @@ const verifyToken = async (req: any, res: any, next: any) => {
         return next();
     } catch (error: any) {
         if (error.name === 'TokenExpiredError') {
-            return res.status(419).json({
-                code: 419,
+            return res.status(401).json({
+                code: 401,
                 message: '토큰이 만료되었습니다.'
             });
         }
@@ -79,31 +79,34 @@ const verifyToken = async (req: any, res: any, next: any) => {
     }
 }
 
-const refresh = async (refreshToken: any) => {
+const refresh = async (kakaoRefreshToken: any, fcmRefreshToken: any) => {
 
     const result = await axios.post("https://kauth.kakao.com/oauth/token", {
         headers: {
             "client_id" : process.env.REST_API_KEY,
-            "refresh_token" : refreshToken
+            "refresh_token" : kakaoRefreshToken
         },
     });    
 
     try {
-        return result;
+        const token = jwt.sign({kakaoToken: kakaoRefreshToken, fcmtoken: fcmRefreshToken}, process.env.JWT_SECRET as string, {});
+        return token;
     } catch (error) {
         throw(error);
     }
 
 }
 
-const logout = async (accessToken: any) => {
+const logout = async (userId: any, kakaoToken: any) => {
     const result = await axios.post( "https://kapi.kakao.com/v1/user/logout", {
         headers: {
-            Authorization: `Bearer ${accessToken}`,
+            Authorization: `Bearer ${kakaoToken}`,
         }
     });
     
     try {
+        await UserService.updateUser(userId, {isLogout: true, fcmToken: ''})
+
         return result;
     } catch (error) {
         throw(error);
