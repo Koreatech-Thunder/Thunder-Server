@@ -88,22 +88,7 @@ const findUserByKakao = async (req: Request, res: Response): Promise<void> => {
 
 }
 
-const getUserForProfileUpdate = async (req: Request, res: Response): Promise<void> => {
 
-    const { userId } = req.params;
-
-    try {
-        const data: UserInfoDto | null = await UserService.getUserForProfileUpdate(userId);
-
-        res.status(statusCode.OK).send(data);
-    }
-
-    catch (error) {
-        res.status(statusCode.INTERNAL_SERVER_ERROR).send(statusCode.INTERNAL_SERVER_ERROR);
-    }
-    
-
-}
 
 const deleteUser = async (req: Request, res: Response): Promise<void> => {
     const { userId } = req.params;
@@ -128,5 +113,4 @@ export default {
     findUserList,
     deleteUser,
     findUserByKakao,
-    getUserForProfileUpdate
 }
