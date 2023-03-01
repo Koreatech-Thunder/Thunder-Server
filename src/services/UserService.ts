@@ -1,7 +1,6 @@
 import { UserCreateDto } from '../interfaces/user/UserCreateDto';
 import { UserUpdateDto } from '../interfaces/user/UserUpdateDto';
 import { UserResponseDto } from '../interfaces/user/UserResponseDto';
-import { UserInfoDto } from '../interfaces/user/UserInfoDto';
 import User from '../models/User';
 
 
@@ -93,17 +92,6 @@ const findUserByKakao = async (userId: any) => {
 const deleteUser = async (userId: string) => {
     try {
         await User.findByIdAndDelete(userId);
-    } catch (error) {
-        console.log(error);
-        throw (error);
-    };
-};
-
-const getUserForProfileUpdate = async (userId: string) => {
-    try {
-        const user: UserInfoDto | null = await User.findById(userId);
-
-        return user;
     } catch (error)
     {
         console.log(error);
@@ -119,6 +107,5 @@ export default {
     findUserById,
     findUserList,
     deleteUser,
-    findUserByKakao,
-    getUserForProfileUpdate
+    findUserByKakao
 }

@@ -11,7 +11,6 @@ import { UserService } from "../services";
 
 
 import { Request, Response } from "express";
-import { UserInfoDto } from '../interfaces/user/UserInfoDto';
 
 
 const createUser = async (req: Request, res: Response): Promise<void> => {
@@ -88,35 +87,18 @@ const findUserByKakao = async (req: Request, res: Response): Promise<void> => {
 
 }
 
-const getUserForProfileUpdate = async (req: Request, res: Response): Promise<void> => {
-
-    const { userId } = req.params;
-
-    try {
-        const data: UserInfoDto | null = await UserService.getUserForProfileUpdate(userId);
-
-        res.status(statusCode.OK).send(data);
-    }
-
-    catch (error) {
-        res.status(statusCode.INTERNAL_SERVER_ERROR).send(statusCode.INTERNAL_SERVER_ERROR);
-    }
-    
-
-}
-
 const deleteUser = async (req: Request, res: Response): Promise<void> => {
     const { userId } = req.params;
 
     try {
         await UserService.deleteUser(userId);
 
-        res.status(statusCode.NO_CONTENT).send(statusCode.OK);
+        res.status(statusCode.NO_CONTENT).send(util.success(statusCode.OK));
 
     }
     catch (error) {
         console.log(error);
-        res.status(statusCode.INTERNAL_SERVER_ERROR).send(statusCode.INTERNAL_SERVER_ERROR);
+        res.status(statusCode.INTERNAL_SERVER_ERROR).send(util.fail());
     }
 }
 
@@ -127,6 +109,5 @@ export default {
     findUserById,
     findUserList,
     deleteUser,
-    findUserByKakao,
-    getUserForProfileUpdate
+    findUserByKakao
 }
