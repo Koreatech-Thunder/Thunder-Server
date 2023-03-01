@@ -99,7 +99,17 @@ const deleteUser = async (userId: string) => {
     };
 };
 
+const getUserForProfileUpdate = async (userId: string) => {
+    try {
+        const user: UserInfoDto | null = await User.findById(userId);
 
+        return user;
+    } catch (error)
+    {
+        console.log(error);
+        throw(error);
+    };
+}
 
 
 
@@ -110,4 +120,5 @@ export default {
     findUserList,
     deleteUser,
     findUserByKakao,
+    getUserForProfileUpdate
 }
