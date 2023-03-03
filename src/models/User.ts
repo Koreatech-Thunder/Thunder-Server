@@ -5,7 +5,7 @@ import { UserInfo } from "../interfaces/user/UserInfo";
 const UserSchema = new mongoose.Schema( {
     name: {
         type: String,
-        required: true
+        default: ''
     },
     introduction: {
         type: String,
