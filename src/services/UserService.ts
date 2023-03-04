@@ -12,11 +12,13 @@ const createUser = async (userCreateDto: UserCreateDto) => {
             mannerTemperature: userCreateDto.mannerTemperature,
             hashtags: userCreateDto.hashtags,
             kakaoId: userCreateDto.kakaoId,
-            kakaoToken: userCreateDto.kakaoToken,
+            accessToken: userCreateDto.accessToken,
+            refreshToken: userCreateDto.refreshToken,
             fcmToken: userCreateDto.fcmToken
         });
 
         await user.save();
+        
         const data = {
             _id: user._id
         };
@@ -38,7 +40,8 @@ const updateUser = async (userId: string, userUpdateDto: UserUpdateDto) => {
             hashtags: userUpdateDto.hashtags,
             isLogout: userUpdateDto.isLogout,
             kakaoId: userUpdateDto.kakaoId,
-            kakaoToken: userUpdateDto.kakaoToken,
+            accessToken: userUpdateDto.accessToken,
+            refreshToken: userUpdateDto.refreshToken,
             fcmToken: userUpdateDto.fcmToken
         }
 
@@ -76,9 +79,9 @@ const findUserList = async () => {
     };
 }
 
-const findUserByKakao = async (userId: any) => {
+const findUserByKakao = async (kakaoId: any) => {
     try {
-        const user: UserResponseDto | null = await User.findOne({kakaoId: userId});
+        const user: UserResponseDto | null = await User.findOne({kakaoId: kakaoId});
 
         return user;
     } catch (error)
@@ -89,15 +92,7 @@ const findUserByKakao = async (userId: any) => {
 
 };
 
-const deleteUser = async (userId: string) => {
-    try {
-        await User.findByIdAndDelete(userId);
-    } catch (error)
-    {
-        console.log(error);
-        throw(error);
-    };
-}
+
 
 
 
@@ -106,6 +101,5 @@ export default {
     updateUser,
     findUserById,
     findUserList,
-    deleteUser,
-    findUserByKakao
+    findUserByKakao,
 }

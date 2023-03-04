@@ -5,7 +5,7 @@ import { UserInfo } from "../interfaces/user/UserInfo";
 const UserSchema = new mongoose.Schema( {
     name: {
         type: String,
-        required: true
+        default: ''
     },
     introduction: {
         type: String,
@@ -13,7 +13,6 @@ const UserSchema = new mongoose.Schema( {
     },
     mannerTemperature: {
         type: Number,
-        required: true,
         default: 36.5
     },
     hashtags: {
@@ -25,13 +24,16 @@ const UserSchema = new mongoose.Schema( {
         default: true
     },
     kakaoId: {
-        type: Number
+        type: String
     },
-    kakaoToken: {
+    accessToken: {
+        type: String
+    },
+    refreshToken: {
         type: String
     },
     fcmToken: {
-        type: String
+        type: [String]
     }
 
 });

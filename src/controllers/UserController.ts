@@ -1,6 +1,5 @@
 import statusCode from '../modules/statusCode';
 import util from "../modules/util";
-import message  from "../modules/responseMessage";
 
 
 import { UserCreateDto } from "../interfaces/user/UserCreateDto";
@@ -87,20 +86,6 @@ const findUserByKakao = async (req: Request, res: Response): Promise<void> => {
 
 }
 
-const deleteUser = async (req: Request, res: Response): Promise<void> => {
-    const { userId } = req.params;
-
-    try {
-        await UserService.deleteUser(userId);
-
-        res.status(statusCode.NO_CONTENT).send(util.success(statusCode.OK));
-
-    }
-    catch (error) {
-        console.log(error);
-        res.status(statusCode.INTERNAL_SERVER_ERROR).send(util.fail());
-    }
-}
 
 
 export default {
@@ -108,6 +93,5 @@ export default {
     updateUser,
     findUserById,
     findUserList,
-    deleteUser,
-    findUserByKakao
+    findUserByKakao,
 }

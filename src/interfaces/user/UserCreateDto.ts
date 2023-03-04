@@ -4,6 +4,8 @@ export interface UserCreateDto {
     mannerTemperature: Number;
     hashtags?: [String];
     isLogOut: Boolean;
-    kakaoId: Number;
-    fcmToken: String;
+    kakaoId?: String;
+    accessToken: String;
+    refreshToken: String;
+    fcmToken: [String];
 }
