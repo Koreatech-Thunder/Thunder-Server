@@ -27,13 +27,16 @@ const UserSchema = new mongoose.Schema( {
         type: String
     },
     accessToken: {
-        type: String
+        type: String,
+        required: true
     },
     refreshToken: {
-        type: String
+        type: String,
+        required: true
     },
     fcmToken: {
-        type: [String]
+        type: [String],
+        required: true
     }
 
 });
