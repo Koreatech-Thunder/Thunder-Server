@@ -2,6 +2,7 @@ import statusCode from '../modules/statusCode';
 import { Request, Response } from "express";
 import AuthService from '../services/AuthService';
 import firebase from 'firebase-admin';
+import errorGenerator from '../errors/errorGenerator';
 
 
 
@@ -13,17 +14,25 @@ const login = async (req: Request, res: Response): Promise<void> => {
         credential: firebase.credential.cert(firebaseKey),
     });
 
-    const fcmToken = req.headers["fcmToken"];
-    const kakaoToken = req.headers["kakaoToken"];
+    const fcmToken = req.body["fcmToken"];
+    const kakaoToken = req.body["kakaoToken"];
+
+    if (!fcmToken || !kakaoToken) {
+        throw errorGenerator({
+            msg: '토큰이 존재하지 않습니다.',
+            statusCode: statusCode.NOT_FOUND
+        })
+    }
     
-    const accessToken = await AuthService.login(kakaoToken, fcmToken);
+    
 
     try {
+        const accessToken = await AuthService.login(kakaoToken, fcmToken);
         res.status(statusCode.OK).json({accessToken: accessToken});
     }
 
-    catch (error) {
-        if (Error.name === 'User Already Exists') {
+    catch (error: any) {
+        if (error.statusCode == statusCode.CONFLICT) { //동일 유저 존재로 인한 에러인 경우 CONFLICT 코드 발송.
             res.status(statusCode.CONFLICT).send(statusCode.CONFLICT);
         }
         else res.status(statusCode.INTERNAL_SERVER_ERROR).send(statusCode.INTERNAL_SERVER_ERROR);
@@ -33,14 +42,32 @@ const login = async (req: Request, res: Response): Promise<void> => {
 
 const refresh = async (req: Request, res: Response): Promise<void> => {
 
-    const userId = req.headers["userId"]
-    const fcmRefreshToken = req.headers["fcmRefreshToken"];
-    const kakaoRefreshToken = req.headers["kakaoRefreshToken"];
+    const accessToken = req.body["accessToken"];
+    const refreshToken = req.body["refreshToken"];
 
-    const accessToken = await AuthService.refresh(kakaoRefreshToken, fcmRefreshToken);
+    if (!accessToken || !refreshToken) {
+        throw errorGenerator({
+            msg: '토큰이 존재하지 않습니다.',
+            statusCode: statusCode.NOT_FOUND
+        })
+    }
+
 
     try {
-        res.status(statusCode.OK).json({accessToken: accessToken});
+
+        const data = await AuthService.refresh(accessToken, refreshToken);
+
+        if (data === "invalid_token") {
+            res.status(statusCode.UNAUTHORIZED).send(statusCode.UNAUTHORIZED);
+        }
+        if (data === "all_tokens_has_expired") {
+            res.status(statusCode.UNAUTHORIZED).send(statusCode.UNAUTHORIZED);
+        }
+        if (data === "valid_token") {
+            res.status(statusCode.FORBIDDEN).send(statusCode.FORBIDDEN);
+        }
+
+        res.status(statusCode.OK).json({accessToken: data});
     }
 
     catch (error) {
@@ -50,11 +77,32 @@ const refresh = async (req: Request, res: Response): Promise<void> => {
 
 const logout = async (req: Request, res: Response): Promise<void> => {
 
-    const userId = req.headers["userId"];
-    const kakaoToken = req.headers["kakaoToken"];
+    const userId = req.body["userId"];
+    const fcmToken = req.body["fcmToken"];
+    const accessToken = req.body["accessToken"]
+
+    if (!fcmToken || !accessToken) {
+        throw errorGenerator({
+            msg: '토큰이 존재하지 않습니다.',
+            statusCode: statusCode.NOT_FOUND
+        })
+    }
+
+    else if (!userId) {
+        throw errorGenerator({
+            msg: '유저가 존재하지 않습니다.',
+            statusCode: statusCode.NOT_FOUND
+        })
+    }
 
     try {
-        await AuthService.logout(userId, kakaoToken);
+        const data = await AuthService.logout(userId, fcmToken, accessToken);
+        if (data === null) {
+            res.status(statusCode.NOT_FOUND).send(statusCode.NOT_FOUND);
+        }
+        else {
+            res.status(statusCode.OK).send(statusCode.OK);
+        }
     }
     catch (error) {
         res.status(statusCode.INTERNAL_SERVER_ERROR).send(statusCode.INTERNAL_SERVER_ERROR);
