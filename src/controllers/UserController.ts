@@ -1,5 +1,6 @@
 import statusCode from '../modules/statusCode';
 import util from "../modules/util";
+import message  from "../modules/message";
 
 
 import { UserCreateDto } from "../interfaces/user/UserCreateDto";
@@ -57,18 +58,6 @@ const findUserById = async (req: Request, res: Response): Promise<void> => {
     }
 }
 
-const findUserList = async (res: Response): Promise<void> => {
-    try {
-        const data: UserResponseDto[] | null = await UserService.findUserList();
-
-        res.status(statusCode.OK).send(util.success(data));
-
-    }
-    catch (error) {
-        console.log(error);
-        res.status(statusCode.INTERNAL_SERVER_ERROR).send(util.fail());
-    }
-}
 
 const findUserByKakao = async (req: Request, res: Response): Promise<void> => {
     const { kakaoId } = req.params;
@@ -87,11 +76,9 @@ const findUserByKakao = async (req: Request, res: Response): Promise<void> => {
 }
 
 
-
 export default {
     createUser,
     updateUser,
     findUserById,
-    findUserList,
     findUserByKakao,
 }

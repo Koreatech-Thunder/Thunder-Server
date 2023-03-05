@@ -3,7 +3,6 @@ import { UserUpdateDto } from '../interfaces/user/UserUpdateDto';
 import { UserResponseDto } from '../interfaces/user/UserResponseDto';
 import User from '../models/User';
 
-
 const createUser = async (userCreateDto: UserCreateDto) => {
     try {
         const user = new User({
@@ -66,19 +65,6 @@ const findUserById = async (userId: string) => {
     };
 }
 
-
-const findUserList = async () => {
-    try {
-        const users: UserResponseDto[] | null = await User.find();
-
-        return users;
-    } catch (error)
-    {
-        console.log(error);
-        throw(error);
-    };
-}
-
 const findUserByKakao = async (kakaoId: any) => {
     try {
         const user: UserResponseDto | null = await User.findOne({kakaoId: kakaoId});
@@ -93,13 +79,9 @@ const findUserByKakao = async (kakaoId: any) => {
 };
 
 
-
-
-
 export default {
     createUser,
     updateUser,
     findUserById,
-    findUserList,
     findUserByKakao,
 }
