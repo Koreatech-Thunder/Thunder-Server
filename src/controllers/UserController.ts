@@ -10,7 +10,7 @@ const deleteUser = async (req: Request, res: Response): Promise<void> => {
     const { userId } = req.params;
 
     try {
-        const data = await UserService.deleteUser(userId);
+        await UserService.deleteUser(userId);
 
         res.status(statusCode.NO_CONTENT).send(statusCode.OK);
 
@@ -23,10 +23,5 @@ const deleteUser = async (req: Request, res: Response): Promise<void> => {
 
 
 export default {
-    createUser,
-    updateUser,
-    findUserById,
-    findUserList,
     deleteUser,
-    findUserByKakao,
 }

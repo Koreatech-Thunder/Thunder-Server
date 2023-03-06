@@ -16,7 +16,7 @@ const deleteUser = async (userId: string) => {
             })
         }
 
-        const result = await axios.post("https://kapi.kakao.com/v2/user/unlink", { 
+        await axios.post("https://kapi.kakao.com/v2/user/unlink", { 
             headers: {
                 Authorization: `Bearer ${user.accessToken}`,
             },
@@ -24,7 +24,6 @@ const deleteUser = async (userId: string) => {
 
         await User.findByIdAndDelete(userId);
 
-        return result
     } catch (error) {
         console.log(error);
         throw (error);
