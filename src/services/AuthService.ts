@@ -109,20 +109,6 @@ const logout = async (userId: any, fcmToken: any) => {
       });
     }
 
-    const result = await axios.post("https://kapi.kakao.com/v1/user/logout", {
-      // 카카오 로그아웃 POST
-      headers: {
-        Authorization: `Bearer ${user.accessToken}`,
-      },
-    });
-
-    if (!result) {
-      throw errorGenerator({
-        msg: "카카오 서버에서 값을 받아오지 못했습니다.",
-        statusCode: statusCode.NOT_FOUND,
-      });
-    }
-
     if (user?.isLogOut) {
       throw errorGenerator({
         msg: "이미 로그아웃된 회원입니다.",
@@ -146,8 +132,6 @@ const logout = async (userId: any, fcmToken: any) => {
       isLogout: true,
       fcmToken: fcmTokenForOtherDevices,
     }); //로그아웃 여부 true로 변경하고 남은 fcm 토큰 유저 정보에 저장.
-
-    return result; //카카오 로그아웃 결과 return
   } catch (error) {
     console.log(error);
     throw error;
