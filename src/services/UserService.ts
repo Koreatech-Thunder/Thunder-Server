@@ -2,6 +2,7 @@ import User from '../models/User';
 import axios from 'axios';
 import errorGenerator from '../errors/errorGenerator';
 import statusCode from '../modules/statusCode';
+import { UserInfoDto } from '../interfaces/user/UserInfoDto';
 
 
 const deleteUser = async (userId: string) => {
@@ -31,8 +32,23 @@ const deleteUser = async (userId: string) => {
 };
 
 
+const getUserForProfileUpdate = async (userId: any) => {
 
+    try {
+        const data: UserInfoDto | null = await User.findById(userId);
+
+        return data;
+    }
+
+    catch (error) {
+        console.log(error);
+        throw (error);
+    }
+    
+
+}
 
 export default {
     deleteUser,
+    getUserForProfileUpdate,
 }
