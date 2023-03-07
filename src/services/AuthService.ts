@@ -38,7 +38,7 @@ const login = async (kakaoToken: string, fcmToken: string) => {
         statusCode: statusCode.CONFLICT,
       }); // 이미 존재하는 유저면 에러 메시지 대신 보냄
     } else {
-      //존재하지 않는 유저면 일단 create하고 accessToken이랑 refreshToken을 AuthResponseDto로 묶어서 보냄.
+      //존재하지 않는 유저면 일단 create하고 accessToken과 refreshToken을 jwt 암호화하여 보냄.
       const user = new User({
         kakaoId: kakaoId,
         fcmToken: fcmToken,
