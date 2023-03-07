@@ -32,6 +32,7 @@ const getRefreshToken = (): string => {
 
 const verifyToken = (token: string) => {
   let decoded;
+
   try {
     decoded = jwt.verify(token, process.env.JWT_SECRET as string);
   } catch (error: any) {

@@ -6,6 +6,7 @@ import jwtHandler from "../modules/jwtHandler";
 import errorGenerator from "../errors/errorGenerator";
 import statusCode from "../modules/statusCode";
 import tokenStatus from "../modules/tokenStatus";
+import { AuthResponseDto } from "../interfaces/auth/AuthResponseDto";
 
 const login = async (kakaoToken: string, fcmToken: string) => {
   try {
@@ -45,13 +46,17 @@ const login = async (kakaoToken: string, fcmToken: string) => {
         isLogout: false,
       });
 
-      user.accessToken = jwtHandler.getAccessToken(user._id);
-      user.refreshToken = jwtHandler.getRefreshToken();
-
       await user.save();
 
-      const accessToken = user.accessToken;
-      return accessToken;
+      const accessToken = jwtHandler.getAccessToken(user.id);
+      const refreshToken = jwtHandler.getRefreshToken();
+
+      const tokenData: AuthResponseDto = {
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+      };
+
+      return tokenData;
     }
   } catch (error) {
     console.log(error);
@@ -74,10 +79,6 @@ const refresh = async (accessToken: string, refreshToken: string) => {
   const userId = (decoded as any).user.id;
   const user = await User.findById(userId);
 
-  if (refreshToken !== user?.refreshToken) {
-    return tokenStatus.INVALID_TOKEN;
-  }
-
   if (newAccessToken === tokenStatus.EXPIRED_TOKEN) {
     if (newRefreshToken === tokenStatus.EXPIRED_TOKEN) {
       return tokenStatus.ALL_TOKENS_HAS_EXPIRED;
@@ -88,8 +89,6 @@ const refresh = async (accessToken: string, refreshToken: string) => {
         accessToken: newToken,
         refreshToken: refreshToken,
       };
-
-      await UserService.updateUser(userId, data);
 
       return data;
     }

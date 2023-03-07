@@ -25,14 +25,6 @@ const UserSchema = new mongoose.Schema({
   kakaoId: {
     type: String,
   },
-  accessToken: {
-    type: String,
-    required: true,
-  },
-  refreshToken: {
-    type: String,
-    required: true,
-  },
   fcmToken: {
     type: [String],
     required: true,
