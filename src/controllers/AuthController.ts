@@ -23,8 +23,8 @@ const login = async (req: Request, res: Response): Promise<void> => {
   }
 
   try {
-    const accessToken = await AuthService.login(kakaoToken, fcmToken);
-    res.status(statusCode.OK).json({ accessToken: accessToken });
+    const tokenData = await AuthService.login(kakaoToken, fcmToken);
+    res.status(statusCode.OK).json(tokenData);
   } catch (error: any) {
     if (error.statusCode == statusCode.CONFLICT) {
       //동일 유저 존재로 인한 에러인 경우 CONFLICT 코드 발송.
