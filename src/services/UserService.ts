@@ -34,7 +34,7 @@ const updateUser = async (userId: string, userUpdateDto: UserUpdateDto) => {
       introduction: userUpdateDto.introduction,
       mannerTemperature: userUpdateDto.mannerTemperature,
       hashtags: userUpdateDto.hashtags,
-      isLogout: userUpdateDto.isLogout,
+      isLogOut: userUpdateDto.isLogOut,
       kakaoId: userUpdateDto.kakaoId,
       fcmToken: userUpdateDto.fcmToken,
     };

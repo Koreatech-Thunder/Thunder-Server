@@ -43,7 +43,7 @@ const login = async (kakaoToken: string, fcmToken: string) => {
       const user = new User({
         kakaoId: kakaoId,
         fcmToken: [fcmToken],
-        isLogout: false,
+        isLogOut: false,
       });
 
       await user.save();
@@ -77,7 +77,6 @@ const refresh = async (accessToken: string, refreshToken: string) => {
   }
 
   const userId = (decoded as any).user.id;
-  const user = await User.findById(userId);
 
   if (newAccessToken === tokenStatus.EXPIRED_TOKEN) {
     if (newRefreshToken === tokenStatus.EXPIRED_TOKEN) {
@@ -128,7 +127,7 @@ const logout = async (userId: any, fcmToken: string) => {
     ); //이 기기에서의 fcm 토큰만 삭제.
 
     await UserService.updateUser(userId, {
-      isLogout: true,
+      isLogOut: true,
       fcmToken: fcmTokenForOtherDevices,
     }); //로그아웃 여부 true로 변경하고 남은 fcm 토큰 유저 정보에 저장.
   } catch (error) {

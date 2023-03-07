@@ -18,7 +18,7 @@ const UserSchema = new mongoose.Schema({
     type: [String],
     default: [],
   },
-  isLogout: {
+  isLogOut: {
     type: Boolean,
     default: true,
   },

@@ -3,7 +3,7 @@ export interface UserUpdateDto {
   introduction?: String;
   mannerTemperature?: Number;
   hashtags?: [String];
-  isLogout?: Boolean;
+  isLogOut?: Boolean;
   kakaoId?: String;
   fcmToken?: String[];
 }
