@@ -41,7 +41,7 @@ const login = async (kakaoToken: string, fcmToken: string) => {
       //존재하지 않는 유저면 일단 create하고 accessToken과 refreshToken을 jwt 암호화하여 보냄.
       const user = new User({
         kakaoId: kakaoId,
-        fcmToken: fcmToken,
+        fcmToken: [fcmToken],
         isLogout: false,
       });
 
@@ -98,7 +98,7 @@ const refresh = async (accessToken: string, refreshToken: string) => {
   }
 };
 
-const logout = async (userId: any, fcmToken: any) => {
+const logout = async (userId: any, fcmToken: string) => {
   try {
     const user = await User.findById(userId);
 
