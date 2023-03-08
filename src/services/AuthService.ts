@@ -30,10 +30,6 @@ const login = async (kakaoToken: string, fcmToken: string) => {
     const existUser = await UserService.findUserByKakao(kakaoId); //유저 여부는 User 스키마의 kakaoId 필드로 구분.
 
     if (existUser) {
-      if (!existUser.fcmToken.includes(fcmToken)) {
-        // 다른 기기에서 로그인했다면
-        existUser.fcmToken.push(fcmToken);
-      }
       throw errorGenerator({
         msg: "이미 존재하는 유저입니다.",
         statusCode: statusCode.CONFLICT,
@@ -42,7 +38,7 @@ const login = async (kakaoToken: string, fcmToken: string) => {
       //존재하지 않는 유저면 일단 create하고 accessToken과 refreshToken을 jwt 암호화하여 보냄.
       const user = new User({
         kakaoId: kakaoId,
-        fcmToken: [fcmToken],
+        fcmToken: fcmToken,
         isLogOut: false,
       });
 
@@ -98,7 +94,7 @@ const refresh = async (accessToken: string, refreshToken: string) => {
   }
 };
 
-const logout = async (userId: any, fcmToken: string) => {
+const logout = async (userId: string, fcmToken: string) => {
   try {
     const user = await User.findById(userId);
 
@@ -124,14 +120,11 @@ const logout = async (userId: any, fcmToken: string) => {
       });
     }
 
-    const fcmTokenForOtherDevices = user.fcmToken.filter(
-      (token) => token !== fcmToken
-    ); //이 기기에서의 fcm 토큰만 삭제.
 
     await UserService.updateUser(userId, {
       isLogOut: true,
-      fcmToken: fcmTokenForOtherDevices,
-    }); //로그아웃 여부 true로 변경하고 남은 fcm 토큰 유저 정보에 저장.
+      fcmToken: "NoToken",
+    }); //로그아웃 여부 true로 변경하고 fcm 토큰은 다음에 다시 로그인할때 새로 받기 전까지 삭제.
   } catch (error) {
     console.log(error);
     throw error;

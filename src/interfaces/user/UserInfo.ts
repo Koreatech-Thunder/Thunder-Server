@@ -5,5 +5,5 @@ export interface UserInfo {
   hashtags: [String];
   isLogOut: Boolean;
   kakaoId?: String;
-  fcmToken: [String];
+  fcmToken: String;
 }
