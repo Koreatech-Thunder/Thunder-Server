@@ -1,9 +1,10 @@
-import { Router } from "express";
-import { UserController } from "../controllers";
+import {Router} from 'express';
+import UserController from '../controllers/user/UserController';
 
 const router: Router = Router();
 
-router.delete('/:userId', UserController.deleteUser);
 router.get('/profile/:userId', UserController.getUserForProfileUpdate);
+router.get('/hashtags/:userId', UserController.findUserHashtag);
+router.put('/:userId', UserController.createUser);
 
 export default router;
