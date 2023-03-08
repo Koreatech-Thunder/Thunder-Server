@@ -1,4 +1,4 @@
-import statusCode from "../modules/statusCode";
+import statusCode from '../modules/statusCode';
 import { Request, Response } from "express";
 import AuthService from "../services/AuthService";
 import firebase from "firebase-admin";
@@ -87,10 +87,18 @@ const logout = async (req: Request, res: Response): Promise<void> => {
   try {
     await AuthService.logout(userId, fcmToken);
     res.status(statusCode.OK).send(statusCode.OK);
-  } catch (error) {
-    res
+  } catch (error: any) {
+    if (error.statusCode == statusCode.NOT_FOUND) {
+      res.status(statusCode.NOT_FOUND).send(statusCode.NOT_FOUND);
+    } else if (error.statusCode == statusCode.BAD_REQUEST)
+    {
+      res.status(statusCode.BAD_REQUEST).send(statusCode.BAD_REQUEST);
+    }
+    {
+      res
       .status(statusCode.INTERNAL_SERVER_ERROR)
-      .send(statusCode.INTERNAL_SERVER_ERROR);
+        .send(statusCode.INTERNAL_SERVER_ERROR);
+    }
   }
 };
 
