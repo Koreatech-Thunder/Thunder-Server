@@ -2,7 +2,7 @@ import { UserUpdateDto } from "../interfaces/user/UserUpdateDto";
 import { UserResponseDto } from "../interfaces/user/UserResponseDto";
 import User from "../models/User";
 
-const updateUser = async (userId: string, userUpdateDto: UserUpdateDto) => {
+const updateUser = async (userId: any, userUpdateDto: UserUpdateDto) => {
   try {
     const updatedUser = {
       name: userUpdateDto.name,
