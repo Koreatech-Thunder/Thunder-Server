@@ -1,11 +1,8 @@
 import statusCode from "../modules/statusCode";
 import util from "../modules/util";
-import message from "../modules/message";
 
-import { UserCreateDto } from "../interfaces/user/UserCreateDto";
 import { UserUpdateDto } from "../interfaces/user/UserUpdateDto";
 import { UserResponseDto } from "../interfaces/user/UserResponseDto";
-import { PostBaseResponseDto } from "../interfaces/common/PostBaseResponseDto";
 import { UserService } from "../services";
 
 import { Request, Response } from "express";

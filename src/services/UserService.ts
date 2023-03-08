@@ -1,4 +1,3 @@
-import { UserCreateDto } from "../interfaces/user/UserCreateDto";
 import { UserUpdateDto } from "../interfaces/user/UserUpdateDto";
 import { UserResponseDto } from "../interfaces/user/UserResponseDto";
 import User from "../models/User";
