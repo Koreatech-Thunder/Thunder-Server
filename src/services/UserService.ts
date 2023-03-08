@@ -3,30 +3,6 @@ import { UserUpdateDto } from "../interfaces/user/UserUpdateDto";
 import { UserResponseDto } from "../interfaces/user/UserResponseDto";
 import User from "../models/User";
 
-const createUser = async (userCreateDto: UserCreateDto) => {
-  try {
-    const user = new User({
-      name: userCreateDto.name,
-      introduction: userCreateDto.introduction,
-      mannerTemperature: userCreateDto.mannerTemperature,
-      hashtags: userCreateDto.hashtags,
-      kakaoId: userCreateDto.kakaoId,
-      fcmToken: userCreateDto.fcmToken,
-    });
-
-    await user.save();
-
-    const data = {
-      _id: user._id,
-    };
-
-    return data;
-  } catch (error) {
-    console.log(error);
-    throw error;
-  }
-};
-
 const updateUser = async (userId: string, userUpdateDto: UserUpdateDto) => {
   try {
     const updatedUser = {
@@ -71,7 +47,6 @@ const findUserByKakao = async (kakaoId: any) => {
 };
 
 export default {
-  createUser,
   updateUser,
   findUserById,
   findUserByKakao,

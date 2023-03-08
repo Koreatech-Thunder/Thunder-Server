@@ -6,11 +6,11 @@ import errorGenerator from "../errors/errorGenerator";
 import tokenStatus from "../modules/tokenStatus";
 
 const login = async (req: Request, res: Response): Promise<void> => {
-  const firebaseKey = require("./koreatechthunder-80a11-firebase-adminsdk-we3dy-ba336957d9.json");
+  //const firebaseKey = require("./koreatechthunder-80a11-firebase-adminsdk-we3dy-ba336957d9.json");
 
-  firebase.initializeApp({
+  /*firebase.initializeApp({
     credential: firebase.credential.cert(firebaseKey),
-  });
+  });*/
 
   const fcmToken = req.body["fcmToken"];
   const kakaoToken = req.body["kakaoToken"];
@@ -51,13 +51,13 @@ const refresh = async (req: Request, res: Response): Promise<void> => {
     const data = await AuthService.refresh(accessToken, refreshToken);
 
     if (data === tokenStatus.INVALID_TOKEN) {
-      res.status(statusCode.UNAUTHORIZED).send(statusCode.UNAUTHORIZED);
+      res.status(statusCode.UNAUTHORIZED);
     }
     if (data === tokenStatus.ALL_TOKENS_HAS_EXPIRED) {
-      res.status(statusCode.UNAUTHORIZED).send(statusCode.UNAUTHORIZED);
+      res.status(statusCode.UNAUTHORIZED);
     }
     if (data === tokenStatus.VALID_TOKEN) {
-      res.status(statusCode.FORBIDDEN).send(statusCode.FORBIDDEN);
+      res.status(statusCode.FORBIDDEN);
     }
 
     res.status(statusCode.OK).json({ accessToken: data });

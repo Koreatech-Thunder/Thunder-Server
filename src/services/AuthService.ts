@@ -48,7 +48,9 @@ const login = async (kakaoToken: string, fcmToken: string) => {
 
       await user.save();
 
-      const accessToken = jwtHandler.getAccessToken(user.id);
+      console.log(user._id)
+
+      const accessToken = jwtHandler.getAccessToken(user._id);
       const refreshToken = jwtHandler.getRefreshToken();
 
       const tokenData: AuthResponseDto = {
