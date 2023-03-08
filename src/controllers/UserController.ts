@@ -13,9 +13,15 @@ const deleteUser = async (req: Request, res: Response): Promise<void> => {
         res.status(statusCode.NO_CONTENT).send(statusCode.OK);
 
     }
-    catch (error) {
+    catch (error: any) {
         console.log(error);
-        res.status(statusCode.INTERNAL_SERVER_ERROR).send(statusCode.INTERNAL_SERVER_ERROR);
+        if (error.statusCode == statusCode.NOT_FOUND)
+        {
+            res.status(statusCode.NOT_FOUND).send(statusCode.NOT_FOUND);
+        }
+        else {
+            res.status(statusCode.INTERNAL_SERVER_ERROR).send(statusCode.INTERNAL_SERVER_ERROR);
+        }
     }
 }
 
@@ -30,8 +36,15 @@ const getUserForProfileUpdate = async (req: Request, res: Response): Promise<voi
         res.status(statusCode.OK).send(data);
     }
 
-    catch (error) {
-        res.status(statusCode.INTERNAL_SERVER_ERROR).send(statusCode.INTERNAL_SERVER_ERROR);
+    catch (error: any) {
+        console.log(error);
+        if (error.statusCode == statusCode.NOT_FOUND)
+        {
+            res.status(statusCode.NOT_FOUND).send(statusCode.NOT_FOUND);
+        }
+        else {
+            res.status(statusCode.INTERNAL_SERVER_ERROR).send(statusCode.INTERNAL_SERVER_ERROR);
+        }
     }
 }
 
