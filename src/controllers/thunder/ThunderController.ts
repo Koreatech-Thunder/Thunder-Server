@@ -1,0 +1,96 @@
+import {Request, Response} from 'express';
+import {Result, ValidationError, validationResult} from 'express-validator';
+import {ThunderCreateDto} from '../../interfaces/thunder/ThunderCreateDto';
+import {ThunderResponseDto} from '../../interfaces/thunder/ThunderResponseDto';
+import {PostBaseResponseDto} from '../../interfaces/common/PostBaseResponseDto';
+import statusCode from '../../modules/statusCode';
+import ThunderService from '../../services/user/ThunderService';
+import message from '../../modules/message';
+
+/**
+ *
+ * @route POST / thunder/:userId
+ * @desc Create Thunder
+ * @access Public
+ */
+const createThunder = async (
+  req: Request,
+  res: Response,
+): Promise<void | Response> => {
+  const errors: Result<ValidationError> = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(statusCode.BAD_REQUEST).send(statusCode.BAD_REQUEST);
+  }
+
+  const thunderCreateDto: ThunderCreateDto = req.body; //key:value
+  const {userId} = req.params;
+
+  try {
+    //data is _id(IdObject)
+    const data: PostBaseResponseDto = await ThunderService.createThunder(
+      thunderCreateDto,
+      userId,
+    );
+
+    res.status(statusCode.CREATED).send(data);
+  } catch (error) {
+    console.log(error);
+    res
+      .status(statusCode.INTERNAL_SERVER_ERROR)
+      .send(statusCode.INTERNAL_SERVER_ERROR);
+  }
+};
+
+/**
+ *
+ * @route GET / thunder/:userId
+ * @desc Get Thunder
+ * @access Public
+ */
+const findThunderAll = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const {userId} = req.params;
+    const data: ThunderResponseDto[] | [] = await ThunderService.findThunderAll(
+      userId,
+    );
+
+    res.status(statusCode.OK).send(data);
+  } catch (error) {
+    console.log(error);
+    res.status(statusCode.INTERNAL_SERVER_ERROR).send();
+  }
+};
+
+/**
+ *
+ * @route GET / thunder/userId:userId/hashtags?hashtag=hashtag
+ * @desc Get Thunder
+ * @access Public
+ */
+const findThunderByHashtag = async (
+  req: Request,
+  res: Response,
+): Promise<void | Response> => {
+  const errors: Result<ValidationError> = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(statusCode.BAD_REQUEST).send(message.BAD_REQUEST);
+  }
+  const userId = req.params.userId;
+  const hashtag = req.query.hashtag;
+
+  try {
+    const data: ThunderResponseDto[] | [] =
+      await ThunderService.findThunderByHashtag(hashtag, userId);
+
+    res.status(statusCode.OK).send(data);
+  } catch (error) {
+    console.log(error);
+    res.status(statusCode.INTERNAL_SERVER_ERROR).send();
+  }
+};
+
+export default {
+  createThunder,
+  findThunderAll,
+  findThunderByHashtag,
+};
