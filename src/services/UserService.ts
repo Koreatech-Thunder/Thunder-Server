@@ -1,8 +1,53 @@
-import User from '../models/User';
-import axios from 'axios';
+import { UserUpdateDto } from "../interfaces/user/UserUpdateDto";
+import { UserResponseDto } from "../interfaces/user/UserResponseDto";
+import User from "../models/User";
 import errorGenerator from '../errors/errorGenerator';
 import statusCode from '../modules/statusCode';
 import { UserInfoDto } from '../interfaces/user/UserInfoDto';
+
+const updateUser = async (userId: any, userUpdateDto: UserUpdateDto) => {
+  try {
+    const updatedUser = {
+      name: userUpdateDto.name,
+      introduction: userUpdateDto.introduction,
+      mannerTemperature: userUpdateDto.mannerTemperature,
+      hashtags: userUpdateDto.hashtags,
+      isLogOut: userUpdateDto.isLogOut,
+      kakaoId: userUpdateDto.kakaoId,
+      fcmToken: userUpdateDto.fcmToken,
+    };
+
+    await User.findByIdAndUpdate(userId, updatedUser);
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+const findUserById = async (userId: string) => {
+  try {
+    const user: UserResponseDto | null = await User.findById(userId);
+
+    return user;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+const findUserByKakao = async (kakaoId: any) => {
+  try {
+    const user: UserResponseDto | null = await User.findOne({
+      kakaoId: kakaoId,
+    });
+
+    return user;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
 
 
 const deleteUser = async (userId: string) => {
@@ -16,12 +61,6 @@ const deleteUser = async (userId: string) => {
                 statusCode: statusCode.NOT_FOUND
             })
         }
-
-        await axios.post("https://kapi.kakao.com/v2/user/unlink", { 
-            headers: {
-                Authorization: `Bearer ${user.accessToken}`,
-            },
-        });
 
         await User.findByIdAndDelete(userId);
 
@@ -49,6 +88,9 @@ const getUserForProfileUpdate = async (userId: any) => {
 }
 
 export default {
-    deleteUser,
-    getUserForProfileUpdate,
-}
+  updateUser,
+  findUserById,
+  findUserByKakao,
+  deleteUser,
+  getUserForProfileUpdate,
+};

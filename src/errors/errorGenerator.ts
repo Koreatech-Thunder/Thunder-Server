@@ -1,4 +1,5 @@
-import message from "../modules/message";
+import message from '../modules/message';
+
 
 type statusMessage = {
   [key: number]: string;
@@ -34,5 +35,6 @@ const errorGenerator = ({
   err.statusCode = statusCode;
   throw err;
 };
+
 
 export default errorGenerator;
