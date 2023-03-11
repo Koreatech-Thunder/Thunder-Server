@@ -8,7 +8,7 @@ const router: Router = Router();
 
 
 
-router.post("/login", auth.auth, AuthController.login);
+router.post("/login",  AuthController.login);
 router.post('/refresh', AuthController.refresh);
 router.post('/logout', auth.auth, AuthController.logout);
 

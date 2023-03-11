@@ -7,18 +7,21 @@ import User from '../models/User';
 
 
 const auth = async (req: Request, res: Response, next: NextFunction) => {
-    const accessToken = req.body["authorization"];
+    const accessToken = req.body["accessToken"];
 
     if (!accessToken) { //액세스 토큰 없으면 에러.
         return res.status(statusCode.UNAUTHORIZED).send(statusCode.UNAUTHORIZED);
     }
 
+
     try {
         const decodedToken = jwtHandler.verifyToken(accessToken as string);
+        console.log(decodedToken)
 
         if (decodedToken === tokenStatus.EXPIRED_TOKEN) { //액세스 토큰 만료되면 에러.
             return res.status(statusCode.UNAUTHORIZED).send(statusCode.UNAUTHORIZED);
         }
+
 
         if (decodedToken === tokenStatus.INVALID_TOKEN) { //액세스 토큰 유효하지 않으면 에러.
             return res.status(statusCode.UNAUTHORIZED).send(statusCode.UNAUTHORIZED);
@@ -34,7 +37,8 @@ const auth = async (req: Request, res: Response, next: NextFunction) => {
             return res.status(statusCode.NOT_FOUND).send(statusCode.NOT_FOUND);
         }
 
-        req.body["userId"] = userId; //userId 뽑아서 바디에 저장하고 다음으로 넘김.
+
+        req.body["userId"] = userId.id; //userId 뽑아서 바디에 저장하고 다음으로 넘김.
 
         next();
     }
@@ -49,6 +53,7 @@ const auth = async (req: Request, res: Response, next: NextFunction) => {
     
 }
 
+
 export default { 
-    auth
+    auth,
 }
