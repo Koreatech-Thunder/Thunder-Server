@@ -7,6 +7,5 @@ router.put('/:userId', UserController.updateUser);
 router.get('/:userId', UserController.findUserById);
 router.delete('/:userId', UserController.deleteUser);
 router.get('/profile/:userId', UserController.getUserForProfileUpdate);
-router.post('/alarm', UserController.pushAlarmToUser);
 
 export default router;
