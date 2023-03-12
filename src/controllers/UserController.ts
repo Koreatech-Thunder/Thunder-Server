@@ -6,7 +6,6 @@ import { UserResponseDto } from "../interfaces/user/UserResponseDto";
 import { UserService } from "../services";
 import { Request, Response } from "express";
 import { UserInfoDto } from '../interfaces/user/UserInfoDto';
-import { UserNoticeBaseDto } from '../interfaces/user/UserAlarmBaseDto';
 
 const updateUser = async (req: Request, res: Response): Promise<void> => {
   const userUpdateDto: UserUpdateDto = req.body;
@@ -78,33 +77,6 @@ const getUserForProfileUpdate = async (req: Request, res: Response): Promise<voi
     }
 }
 
-const pushAlarmToUser = async (req: Request, res: Response): Promise<void> => {
-  const { userId } = req.params;
-
-  try {
-    const userNoticeBaseDto: UserNoticeBaseDto = {
-      userId
-    };
-
-    const data = await UserService.pushAlarmToUser(userNoticeBaseDto);
-    if (data === null) {
-      res.status(statusCode.NOT_FOUND).send(statusCode.NOT_FOUND);
-    }
-
-    res.status(statusCode.CREATED).send(statusCode.CREATED);
-  }
-  catch (error: any) {
-    console.log(error);
-    if (error.statusCode === statusCode.BAD_REQUEST) {
-      res.status(statusCode.BAD_REQUEST).send(statusCode.BAD_REQUEST);
-    }
-    else {
-      res.status(statusCode.INTERNAL_SERVER_ERROR).send(statusCode.INTERNAL_SERVER_ERROR);
-    }
-
-  }
-}
-
 
 export default {
   updateUser,
@@ -112,5 +84,4 @@ export default {
   findUserByKakao,
   deleteUser,
   getUserForProfileUpdate,
-  pushAlarmToUser
 };
