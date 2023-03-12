@@ -6,11 +6,7 @@ import errorGenerator from "../errors/errorGenerator";
 import tokenStatus from "../modules/tokenStatus";
 
 const login = async (req: Request, res: Response): Promise<void> => {
-  //const firebaseKey = require("./koreatechthunder-80a11-firebase-adminsdk-we3dy-ba336957d9.json");
 
-  /*firebase.initializeApp({
-    credential: firebase.credential.cert(firebaseKey),
-  });*/
 
   const fcmToken = req.body["fcmToken"];
   const kakaoToken = req.body["kakaoToken"];

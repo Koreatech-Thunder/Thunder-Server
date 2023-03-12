@@ -1,0 +1,4 @@
+const pushMessageTemplate = {
+    title: "",
+    body: ""
+}
