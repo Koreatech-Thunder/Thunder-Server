@@ -4,7 +4,7 @@ import {ThunderCreateDto} from '../../interfaces/thunder/ThunderCreateDto';
 import {ThunderResponseDto} from '../../interfaces/thunder/ThunderResponseDto';
 import {PostBaseResponseDto} from '../../interfaces/common/PostBaseResponseDto';
 import statusCode from '../../modules/statusCode';
-import ThunderService from '../../services/user/ThunderService';
+import ThunderService from '../../services/thunder/ThunderService';
 import message from '../../modules/message';
 
 /**
@@ -33,11 +33,16 @@ const createThunder = async (
     );
 
     res.status(statusCode.CREATED).send(data);
-  } catch (error) {
-    console.log(error);
-    res
-      .status(statusCode.INTERNAL_SERVER_ERROR)
-      .send(statusCode.INTERNAL_SERVER_ERROR);
+  } catch (error: any) {
+    if (error.msg == '유효하지 않은 id입니다.') {
+      console.log(error);
+      res.status(statusCode.UNAUTHORIZED).send(statusCode.UNAUTHORIZED);
+    } else {
+      console.log(error);
+      res
+        .status(statusCode.INTERNAL_SERVER_ERROR)
+        .send(statusCode.INTERNAL_SERVER_ERROR);
+    }
   }
 };
 
@@ -55,9 +60,16 @@ const findThunderAll = async (req: Request, res: Response): Promise<void> => {
     );
 
     res.status(statusCode.OK).send(data);
-  } catch (error) {
-    console.log(error);
-    res.status(statusCode.INTERNAL_SERVER_ERROR).send();
+  } catch (error: any) {
+    if (error.msg == '유효하지 않은 id입니다.') {
+      console.log(error);
+      res.status(statusCode.UNAUTHORIZED).send(statusCode.UNAUTHORIZED);
+    } else {
+      console.log(error);
+      res
+        .status(statusCode.INTERNAL_SERVER_ERROR)
+        .send(statusCode.INTERNAL_SERVER_ERROR);
+    }
   }
 };
 
@@ -83,9 +95,16 @@ const findThunderByHashtag = async (
       await ThunderService.findThunderByHashtag(hashtag, userId);
 
     res.status(statusCode.OK).send(data);
-  } catch (error) {
-    console.log(error);
-    res.status(statusCode.INTERNAL_SERVER_ERROR).send();
+  } catch (error: any) {
+    if (error.msg == '유효하지 않은 id입니다.') {
+      console.log(error);
+      res.status(statusCode.UNAUTHORIZED).send(statusCode.UNAUTHORIZED);
+    } else {
+      console.log(error);
+      res
+        .status(statusCode.INTERNAL_SERVER_ERROR)
+        .send(statusCode.INTERNAL_SERVER_ERROR);
+    }
   }
 };
 

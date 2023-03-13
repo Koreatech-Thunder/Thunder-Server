@@ -42,7 +42,7 @@ const findThunderAll = async (
   try {
     await UserServiceUtils.findUserById(userId);
 
-    const thunderlist = await Thunder.find().sort({createdAt: 'asc'});
+    const thunderlist = await Thunder.find().sort({createdAt: 'desc'});
 
     if (!thunderlist) {
       return [];
@@ -51,40 +51,40 @@ const findThunderAll = async (
     const allThunder: ThunderResponseDto[] = [];
 
     await Promise.all(
-      thunderlist.map(async (all: any) => {
+      thunderlist.map(async (thunder: any) => {
         const isMembers = await ThunderServiceUtils.findMemberById(
           userId,
-          all.members,
+          thunder.members,
         );
 
-        if (isMembers == 1) {
+        if (isMembers == 'HOST') {
           allThunder.push({
-            title: all.title,
-            deadline: all.deadline.toString(),
-            content: all.content,
-            hashtags: all.hashtags,
-            members: all.members, //id<Object>
-            limitMembersCnt: all.limitMembersCnt,
+            title: thunder.title,
+            deadline: thunder.deadline.toString(),
+            content: thunder.content,
+            hashtags: thunder.hashtags,
+            members: thunder.members, //id<Object>
+            limitMembersCnt: thunder.limitMembersCnt,
             thunderState: 'HOST',
           });
-        } else if (isMembers == 0) {
+        } else if (isMembers == 'NON_MEMBER') {
           allThunder.push({
-            title: all.title,
-            deadline: all.deadline.toString(),
-            content: all.content,
-            hashtags: all.hashtags,
-            members: all.members, //id<Object>
-            limitMembersCnt: all.limitMembersCnt,
+            title: thunder.title,
+            deadline: thunder.deadline.toString(),
+            content: thunder.content,
+            hashtags: thunder.hashtags,
+            members: thunder.members, //id<Object>
+            limitMembersCnt: thunder.limitMembersCnt,
             thunderState: 'NON_MEMBER',
           });
         } else {
           allThunder.push({
-            title: all.title,
-            deadline: all.deadline.toString(),
-            content: all.content,
-            hashtags: all.hashtags,
-            members: all.members, //id<Object>
-            limitMembersCnt: all.limitMembersCnt,
+            title: thunder.title,
+            deadline: thunder.deadline.toString(),
+            content: thunder.content,
+            hashtags: thunder.hashtags,
+            members: thunder.members, //id<Object>
+            limitMembersCnt: thunder.limitMembersCnt,
             thunderState: 'MEMBER',
           });
         }
@@ -106,7 +106,7 @@ const findThunderByHashtag = async (
     await UserServiceUtils.findUserById(userId);
 
     const thunderlist = await Thunder.find({hashtags: hashtag}).sort({
-      createdAt: 'asc',
+      createdAt: 'desc',
     });
 
     if (!thunderlist) {
@@ -121,7 +121,7 @@ const findThunderByHashtag = async (
           hashtag.members,
         );
 
-        if (isMembers == 1) {
+        if (isMembers == 'HOST') {
           hashtagthunder.push({
             title: hashtag.title,
             deadline: hashtag.deadline.toString(),
@@ -131,7 +131,7 @@ const findThunderByHashtag = async (
             limitMembersCnt: hashtag.limitMembersCnt,
             thunderState: 'HOST',
           });
-        } else if (isMembers == 0) {
+        } else if (isMembers == 'NON_MEMBER') {
           hashtagthunder.push({
             title: hashtag.title,
             deadline: hashtag.deadline.toString(),

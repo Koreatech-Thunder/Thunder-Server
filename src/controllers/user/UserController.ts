@@ -7,6 +7,7 @@ import {UserHashtagResponseDto} from '../../interfaces/user/UserHashtagResponseD
 import {Result, ValidationError, validationResult} from 'express-validator';
 import message from '../../modules/message';
 import {PostBaseResponseDto} from '../../interfaces/common/PostBaseResponseDto';
+import errorGenerator from '../../errors/errorGenerator';
 
 /**
  *
@@ -33,11 +34,19 @@ const createUser = async (
     );
 
     res.status(statusCode.CREATED).send(data);
-  } catch (error) {
-    console.log(error);
-    res
-      .status(statusCode.INTERNAL_SERVER_ERROR)
-      .send(statusCode.INTERNAL_SERVER_ERROR);
+  } catch (error: any) {
+    if (error.msg == '사용자 닉네임 중복입니다.') {
+      console.log(error);
+      res.status(statusCode.CONFLICT).send(statusCode.CONFLICT);
+    } else if (error.msg == '이미 가입한 사용자입니다.') {
+      console.log(error);
+      res.status(statusCode.CONFLICT).send(statusCode.CONFLICT);
+    } else {
+      console.log(error);
+      res
+        .status(statusCode.INTERNAL_SERVER_ERROR)
+        .send(statusCode.INTERNAL_SERVER_ERROR);
+    }
   }
 };
 
@@ -56,9 +65,19 @@ const findUserHashtag = async (req: Request, res: Response): Promise<void> => {
     );
 
     res.status(statusCode.OK).send(data);
-  } catch (error) {
-    console.log(error);
-    res.status(statusCode.INTERNAL_SERVER_ERROR).send();
+  } catch (error: any) {
+    if (error.msg == '조회할 사용자 정보가 없습니다.') {
+      console.log(error);
+      res.status(statusCode.NOT_FOUND).send(statusCode.NOT_FOUND);
+    } else if ('유효하지 않은 id입니다.') {
+      console.log(error);
+      res.status(statusCode.UNAUTHORIZED).send(statusCode.UNAUTHORIZED);
+    } else {
+      console.log(error);
+      res
+        .status(statusCode.INTERNAL_SERVER_ERROR)
+        .send(statusCode.INTERNAL_SERVER_ERROR);
+    }
   }
 };
 /*
