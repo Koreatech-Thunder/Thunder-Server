@@ -6,6 +6,7 @@ import statusCode from '../modules/statusCode';
 import { UserInfoDto } from '../interfaces/user/UserInfoDto';
 import { UserInfo } from '../interfaces/user/UserInfo';
 
+
 const updateUser = async (userId: any, userUpdateDto: UserUpdateDto) => {
   try {
     const updatedUser = {
@@ -100,6 +101,7 @@ const getUserForProfileUpdate = async (userId: string) => {
     
 
 }
+
 
 export default {
   updateUser,

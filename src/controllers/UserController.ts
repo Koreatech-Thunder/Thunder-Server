@@ -1,4 +1,4 @@
-import statusCode from "../modules/statusCode";
+import statusCode from '../modules/statusCode';
 import util from "../modules/util";
 
 import { UserUpdateDto } from "../interfaces/user/UserUpdateDto";
