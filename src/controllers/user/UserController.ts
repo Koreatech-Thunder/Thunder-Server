@@ -69,7 +69,7 @@ const findUserHashtag = async (req: Request, res: Response): Promise<void> => {
     if (error.msg == '조회할 사용자 정보가 없습니다.') {
       console.log(error);
       res.status(statusCode.NOT_FOUND).send(statusCode.NOT_FOUND);
-    } else if ('유효하지 않은 id입니다.') {
+    } else if (error.msg == '유효하지 않은 id입니다.') {
       console.log(error);
       res.status(statusCode.UNAUTHORIZED).send(statusCode.UNAUTHORIZED);
     } else {

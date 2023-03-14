@@ -115,40 +115,40 @@ const findThunderByHashtag = async (
 
     const hashtagthunder: ThunderResponseDto[] = [];
     await Promise.all(
-      thunderlist.map(async (hashtag: any) => {
-        const isMembers = await ThunderServiceUtils.findMemberById(
+      thunderlist.map(async (thunder: any) => {
+        const isMembers: string = await ThunderServiceUtils.findMemberById(
           userId,
-          hashtag.members,
+          thunder.members,
         );
 
         if (isMembers == 'HOST') {
           hashtagthunder.push({
-            title: hashtag.title,
-            deadline: hashtag.deadline.toString(),
-            content: hashtag.content,
-            hashtags: hashtag.hashtags,
-            members: hashtag.members, //id<Object>
-            limitMembersCnt: hashtag.limitMembersCnt,
+            title: thunder.title,
+            deadline: thunder.deadline.toString(),
+            content: thunder.content,
+            hashtags: thunder.hashtags,
+            members: thunder.members, //id<Object>
+            limitMembersCnt: thunder.limitMembersCnt,
             thunderState: 'HOST',
           });
         } else if (isMembers == 'NON_MEMBER') {
           hashtagthunder.push({
-            title: hashtag.title,
-            deadline: hashtag.deadline.toString(),
-            content: hashtag.content,
-            hashtags: hashtag.hashtags,
-            members: hashtag.members, //id<Object>
-            limitMembersCnt: hashtag.limitMembersCnt,
+            title: thunder.title,
+            deadline: thunder.deadline.toString(),
+            content: thunder.content,
+            hashtags: thunder.hashtags,
+            members: thunder.members, //id<Object>
+            limitMembersCnt: thunder.limitMembersCnt,
             thunderState: 'NON_MEMBER',
           });
         } else {
           hashtagthunder.push({
-            title: hashtag.title,
-            deadline: hashtag.deadline.toString(),
-            content: hashtag.content,
-            hashtags: hashtag.hashtags,
-            members: hashtag.members, //id<Object>
-            limitMembersCnt: hashtag.limitMembersCnt,
+            title: thunder.title,
+            deadline: thunder.deadline.toString(),
+            content: thunder.content,
+            hashtags: thunder.hashtags,
+            members: thunder.members, //id<Object>
+            limitMembersCnt: thunder.limitMembersCnt,
             thunderState: 'MEMBER',
           });
         }

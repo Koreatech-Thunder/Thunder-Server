@@ -8,7 +8,7 @@ import {UserCreateDto} from '../../interfaces/user/UserCreateDto';
 import {PostBaseResponseDto} from '../../interfaces/common/PostBaseResponseDto';
 import UserServiceUtils from './UserServiceUtils';
 import {UserHashtagResponseDto} from '../../interfaces/user/UserHashtagResponseDto';
-
+import {UserInfo} from '../../interfaces/user/UserInfo';
 /*
 const deleteUser = async (userId: string) => {
   try {
@@ -50,7 +50,13 @@ const createUser = async (
   userId: string,
 ): Promise<PostBaseResponseDto> => {
   try {
-    await UserServiceUtils.findExistUserById(userId);
+    const existuser = await User.findById(userId);
+    if (existuser) {
+      throw errorGenerator({
+        msg: '이미 가입한 사용자입니다.',
+        statusCode: statusCode.CONFLICT,
+      });
+    }
 
     const existUsername = await User.findOne({
       name: userCreateDto.name,
@@ -84,16 +90,7 @@ const findUserHashtag = async (
   userId: string,
 ): Promise<UserHashtagResponseDto> => {
   try {
-    await UserServiceUtils.findUserById(userId);
-
-    const user: UserResponseDto = await User.findById(userId)!;
-
-    if (!user) {
-      throw errorGenerator({
-        msg: '조회할 사용자 정보가 없습니다.',
-        statusCode: statusCode.NOT_FOUND,
-      });
-    }
+    const user: UserInfo = await UserServiceUtils.findUserById(userId);
 
     const data: UserHashtagResponseDto = {
       hashtags: user.hashtags,

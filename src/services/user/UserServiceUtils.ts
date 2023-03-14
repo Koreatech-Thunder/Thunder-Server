@@ -3,8 +3,10 @@ import statusCode from '../../modules/statusCode';
 import message from '../../modules/statusCode';
 import errorGenerator from '../../errors/errorGenerator';
 import Thunder from '../../models/Thunder';
+import {UserResponseDto} from '../../interfaces/user/UserResponseDto';
+import {UserInfo} from '../../interfaces/user/UserInfo';
 
-const findUserById = async (userId: string) => {
+const findUserById = async (userId: string): Promise<UserInfo> => {
   const user = await User.findById(userId);
   if (!user) {
     throw errorGenerator({
@@ -15,18 +17,6 @@ const findUserById = async (userId: string) => {
   return user;
 };
 
-const findExistUserById = async (userId: string) => {
-  const user = await User.findById(userId);
-  if (user) {
-    throw errorGenerator({
-      msg: '이미 가입한 사용자입니다.',
-      statusCode: statusCode.CONFLICT,
-    });
-  }
-  return user;
-};
-
 export default {
   findUserById,
-  findExistUserById,
 };
