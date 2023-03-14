@@ -108,8 +108,44 @@ const findThunderByHashtag = async (
   }
 };
 
+/**
+ *
+ * @route GET / thunder/:userId/:thunderId
+ * @desc Get Thunder Details
+ * @access Public
+ */
+const findThunder = async (
+  req: Request,
+  res: Response,
+): Promise<void | Response> => {
+  const userId = req.params.userId;
+  const thunderId = req.params.thunderId;
+
+  try {
+    const data: ThunderResponseDto = await ThunderService.findThunder(
+      userId,
+      thunderId,
+    );
+
+    res.status(statusCode.OK).send(data);
+  } catch (error: any) {
+    if (error.msg == '유효하지 않은 id입니다.') {
+      console.log(error);
+      res.status(statusCode.UNAUTHORIZED).send(statusCode.UNAUTHORIZED);
+    } else if (error.msg == '존재하지 않는 방입니다.') {
+      console.log(error);
+      res.status(statusCode.NOT_FOUND).send(statusCode.NOT_FOUND);
+    } else {
+      res
+        .status(statusCode.INTERNAL_SERVER_ERROR)
+        .send(statusCode.INTERNAL_SERVER_ERROR);
+    }
+  }
+};
+
 export default {
   createThunder,
   findThunderAll,
   findThunderByHashtag,
+  findThunder,
 };

@@ -162,8 +162,62 @@ const findThunderByHashtag = async (
   }
 };
 
+const findThunder = async (
+  userId: string,
+  thunderId: string,
+): Promise<ThunderResponseDto> => {
+  try {
+    await UserServiceUtils.findUserById(userId);
+
+    const thunder = await ThunderServiceUtils.findThunderById(thunderId);
+
+    const isMembers: string = await ThunderServiceUtils.findMemberById(
+      userId,
+      thunder.members,
+    );
+
+    if (isMembers == 'HOST') {
+      var data: ThunderResponseDto = {
+        title: thunder.title,
+        deadline: thunder.deadline.toString(),
+        content: thunder.content,
+        hashtags: thunder.hashtags,
+        members: thunder.members, //id<Object>
+        limitMembersCnt: thunder.limitMembersCnt,
+        thunderState: 'HOST',
+      };
+    } else if (isMembers == 'NON_MEMBER') {
+      var data: ThunderResponseDto = {
+        title: thunder.title,
+        deadline: thunder.deadline.toString(),
+        content: thunder.content,
+        hashtags: thunder.hashtags,
+        members: thunder.members, //id<Object>
+        limitMembersCnt: thunder.limitMembersCnt,
+        thunderState: 'NON_MEMBER',
+      };
+    } else {
+      var data: ThunderResponseDto = {
+        title: thunder.title,
+        deadline: thunder.deadline.toString(),
+        content: thunder.content,
+        hashtags: thunder.hashtags,
+        members: thunder.members, //id<Object>
+        limitMembersCnt: thunder.limitMembersCnt,
+        thunderState: 'MEMBER',
+      };
+    }
+
+    return data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
 export default {
   createThunder,
   findThunderAll,
   findThunderByHashtag,
+  findThunder,
 };
