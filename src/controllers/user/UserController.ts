@@ -27,12 +27,9 @@ const updateUser = async (
   const {userId} = req.params;
 
   try {
-    const data: PostBaseResponseDto = await UserService.updateUser(
-      userCreateDto,
-      userId,
-    );
+    await UserService.updateUser(userCreateDto, userId);
 
-    res.status(statusCode.CREATED).send(data);
+    res.status(statusCode.CREATED).send(statusCode.CREATED);
   } catch (error: any) {
     if (error.msg == '사용자 닉네임 중복입니다.') {
       console.log(error);

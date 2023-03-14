@@ -3,9 +3,7 @@ import User from '../../models/User';
 import errorGenerator from '../../errors/errorGenerator';
 import statusCode from '../../modules/statusCode';
 import {UserInfoDto} from '../../interfaces/user/UserInfoDto';
-import {UserResponseDto} from '../../interfaces/user/UserResponseDto';
-import {UserCreateDto} from '../../interfaces/user/UserCreateDto';
-import {PostBaseResponseDto} from '../../interfaces/common/PostBaseResponseDto';
+import {UserUpdateDto} from '../../interfaces/user/UserUpdateDto';
 import UserServiceUtils from './UserServiceUtils';
 import {UserHashtagResponseDto} from '../../interfaces/user/UserHashtagResponseDto';
 import {UserInfo} from '../../interfaces/user/UserInfo';
@@ -46,14 +44,14 @@ const getUserForProfileUpdate = async (userId: any) => {
 };
 
 const updateUser = async (
-  userCreateDto: UserCreateDto,
+  userUpdateDto: UserUpdateDto,
   userId: string,
-): Promise<PostBaseResponseDto> => {
+): Promise<void> => {
   try {
     await UserServiceUtils.findUserById(userId);
 
     const existUsername = await User.findOne({
-      name: userCreateDto.name,
+      name: userUpdateDto.name,
     });
     if (existUsername) {
       throw errorGenerator({
@@ -62,18 +60,7 @@ const updateUser = async (
       });
     }
 
-    const user = new User({
-      name: userCreateDto.name,
-      hashtags: userCreateDto.hashtags,
-    });
-
-    await user.save();
-
-    const data = {
-      _id: user._id,
-    };
-
-    return data;
+    await User.findByIdAndUpdate(userId, userUpdateDto);
   } catch (error) {
     console.log(error);
     throw error;
