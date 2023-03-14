@@ -36,6 +36,7 @@ const message = {
   READ_THUNDER_SUCCESS: '번개 정보 조회 성공입니다',
   JOIN_ROOM_SUCCESS: '번개 참가 성공입니다.',
   LEAVE_ROOM_SUCCESS: '번개 나가기 성공입니다.',
+  OVER_LIMITMEMBERSCNT: '제한된 인원을 초과하였습니다.',
 };
 
 export default message;

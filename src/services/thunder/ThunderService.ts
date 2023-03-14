@@ -247,10 +247,46 @@ const updateThunder = async (
   }
 };
 
+const joinThunder = async (
+  userId: string,
+  thunderId: string,
+): Promise<void> => {
+  try {
+    await UserServiceUtils.findUserById(userId);
+
+    const thunder = await ThunderServiceUtils.findThunderById(thunderId);
+
+    if (thunder.members.length > thunder.limitMembersCnt) {
+      throw errorGenerator({
+        msg: '제한된 인원을 초과하였습니다.',
+        statusCode: statusCode.FORBIDDEN,
+      });
+    }
+
+    const isMembers: string = await ThunderServiceUtils.findMemberById(
+      userId,
+      thunder.members,
+    );
+
+    if (isMembers == 'NON_MEMBER') {
+      await Thunder.findByIdAndUpdate(thunderId, {$push: {members: userId}});
+    } else {
+      throw errorGenerator({
+        msg: '권한이 없는 유저의 요청입니다.',
+        statusCode: statusCode.FORBIDDEN,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
 export default {
   createThunder,
   findThunderAll,
   findThunderByHashtag,
   findThunder,
   updateThunder,
+  joinThunder,
 };
