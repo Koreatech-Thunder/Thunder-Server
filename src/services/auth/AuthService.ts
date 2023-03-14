@@ -30,10 +30,13 @@ const login = async (kakaoToken: string, fcmToken: string) => {
     const existUser = await UserService.findUserByKakao(kakaoId); //유저 여부는 User 스키마의 kakaoId 필드로 구분.
 
     if (existUser) {
-      await UserService.updateUser(existUser._id, {
-        isLogOut: false,
-        fcmToken: fcmToken,
-      });
+      await UserService.updateUser(
+        {
+          isLogOut: false,
+          fcmToken: fcmToken,
+        },
+        existUser._id.toString(),
+      );
 
       throw errorGenerator({
         msg: '이미 존재하는 유저입니다.',

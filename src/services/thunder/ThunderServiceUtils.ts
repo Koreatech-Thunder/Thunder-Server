@@ -1,8 +1,3 @@
-import Thunder from '../../models/Thunder';
-import errorGenerator from '../../errors/errorGenerator';
-import statusCode from '../../modules/statusCode';
-import {ThunderResponseDto} from '../../interfaces/thunder/ThunderResponseDto';
-
 const findMemberById = async (
   userId: string,
   list: string[],

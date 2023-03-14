@@ -1,7 +1,6 @@
 import statusCode from '../../modules/statusCode';
 import util from '../../modules/util';
 import {Result, ValidationError, validationResult} from 'express-validator';
-import {UserUpdateDto} from '../../interfaces/user/UserUpdateDto';
 import {UserResponseDto} from '../../interfaces/user/UserResponseDto';
 import {UserService} from '../../services';
 import {Request, Response} from 'express';
@@ -13,7 +12,7 @@ import {UserHashtagResponseDto} from '../../interfaces/user/UserHashtagResponseD
 /**
  *
  * @route PUT / user
- * @desc Create User information at login View
+ * @desc Update User information
  * @access Public
  */
 const updateUser = async (
@@ -36,7 +35,7 @@ const updateUser = async (
     if (error.msg == '사용자 닉네임 중복입니다.') {
       console.log(error);
       res.status(statusCode.CONFLICT).send(statusCode.CONFLICT);
-    } else if (error.msg == '이미 가입한 사용자입니다.') {
+    } else if (error.msg == '유효하지 않은 id입니다.') {
       console.log(error);
       res.status(statusCode.CONFLICT).send(statusCode.CONFLICT);
     } else {
@@ -51,7 +50,7 @@ const updateUser = async (
 /**
  *
  * @route GET / user/hashtags/:userId
- * @desc Read User information at main View
+ * @desc Read User hashtags
  * @access Public
  */
 const findUserHashtag = async (req: Request, res: Response): Promise<void> => {
@@ -64,10 +63,7 @@ const findUserHashtag = async (req: Request, res: Response): Promise<void> => {
 
     res.status(statusCode.OK).send(data);
   } catch (error: any) {
-    if (error.msg == '조회할 사용자 정보가 없습니다.') {
-      console.log(error);
-      res.status(statusCode.NOT_FOUND).send(statusCode.NOT_FOUND);
-    } else if (error.msg == '유효하지 않은 id입니다.') {
+    if (error.msg == '유효하지 않은 id입니다.') {
       console.log(error);
       res.status(statusCode.UNAUTHORIZED).send(statusCode.UNAUTHORIZED);
     } else {

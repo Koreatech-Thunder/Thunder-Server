@@ -1,6 +1,5 @@
 import User from '../../models/User';
 import statusCode from '../../modules/statusCode';
-import message from '../../modules/statusCode';
 import errorGenerator from '../../errors/errorGenerator';
 import {UserInfo} from '../../interfaces/user/UserInfo';
 

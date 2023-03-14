@@ -1,6 +1,5 @@
 import message from '../modules/message';
 
-
 type statusMessage = {
   [key: number]: string;
 };
@@ -30,11 +29,10 @@ const errorGenerator = ({
 }): void => {
   // 인자로 들어오는 메세지와 상태 코드를 매핑
   const err: ErrorWithStatusCode = new Error(
-    msg || DEFAULT_HTTP_STATUS_MESSAGES[statusCode]
+    msg || DEFAULT_HTTP_STATUS_MESSAGES[statusCode],
   );
   err.statusCode = statusCode;
   throw err;
 };
-
 
 export default errorGenerator;

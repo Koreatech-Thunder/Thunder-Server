@@ -76,7 +76,7 @@ const findThunderAll = async (req: Request, res: Response): Promise<void> => {
 /**
  *
  * @route GET / thunder/userId:userId/hashtags?hashtag=hashtag
- * @desc Get Thunder
+ * @desc Get Thunder by hashtags
  * @access Public
  */
 const findThunderByHashtag = async (

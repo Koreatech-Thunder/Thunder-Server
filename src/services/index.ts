@@ -1,8 +1,6 @@
-import UserService from "./UserService"
-import AuthService from "./AuthService"
+import UserService from './user/UserService';
+import AuthService from './auth/AuthService';
+import ThunderService from './thunder/ThunderService';
 
 //service index file
-export {
-    UserService,
-    AuthService
-}
+export {UserService, AuthService, ThunderService};
