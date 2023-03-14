@@ -17,5 +17,6 @@ router.get(
 router.get('/:userId/:thunderId', auth.auth, ThunderController.findThunder);
 router.put('/:userId/:thunderId', ThunderController.updateThunder);
 router.put('/join/:userId/:thunderId', ThunderController.joinThunder);
+router.put('/out/:userId/:thunderId', ThunderController.outThunder);
 
 export default router;
