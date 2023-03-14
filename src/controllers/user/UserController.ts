@@ -1,12 +1,14 @@
 import statusCode from '../../modules/statusCode';
-import UserService from '../../services/user/UserService';
+import util from '../../modules/util';
+import {Result, ValidationError, validationResult} from 'express-validator';
+import {UserUpdateDto} from '../../interfaces/user/UserUpdateDto';
+import {UserResponseDto} from '../../interfaces/user/UserResponseDto';
+import {UserService} from '../../services';
 import {Request, Response} from 'express';
 import {UserInfoDto} from '../../interfaces/user/UserInfoDto';
+import message from '../../modules/message';
 import {UserCreateDto} from '../../interfaces/user/UserCreateDto';
 import {UserHashtagResponseDto} from '../../interfaces/user/UserHashtagResponseDto';
-import {Result, ValidationError, validationResult} from 'express-validator';
-import message from '../../modules/message';
-import {PostBaseResponseDto} from '../../interfaces/common/PostBaseResponseDto';
 
 /**
  *
@@ -76,7 +78,34 @@ const findUserHashtag = async (req: Request, res: Response): Promise<void> => {
     }
   }
 };
-/*
+
+const findUserById = async (req: Request, res: Response): Promise<void> => {
+  const {userId} = req.params;
+
+  try {
+    const data: UserResponseDto | null = await UserService.findUserById(userId);
+
+    res.status(statusCode.OK).send(util.success(data));
+  } catch (error) {
+    console.log(error);
+    res.status(statusCode.INTERNAL_SERVER_ERROR).send(util.fail());
+  }
+};
+
+const findUserByKakao = async (req: Request, res: Response): Promise<void> => {
+  const {kakaoId} = req.params;
+
+  try {
+    const data: UserResponseDto | null = await UserService.findUserByKakao(
+      kakaoId,
+    );
+    res.status(statusCode.OK).send(util.success(data));
+  } catch (error) {
+    console.log(error);
+    res.status(statusCode.INTERNAL_SERVER_ERROR).send(util.fail());
+  }
+};
+
 const deleteUser = async (req: Request, res: Response): Promise<void> => {
   const {userId} = req.params;
 
@@ -84,14 +113,18 @@ const deleteUser = async (req: Request, res: Response): Promise<void> => {
     await UserService.deleteUser(userId);
 
     res.status(statusCode.NO_CONTENT).send(statusCode.OK);
-  } catch (error) {
+  } catch (error: any) {
     console.log(error);
-    res
-      .status(statusCode.INTERNAL_SERVER_ERROR)
-      .send(statusCode.INTERNAL_SERVER_ERROR);
+    if (error.statusCode == statusCode.NOT_FOUND) {
+      res.status(statusCode.NOT_FOUND).send(statusCode.NOT_FOUND);
+    } else {
+      res
+        .status(statusCode.INTERNAL_SERVER_ERROR)
+        .send(statusCode.INTERNAL_SERVER_ERROR);
+    }
   }
 };
-*/
+
 const getUserForProfileUpdate = async (
   req: Request,
   res: Response,
@@ -104,16 +137,23 @@ const getUserForProfileUpdate = async (
     );
 
     res.status(statusCode.OK).send(data);
-  } catch (error) {
-    res
-      .status(statusCode.INTERNAL_SERVER_ERROR)
-      .send(statusCode.INTERNAL_SERVER_ERROR);
+  } catch (error: any) {
+    console.log(error);
+    if (error.statusCode == statusCode.NOT_FOUND) {
+      res.status(statusCode.NOT_FOUND).send(statusCode.NOT_FOUND);
+    } else {
+      res
+        .status(statusCode.INTERNAL_SERVER_ERROR)
+        .send(statusCode.INTERNAL_SERVER_ERROR);
+    }
   }
 };
 
 export default {
   updateUser,
-  findUserHashtag,
-  //deleteUser,
+  findUserById,
+  findUserByKakao,
+  deleteUser,
   getUserForProfileUpdate,
+  findUserHashtag,
 };

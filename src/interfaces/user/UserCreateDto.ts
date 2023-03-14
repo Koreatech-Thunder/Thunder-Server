@@ -1,10 +1,9 @@
 export interface UserCreateDto {
-    name: String;
+    name?: String;
     introduction?: String;
     mannerTemperature: Number;
     hashtags?: [String];
     isLogOut: Boolean;
-    kakaoId: Number;
-    kakaoToken: String;
+    kakaoId?: String;
     fcmToken: String;
 }

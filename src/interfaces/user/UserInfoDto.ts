@@ -1,4 +1,3 @@
-
 export interface UserInfoDto {
     name: String;
     introduction: String;

@@ -88,7 +88,7 @@ const findThunderByHashtag = async (
     return res.status(statusCode.BAD_REQUEST).send(message.BAD_REQUEST);
   }
   const userId = req.params.userId;
-  const hashtag = req.query.hashtag;
+  const hashtag: string = req.query.hashtag;
 
   try {
     const data: ThunderResponseDto[] | [] =

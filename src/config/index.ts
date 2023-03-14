@@ -25,4 +25,13 @@ export default {
    * MongoDB URI
    */
   mongoURI: process.env.MONGODB_URI as string,
+
+  /**
+   * JWT Secret Key
+   */ 
+
+  jwtSecret: process.env.JWT_SECRET as string,
+
+
+
 };
