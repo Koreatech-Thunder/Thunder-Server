@@ -1,7 +1,10 @@
+import errorGenerator from '../../errors/errorGenerator';
 import {PostBaseResponseDto} from '../../interfaces/common/PostBaseResponseDto';
 import {ThunderCreateDto} from '../../interfaces/thunder/ThunderCreateDto';
 import {ThunderResponseDto} from '../../interfaces/thunder/ThunderResponseDto';
+import {ThunderUpdateDto} from '../../interfaces/thunder/ThunderUpdateDto';
 import Thunder from '../../models/Thunder';
+import statusCode from '../../modules/statusCode';
 import UserServiceUtils from '../user/UserServiceUtils';
 import ThunderServiceUtils from './ThunderServiceUtils';
 
@@ -162,8 +165,92 @@ const findThunderByHashtag = async (
   }
 };
 
+const findThunder = async (
+  userId: string,
+  thunderId: string,
+): Promise<ThunderResponseDto> => {
+  try {
+    await UserServiceUtils.findUserById(userId);
+
+    const thunder = await ThunderServiceUtils.findThunderById(thunderId);
+
+    const isMembers: string = await ThunderServiceUtils.findMemberById(
+      userId,
+      thunder.members,
+    );
+
+    if (isMembers == 'HOST') {
+      var data: ThunderResponseDto = {
+        title: thunder.title,
+        deadline: thunder.deadline.toString(),
+        content: thunder.content,
+        hashtags: thunder.hashtags,
+        members: thunder.members, //id<Object>
+        limitMembersCnt: thunder.limitMembersCnt,
+        thunderState: 'HOST',
+      };
+    } else if (isMembers == 'NON_MEMBER') {
+      var data: ThunderResponseDto = {
+        title: thunder.title,
+        deadline: thunder.deadline.toString(),
+        content: thunder.content,
+        hashtags: thunder.hashtags,
+        members: thunder.members, //id<Object>
+        limitMembersCnt: thunder.limitMembersCnt,
+        thunderState: 'NON_MEMBER',
+      };
+    } else {
+      var data: ThunderResponseDto = {
+        title: thunder.title,
+        deadline: thunder.deadline.toString(),
+        content: thunder.content,
+        hashtags: thunder.hashtags,
+        members: thunder.members, //id<Object>
+        limitMembersCnt: thunder.limitMembersCnt,
+        thunderState: 'MEMBER',
+      };
+    }
+
+    return data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+const updateThunder = async (
+  userId: string,
+  thunderId: string,
+  thunderUpdateDto: ThunderUpdateDto,
+): Promise<void> => {
+  try {
+    await UserServiceUtils.findUserById(userId);
+
+    const thunder = await ThunderServiceUtils.findThunderById(thunderId);
+
+    const isMembers: string = await ThunderServiceUtils.findMemberById(
+      userId,
+      thunder.members,
+    );
+
+    if (isMembers == 'HOST') {
+      await Thunder.findByIdAndUpdate(thunderId, thunderUpdateDto);
+    } else {
+      throw errorGenerator({
+        msg: '권한이 없는 유저의 요청입니다.',
+        statusCode: statusCode.FORBIDDEN,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
 export default {
   createThunder,
   findThunderAll,
   findThunderByHashtag,
+  findThunder,
+  updateThunder,
 };
