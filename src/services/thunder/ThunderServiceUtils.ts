@@ -7,10 +7,12 @@ const findMemberById = async (
   userId: string,
   list: string[],
 ): Promise<string> => {
-  for (var i = 0; i < list.length; i++) {
-    if (list[0] == userId) {
-      return 'HOST';
-    } else if (list[i] == userId) {
+  var i = 0;
+  if (list[0] == userId) {
+    return 'HOST';
+  }
+  for (i = 1; i < list.length; i++) {
+    if (list[i] == userId) {
       return 'MEMBER';
     }
   }
