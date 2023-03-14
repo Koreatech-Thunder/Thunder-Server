@@ -45,18 +45,12 @@ const getUserForProfileUpdate = async (userId: any) => {
   }
 };
 
-const createUser = async (
+const updateUser = async (
   userCreateDto: UserCreateDto,
   userId: string,
 ): Promise<PostBaseResponseDto> => {
   try {
-    const existuser = await User.findById(userId);
-    if (existuser) {
-      throw errorGenerator({
-        msg: '이미 가입한 사용자입니다.',
-        statusCode: statusCode.CONFLICT,
-      });
-    }
+    await UserServiceUtils.findUserById(userId);
 
     const existUsername = await User.findOne({
       name: userCreateDto.name,
@@ -106,6 +100,6 @@ const findUserHashtag = async (
 export default {
   //deleteUser,
   getUserForProfileUpdate,
-  createUser,
+  updateUser,
   findUserHashtag,
 };

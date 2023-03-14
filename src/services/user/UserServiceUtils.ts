@@ -2,8 +2,6 @@ import User from '../../models/User';
 import statusCode from '../../modules/statusCode';
 import message from '../../modules/statusCode';
 import errorGenerator from '../../errors/errorGenerator';
-import Thunder from '../../models/Thunder';
-import {UserResponseDto} from '../../interfaces/user/UserResponseDto';
 import {UserInfo} from '../../interfaces/user/UserInfo';
 
 const findUserById = async (userId: string): Promise<UserInfo> => {

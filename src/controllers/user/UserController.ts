@@ -7,7 +7,6 @@ import {UserHashtagResponseDto} from '../../interfaces/user/UserHashtagResponseD
 import {Result, ValidationError, validationResult} from 'express-validator';
 import message from '../../modules/message';
 import {PostBaseResponseDto} from '../../interfaces/common/PostBaseResponseDto';
-import errorGenerator from '../../errors/errorGenerator';
 
 /**
  *
@@ -15,7 +14,7 @@ import errorGenerator from '../../errors/errorGenerator';
  * @desc Create User information at login View
  * @access Public
  */
-const createUser = async (
+const updateUser = async (
   req: Request,
   res: Response,
 ): Promise<void | Response> => {
@@ -28,7 +27,7 @@ const createUser = async (
   const {userId} = req.params;
 
   try {
-    const data: PostBaseResponseDto = await UserService.createUser(
+    const data: PostBaseResponseDto = await UserService.updateUser(
       userCreateDto,
       userId,
     );
@@ -116,7 +115,7 @@ const getUserForProfileUpdate = async (
 };
 
 export default {
-  createUser,
+  updateUser,
   findUserHashtag,
   //deleteUser,
   getUserForProfileUpdate,
