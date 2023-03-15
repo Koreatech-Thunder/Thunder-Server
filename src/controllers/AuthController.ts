@@ -22,10 +22,10 @@ const login = async (req: Request, res: Response): Promise<void> => {
     if (error.statusCode == statusCode.CONFLICT) {
       //동일 유저 존재로 인한 에러인 경우 CONFLICT 코드 발송.
       res.status(statusCode.CONFLICT).send(statusCode.CONFLICT);
-    } else if (error.statusCode.NOT_FOUND) {
+    } else if (error.statusCode == statusCode.NOT_FOUND) {
       //카카오 서버에서 값을 가져오지 못했다면 NOT FOUND 발송.
       res.status(statusCode.NOT_FOUND).send(statusCode.NOT_FOUND);
-    } else if (error.statusCode.BAD_REQUEST) {
+    } else if (error.statusCode == statusCode.BAD_REQUEST) {
       //유저 정보 수정 완료 전 어플리케이션 종료로 수정 작업이 제대로 종료되지 못했다면 BAD REQUEST 발송.
       res.status(statusCode.BAD_REQUEST).send(statusCode.BAD_REQUEST);
     } else {
