@@ -28,10 +28,11 @@ const login = async (req: Request, res: Response): Promise<void> => {
     } else if (error.statusCode.BAD_REQUEST) {
       //유저 정보 수정 완료 전 어플리케이션 종료로 수정 작업이 제대로 종료되지 못했다면 BAD REQUEST 발송.
       res.status(statusCode.BAD_REQUEST).send(statusCode.BAD_REQUEST);
+    } else {
+      res
+        .status(statusCode.INTERNAL_SERVER_ERROR)
+        .send(statusCode.INTERNAL_SERVER_ERROR);
     }
-    res
-      .status(statusCode.INTERNAL_SERVER_ERROR)
-      .send(statusCode.INTERNAL_SERVER_ERROR);
   }
 };
 
