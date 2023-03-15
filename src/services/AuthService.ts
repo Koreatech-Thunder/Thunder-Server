@@ -30,11 +30,6 @@ const login = async (kakaoToken: string, fcmToken: string) => {
     const existUser = await UserService.findUserByKakao(kakaoId); //유저 여부는 User 스키마의 kakaoId 필드로 구분.
 
     if (existUser) {
-      await UserService.updateUser(existUser._id, {
-        isLogOut: false,
-        fcmToken: fcmToken,
-      });
-
       if (existUser.name == '') {
         throw errorGenerator({
           msg: '유저 생성 오류입니다.',
@@ -67,6 +62,57 @@ const login = async (kakaoToken: string, fcmToken: string) => {
       };
 
       return tokenData;
+    }
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+const existLogin = async (kakaoToken: string, fcmToken: string) => {
+  try {
+    const result = await axios.get('https://kapi.kakao.com/v2/user/me', {
+      //클라에서 받은 카카오 토큰으로 카카오 서버에서 정보 받아오기
+      headers: {
+        Authorization: `Bearer ${kakaoToken}`,
+      },
+    });
+
+    if (!result) {
+      throw errorGenerator({
+        msg: '카카오 서버에서 값을 받아오지 못했습니다.',
+        statusCode: statusCode.NOT_FOUND,
+      });
+    }
+
+    const {data} = result;
+    const kakaoId = data.id;
+
+    const existUser = await UserService.findUserByKakao(kakaoId);
+
+    if (existUser) {
+      await UserService.updateUser(existUser._id, {
+        isLogOut: false,
+        fcmToken: fcmToken,
+      });
+
+      const userId = existUser._id;
+      console.log(userId);
+
+      const accessToken = jwtHandler.getAccessToken(userId);
+      const refreshToken = jwtHandler.getRefreshToken();
+
+      const tokenData: AuthResponseDto = {
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+      };
+
+      return tokenData;
+    } else {
+      throw errorGenerator({
+        msg: '존재하는 유저가 아닙니다. 잘못된 접근입니다.',
+        statusCode: statusCode.BAD_REQUEST,
+      });
     }
   } catch (error) {
     console.log(error);
@@ -136,6 +182,7 @@ const logout = async (userId: string) => {
 
 export default {
   login,
+  existLogin,
   refresh,
   logout,
 };

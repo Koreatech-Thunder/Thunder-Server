@@ -36,6 +36,35 @@ const login = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
+const existLogin = async (req: Request, res: Response): Promise<void> => {
+  const fcmToken = req.body['fcmToken'];
+  const kakaoToken = req.body['kakaoToken'];
+
+  if (!fcmToken || !kakaoToken) {
+    throw errorGenerator({
+      msg: '토큰이 존재하지 않습니다.',
+      statusCode: statusCode.NOT_FOUND,
+    });
+  }
+
+  try {
+    const tokenData = await AuthService.existLogin(kakaoToken, fcmToken);
+    res.status(statusCode.OK).json(tokenData);
+  } catch (error: any) {
+    if (error.statusCode == statusCode.NOT_FOUND) {
+      //카카오 서버에서 값을 가져오지 못했다면 NOT FOUND 발송.
+      res.status(statusCode.NOT_FOUND).send(statusCode.NOT_FOUND);
+    } else if (error.statusCode == statusCode.BAD_REQUEST) {
+      //존재하지 않는 유저인데 해당 API에 입장했다면 BAD REQUEST 발송.
+      res.status(statusCode.BAD_REQUEST).send(statusCode.BAD_REQUEST);
+    } else {
+      res
+        .status(statusCode.INTERNAL_SERVER_ERROR)
+        .send(statusCode.INTERNAL_SERVER_ERROR);
+    }
+  }
+};
+
 const refresh = async (req: Request, res: Response): Promise<void> => {
   const accessToken = req.body['accessToken'];
   const refreshToken = req.body['refreshToken'];
@@ -97,6 +126,7 @@ const logout = async (req: Request, res: Response): Promise<void> => {
 
 export default {
   login,
+  existLogin,
   refresh,
   logout,
 };
