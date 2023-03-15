@@ -35,6 +35,13 @@ const login = async (kakaoToken: string, fcmToken: string) => {
         fcmToken: fcmToken,
       });
 
+      if (existUser.name == '') {
+        throw errorGenerator({
+          msg: '유저 생성 오류입니다.',
+          statusCode: statusCode.BAD_REQUEST, //로그인 후 유저 정보 첫 수정 전 예기치 못한 오류로 앱이 종료되어 유저 정보만 생성되고 첫수정은 되지 않은 경우
+        });
+      }
+
       throw errorGenerator({
         msg: '이미 존재하는 유저입니다.',
         statusCode: statusCode.CONFLICT,
