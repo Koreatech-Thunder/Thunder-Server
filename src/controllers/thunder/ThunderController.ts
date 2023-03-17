@@ -119,8 +119,8 @@ const findThunder = async (
   req: Request,
   res: Response,
 ): Promise<void | Response> => {
-  const userId = req.params.userId;
-  const thunderId = req.params.thunderId;
+  const userId: string = req.body['userId'];
+  const thunderId: string = req.body['thunderId'];
 
   try {
     const data: ThunderResponseDto = await ThunderService.findThunder(
@@ -130,10 +130,7 @@ const findThunder = async (
 
     res.status(statusCode.OK).send(data);
   } catch (error: any) {
-    if (error.msg == '유효하지 않은 id입니다.') {
-      console.log(error);
-      res.status(statusCode.UNAUTHORIZED).send(statusCode.UNAUTHORIZED);
-    } else if (error.msg == '존재하지 않는 방입니다.') {
+    if (error.msg == message.NOT_FOUND_ROOM) {
       console.log(error);
       res.status(statusCode.NOT_FOUND).send(statusCode.NOT_FOUND);
     } else {

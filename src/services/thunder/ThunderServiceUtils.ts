@@ -1,6 +1,7 @@
 import errorGenerator from '../../errors/errorGenerator';
 import {ThunderInfo} from '../../interfaces/thunder/ThunderInfo';
 import Thunder from '../../models/Thunder';
+import message from '../../modules/message';
 import statusCode from '../../modules/statusCode';
 
 const findMemberById = async (userId: string, list: any): Promise<string> => {
@@ -20,7 +21,7 @@ const findThunderById = async (thunderId: string): Promise<ThunderInfo> => {
   const thunder = await Thunder.findById(thunderId);
   if (!thunder) {
     throw errorGenerator({
-      msg: '존재하지 않는 방입니다.',
+      msg: message.NOT_FOUND_ROOM,
       statusCode: statusCode.NOT_FOUND,
     });
   }
