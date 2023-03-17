@@ -2,15 +2,12 @@ import {PostBaseResponseDto} from '../../interfaces/common/PostBaseResponseDto';
 import {ThunderCreateDto} from '../../interfaces/thunder/ThunderCreateDto';
 import {ThunderResponseDto} from '../../interfaces/thunder/ThunderResponseDto';
 import Thunder from '../../models/Thunder';
-import UserServiceUtils from '../user/UserServiceUtils';
 import ThunderServiceUtils from './ThunderServiceUtils';
 
 const createThunder = async (
   thunderCreateDto: ThunderCreateDto,
   userId: string,
 ): Promise<PostBaseResponseDto> => {
-  await UserServiceUtils.findUserById(userId);
-
   try {
     const thunder = new Thunder({
       title: thunderCreateDto.title,
@@ -40,8 +37,6 @@ const findThunderAll = async (
   userId: string,
 ): Promise<ThunderResponseDto[] | []> => {
   try {
-    await UserServiceUtils.findUserById(userId);
-
     const thunderlist = await Thunder.find().sort({createdAt: 'desc'});
 
     if (!thunderlist) {
@@ -103,8 +98,6 @@ const findThunderByHashtag = async (
   userId: string,
 ): Promise<ThunderResponseDto[] | []> => {
   try {
-    await UserServiceUtils.findUserById(userId);
-
     const thunderlist = await Thunder.find({hashtags: hashtag}).sort({
       createdAt: 'desc',
     });

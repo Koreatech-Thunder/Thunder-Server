@@ -23,7 +23,7 @@ const createThunder = async (
   }
 
   const thunderCreateDto: ThunderCreateDto = req.body; //key:value
-  const {userId} = req.params;
+  const userId: string = req.body['userId'];
 
   try {
     //data is _id(IdObject)
@@ -34,15 +34,10 @@ const createThunder = async (
 
     res.status(statusCode.CREATED).send(data);
   } catch (error: any) {
-    if (error.msg == '유효하지 않은 id입니다.') {
-      console.log(error);
-      res.status(statusCode.UNAUTHORIZED).send(statusCode.UNAUTHORIZED);
-    } else {
-      console.log(error);
-      res
-        .status(statusCode.INTERNAL_SERVER_ERROR)
-        .send(statusCode.INTERNAL_SERVER_ERROR);
-    }
+    console.log(error);
+    res
+      .status(statusCode.INTERNAL_SERVER_ERROR)
+      .send(statusCode.INTERNAL_SERVER_ERROR);
   }
 };
 
@@ -54,28 +49,23 @@ const createThunder = async (
  */
 const findThunderAll = async (req: Request, res: Response): Promise<void> => {
   try {
-    const {userId} = req.params;
+    const userId: string = req.body['userId'];
     const data: ThunderResponseDto[] | [] = await ThunderService.findThunderAll(
       userId,
     );
 
     res.status(statusCode.OK).send(data);
   } catch (error: any) {
-    if (error.msg == '유효하지 않은 id입니다.') {
-      console.log(error);
-      res.status(statusCode.UNAUTHORIZED).send(statusCode.UNAUTHORIZED);
-    } else {
-      console.log(error);
-      res
-        .status(statusCode.INTERNAL_SERVER_ERROR)
-        .send(statusCode.INTERNAL_SERVER_ERROR);
-    }
+    console.log(error);
+    res
+      .status(statusCode.INTERNAL_SERVER_ERROR)
+      .send(statusCode.INTERNAL_SERVER_ERROR);
   }
 };
 
 /**
  *
- * @route GET / thunder/userId:userId/hashtags?hashtag=hashtag
+ * @route GET / thunder/hashtags?hashtag=
  * @desc Get Thunder by hashtags
  * @access Public
  */
@@ -87,24 +77,20 @@ const findThunderByHashtag = async (
   if (!errors.isEmpty()) {
     return res.status(statusCode.BAD_REQUEST).send(message.BAD_REQUEST);
   }
-  const userId = req.params.userId;
-  const hashtag: string = req.query.hashtag;
+
+  const userId: string = req.body['userId'];
+  const {hashtag} = req.query;
 
   try {
     const data: ThunderResponseDto[] | [] =
-      await ThunderService.findThunderByHashtag(hashtag, userId);
+      await ThunderService.findThunderByHashtag(hashtag as string, userId);
 
     res.status(statusCode.OK).send(data);
   } catch (error: any) {
-    if (error.msg == '유효하지 않은 id입니다.') {
-      console.log(error);
-      res.status(statusCode.UNAUTHORIZED).send(statusCode.UNAUTHORIZED);
-    } else {
-      console.log(error);
-      res
-        .status(statusCode.INTERNAL_SERVER_ERROR)
-        .send(statusCode.INTERNAL_SERVER_ERROR);
-    }
+    console.log(error);
+    res
+      .status(statusCode.INTERNAL_SERVER_ERROR)
+      .send(statusCode.INTERNAL_SERVER_ERROR);
   }
 };
 

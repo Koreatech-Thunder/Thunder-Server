@@ -25,17 +25,14 @@ const updateUser = async (
   }
 
   const userCreateDto: UserCreateDto = req.body;
-  const {userId} = req.params;
+  const userId: string = req.body['userId'];
 
   try {
     await UserService.updateUser(userCreateDto, userId);
 
     res.status(statusCode.CREATED).send(statusCode.CREATED);
   } catch (error: any) {
-    if (error.msg == '사용자 닉네임 중복입니다.') {
-      console.log(error);
-      res.status(statusCode.CONFLICT).send(statusCode.CONFLICT);
-    } else if (error.msg == '유효하지 않은 id입니다.') {
+    if (error.msg == message.CONFLICT_USER_NAME) {
       console.log(error);
       res.status(statusCode.CONFLICT).send(statusCode.CONFLICT);
     } else {
@@ -54,7 +51,7 @@ const updateUser = async (
  * @access Public
  */
 const findUserHashtag = async (req: Request, res: Response): Promise<void> => {
-  const {userId} = req.params;
+  const userId: string = req.body['userId'];
 
   try {
     const data: UserHashtagResponseDto = await UserService.findUserHashtag(
@@ -63,15 +60,10 @@ const findUserHashtag = async (req: Request, res: Response): Promise<void> => {
 
     res.status(statusCode.OK).send(data);
   } catch (error: any) {
-    if (error.msg == '유효하지 않은 id입니다.') {
-      console.log(error);
-      res.status(statusCode.UNAUTHORIZED).send(statusCode.UNAUTHORIZED);
-    } else {
-      console.log(error);
-      res
-        .status(statusCode.INTERNAL_SERVER_ERROR)
-        .send(statusCode.INTERNAL_SERVER_ERROR);
-    }
+    console.log(error);
+    res
+      .status(statusCode.INTERNAL_SERVER_ERROR)
+      .send(statusCode.INTERNAL_SERVER_ERROR);
   }
 };
 

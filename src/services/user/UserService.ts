@@ -4,9 +4,9 @@ import errorGenerator from '../../errors/errorGenerator';
 import statusCode from '../../modules/statusCode';
 import {UserInfoDto} from '../../interfaces/user/UserInfoDto';
 import {UserUpdateDto} from '../../interfaces/user/UserUpdateDto';
-import UserServiceUtils from './UserServiceUtils';
 import {UserHashtagResponseDto} from '../../interfaces/user/UserHashtagResponseDto';
 import {UserInfo} from '../../interfaces/user/UserInfo';
+import message from '../../modules/message';
 
 const findUserById = async (userId: string) => {
   try {
@@ -79,14 +79,12 @@ const updateUser = async (
   userId: string,
 ): Promise<void> => {
   try {
-    await UserServiceUtils.findUserById(userId);
-
     const existUsername = await User.findOne({
       name: userUpdateDto.name,
     });
     if (existUsername) {
       throw errorGenerator({
-        msg: '사용자 닉네임 중복입니다.',
+        msg: message.CONFLICT_USER_NAME,
         statusCode: statusCode.CONFLICT,
       });
     }
@@ -102,10 +100,10 @@ const findUserHashtag = async (
   userId: string,
 ): Promise<UserHashtagResponseDto> => {
   try {
-    const user: UserInfo = await UserServiceUtils.findUserById(userId);
+    const user = await User.findById(userId);
 
     const data: UserHashtagResponseDto = {
-      hashtags: user.hashtags,
+      hashtags: user!.hashtags,
     };
 
     return data;
