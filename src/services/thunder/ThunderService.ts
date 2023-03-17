@@ -2,7 +2,6 @@ import {PostBaseResponseDto} from '../../interfaces/common/PostBaseResponseDto';
 import {ThunderCreateDto} from '../../interfaces/thunder/ThunderCreateDto';
 import {ThunderResponseDto} from '../../interfaces/thunder/ThunderResponseDto';
 import Thunder from '../../models/Thunder';
-import UserServiceUtils from '../user/UserServiceUtils';
 import ThunderServiceUtils from './ThunderServiceUtils';
 
 const createThunder = async (
@@ -167,8 +166,6 @@ const findThunder = async (
   thunderId: string,
 ): Promise<ThunderResponseDto> => {
   try {
-    await UserServiceUtils.findUserById(userId);
-
     const thunder = await ThunderServiceUtils.findThunderById(thunderId);
 
     const isMembers: string = await ThunderServiceUtils.findMemberById(
