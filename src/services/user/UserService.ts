@@ -4,7 +4,6 @@ import errorGenerator from '../../errors/errorGenerator';
 import statusCode from '../../modules/statusCode';
 import {UserInfoDto} from '../../interfaces/user/UserInfoDto';
 import {UserUpdateDto} from '../../interfaces/user/UserUpdateDto';
-import UserServiceUtils from './UserServiceUtils';
 import {UserHashtagResponseDto} from '../../interfaces/user/UserHashtagResponseDto';
 import {UserInfo} from '../../interfaces/user/UserInfo';
 

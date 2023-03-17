@@ -5,7 +5,7 @@ import {ThunderResponseDto} from '../../interfaces/thunder/ThunderResponseDto';
 import {ThunderUpdateDto} from '../../interfaces/thunder/ThunderUpdateDto';
 import Thunder from '../../models/Thunder';
 import statusCode from '../../modules/statusCode';
-import UserServiceUtils from '../user/UserServiceUtils';
+import message from '../../modules/message';
 import ThunderServiceUtils from './ThunderServiceUtils';
 
 const createThunder = async (
@@ -284,8 +284,6 @@ const joinThunder = async (
 
 const outThunder = async (userId: string, thunderId: string): Promise<void> => {
   try {
-    await UserServiceUtils.findUserById(userId);
-
     const thunder = await ThunderServiceUtils.findThunderById(thunderId);
 
     const isMembers: string = await ThunderServiceUtils.findMemberById(
@@ -297,7 +295,7 @@ const outThunder = async (userId: string, thunderId: string): Promise<void> => {
       await Thunder.updateOne({_id: thunderId}, {$pull: {members: userId}});
     } else {
       throw errorGenerator({
-        msg: '권한이 없는 유저의 요청입니다.',
+        msg: message.FORBIDDEN,
         statusCode: statusCode.FORBIDDEN,
       });
     }
