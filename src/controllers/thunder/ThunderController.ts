@@ -195,7 +195,7 @@ const joinThunder = async (
   }
 
   const userId: string = req.body['userId'];
-  const thunderId: string = req.body['thunderId'];
+  const {thunderId} = req.params;
 
   try {
     await ThunderService.joinThunder(userId, thunderId);
