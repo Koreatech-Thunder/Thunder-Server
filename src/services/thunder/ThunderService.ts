@@ -247,7 +247,7 @@ const joinThunder = async (
   try {
     const thunder = await ThunderServiceUtils.findThunderById(thunderId);
 
-    if (thunder.members.length > thunder.limitMembersCnt) {
+    if (thunder.members.length >= thunder.limitMembersCnt) {
       throw errorGenerator({
         msg: message.OVER_LIMITMEMBERSCNT,
         statusCode: statusCode.FORBIDDEN,
