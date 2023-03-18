@@ -29,6 +29,9 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  thunderRecords: {
+    type: [mongoose.Schema.Types.ObjectId]
+  }
 });
 
 export default mongoose.model<UserInfo & mongoose.Document>("User", UserSchema);

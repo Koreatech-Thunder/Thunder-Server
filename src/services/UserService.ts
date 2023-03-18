@@ -5,6 +5,7 @@ import errorGenerator from '../errors/errorGenerator';
 import statusCode from '../modules/statusCode';
 import { UserInfoDto } from '../interfaces/user/UserInfoDto';
 import { UserInfo } from '../interfaces/user/UserInfo';
+import message from '../modules/message';
 
 
 const updateUser = async (userId: any, userUpdateDto: UserUpdateDto) => {
@@ -59,7 +60,7 @@ const deleteUser = async (userId: string) => {
 
         if (!user) {
             throw errorGenerator({
-                msg: '유저 정보를 불러올 수 없습니다.',
+                msg: message.NOT_FOUND_USER,
                 statusCode: statusCode.NOT_FOUND
             })
         }
@@ -80,7 +81,7 @@ const getUserForProfileUpdate = async (userId: string) => {
 
         if (!data) {
             throw errorGenerator ({
-                msg: '유저 정보를 불러오지 못했습니다.',
+                msg: message.NOT_FOUND_USER,
                 statusCode: statusCode.NOT_FOUND
             })
         }
