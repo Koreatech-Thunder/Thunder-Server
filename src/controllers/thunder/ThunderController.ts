@@ -2,6 +2,7 @@ import {Request, Response} from 'express';
 import {Result, ValidationError, validationResult} from 'express-validator';
 import {ThunderCreateDto} from '../../interfaces/thunder/ThunderCreateDto';
 import {ThunderResponseDto} from '../../interfaces/thunder/ThunderResponseDto';
+import {ThunderUpdateDto} from '../../interfaces/thunder/ThunderUpdateDto';
 import {PostBaseResponseDto} from '../../interfaces/common/PostBaseResponseDto';
 import {ThunderUpdateDto} from '../../interfaces/thunder/ThunderUpdateDto';
 import statusCode from '../../modules/statusCode';
@@ -111,7 +112,7 @@ const findThunderByHashtag = async (
 
 /**
  *
- * @route GET / thunder/:userId/:thunderId
+ * @route GET / thunder/:thunderId
  * @desc Get Thunder Details
  * @access Public
  */
@@ -123,7 +124,7 @@ const findThunder = async (
   const thunderId: string = req.body['thunderId'];
 
   try {
-    const data: ThunderResponseDto = await ThunderService.findThunder(
+    const data: ThunderUpdateDto = await ThunderService.findThunder(
       userId,
       thunderId,
     );
