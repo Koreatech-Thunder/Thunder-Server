@@ -2,6 +2,7 @@ import * as firebase from "firebase-admin";
 import errorGenerator from "../errors/errorGenerator";
 import statusCode from "./statusCode";
 import User from "../models/User";
+import message from './message';
 
 
 const pushAlarmToUser = async (userId: string) => {
@@ -13,7 +14,7 @@ const pushAlarmToUser = async (userId: string) => {
 
     if (user.isLogOut === true) {
       throw errorGenerator({
-        msg: '로그아웃한 유저입니다.',
+        msg: message.USER_ALREADY_LOGOUT,
         statusCode: statusCode.BAD_REQUEST
       })
     }
@@ -35,7 +36,7 @@ const pushAlarmToUser = async (userId: string) => {
       .catch(function (err: any) {
         console.log('다음 메시지를 보내는 데 에러 발생: ', err)
         throw errorGenerator({
-          msg: 'FCM 메시지 오류.',
+          msg: message.FCM_ERROR,
           statusCode: statusCode.INTERNAL_SERVER_ERROR
         })
       })

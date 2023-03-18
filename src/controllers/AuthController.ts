@@ -3,6 +3,7 @@ import {Request, Response} from 'express';
 import AuthService from '../services/AuthService';
 import errorGenerator from '../errors/errorGenerator';
 import tokenStatus from '../modules/tokenStatus';
+import message from '../modules/message';
 
 const login = async (req: Request, res: Response): Promise<void> => {
   const fcmToken = req.body['fcmToken'];
@@ -10,7 +11,7 @@ const login = async (req: Request, res: Response): Promise<void> => {
 
   if (!fcmToken || !kakaoToken) {
     throw errorGenerator({
-      msg: '토큰이 존재하지 않습니다.',
+      msg: message.NOT_FOUND_TOKEN,
       statusCode: statusCode.NOT_FOUND,
     });
   }
@@ -42,7 +43,7 @@ const existLogin = async (req: Request, res: Response): Promise<void> => {
 
   if (!fcmToken || !kakaoToken) {
     throw errorGenerator({
-      msg: '토큰이 존재하지 않습니다.',
+      msg: message.NOT_FOUND_TOKEN,
       statusCode: statusCode.NOT_FOUND,
     });
   }
@@ -71,7 +72,7 @@ const refresh = async (req: Request, res: Response): Promise<void> => {
 
   if (!accessToken || !refreshToken) {
     throw errorGenerator({
-      msg: '토큰이 존재하지 않습니다.',
+      msg: message.NOT_FOUND_TOKEN,
       statusCode: statusCode.NOT_FOUND,
     });
   }
@@ -102,7 +103,7 @@ const logout = async (req: Request, res: Response): Promise<void> => {
 
   if (!userId) {
     throw errorGenerator({
-      msg: '유저가 존재하지 않습니다.',
+      msg: message.NOT_FOUND_USER,
       statusCode: statusCode.NOT_FOUND,
     });
   }

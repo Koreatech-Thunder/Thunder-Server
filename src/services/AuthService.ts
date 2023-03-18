@@ -7,6 +7,7 @@ import errorGenerator from '../errors/errorGenerator';
 import statusCode from '../modules/statusCode';
 import tokenStatus from '../modules/tokenStatus';
 import {AuthResponseDto} from '../interfaces/auth/AuthResponseDto';
+import message from '../modules/message';
 
 const login = async (kakaoToken: string, fcmToken: string) => {
   try {
@@ -19,7 +20,7 @@ const login = async (kakaoToken: string, fcmToken: string) => {
 
     if (!result) {
       throw errorGenerator({
-        msg: '카카오 서버에서 값을 받아오지 못했습니다.',
+        msg: message.KAKAO_SERVER_ERROR,
         statusCode: statusCode.NOT_FOUND,
       });
     }
@@ -32,13 +33,13 @@ const login = async (kakaoToken: string, fcmToken: string) => {
     if (existUser) {
       if (existUser.name == '') {
         throw errorGenerator({
-          msg: '유저 생성 오류입니다.',
+          msg: message.USER_CREATION_ERROR,
           statusCode: statusCode.BAD_REQUEST, //로그인 후 유저 정보 첫 수정 전 예기치 못한 오류로 앱이 종료되어 유저 정보만 생성되고 첫수정은 되지 않은 경우
         });
       }
 
       throw errorGenerator({
-        msg: '이미 존재하는 유저입니다.',
+        msg: message.CONFLICT_USER,
         statusCode: statusCode.CONFLICT,
       }); // 이미 존재하는 유저면 에러 메시지 대신 보냄
     } else {
@@ -80,7 +81,7 @@ const existLogin = async (kakaoToken: string, fcmToken: string) => {
 
     if (!result) {
       throw errorGenerator({
-        msg: '카카오 서버에서 값을 받아오지 못했습니다.',
+        msg: message.KAKAO_SERVER_ERROR,
         statusCode: statusCode.NOT_FOUND,
       });
     }
@@ -110,7 +111,7 @@ const existLogin = async (kakaoToken: string, fcmToken: string) => {
       return tokenData;
     } else {
       throw errorGenerator({
-        msg: '존재하는 유저가 아닙니다. 잘못된 접근입니다.',
+        msg: message.NOT_FOUND_USER,
         statusCode: statusCode.BAD_REQUEST,
       });
     }
@@ -158,14 +159,14 @@ const logout = async (userId: string) => {
 
     if (!user) {
       throw errorGenerator({
-        msg: '유저 정보가 없습니다.',
+        msg: message.NOT_FOUND_USER,
         statusCode: statusCode.NOT_FOUND,
       });
     }
 
     if (user?.isLogOut) {
       throw errorGenerator({
-        msg: '이미 로그아웃된 회원입니다.',
+        msg: message.USER_ALREADY_LOGOUT,
         statusCode: statusCode.BAD_REQUEST,
       });
     }
