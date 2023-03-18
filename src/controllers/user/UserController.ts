@@ -46,7 +46,7 @@ const updateUser = async (
 
 /**
  *
- * @route GET / user/hashtags/:userId
+ * @route GET / user/hashtags
  * @desc Read User hashtags
  * @access Public
  */

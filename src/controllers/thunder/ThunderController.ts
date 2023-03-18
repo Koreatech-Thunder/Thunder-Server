@@ -9,7 +9,7 @@ import message from '../../modules/message';
 
 /**
  *
- * @route POST / thunder/:userId
+ * @route POST / thunder
  * @desc Create Thunder
  * @access Public
  */
@@ -43,7 +43,7 @@ const createThunder = async (
 
 /**
  *
- * @route GET / thunder/:userId
+ * @route GET / thunder
  * @desc Get Thunder
  * @access Public
  */
