@@ -1,19 +1,16 @@
-import statusCode from '../modules/statusCode';
-import { Request, Response } from "express";
-import AuthService from "../services/AuthService";
-import firebase from "firebase-admin";
-import errorGenerator from "../errors/errorGenerator";
-import tokenStatus from "../modules/tokenStatus";
+import statusCode from '../../modules/statusCode';
+import {Request, Response} from 'express';
+import AuthService from '../../services/auth/AuthService';
+import errorGenerator from '../../errors/errorGenerator';
+import tokenStatus from '../../modules/tokenStatus';
 
 const login = async (req: Request, res: Response): Promise<void> => {
-
-
-  const fcmToken = req.body["fcmToken"];
-  const kakaoToken = req.body["kakaoToken"];
+  const fcmToken = req.body['fcmToken'];
+  const kakaoToken = req.body['kakaoToken'];
 
   if (!fcmToken || !kakaoToken) {
     throw errorGenerator({
-      msg: "토큰이 존재하지 않습니다.",
+      msg: '토큰이 존재하지 않습니다.',
       statusCode: statusCode.NOT_FOUND,
     });
   }
@@ -33,12 +30,12 @@ const login = async (req: Request, res: Response): Promise<void> => {
 };
 
 const refresh = async (req: Request, res: Response): Promise<void> => {
-  const accessToken = req.body["accessToken"];
-  const refreshToken = req.body["refreshToken"];
+  const accessToken = req.body['accessToken'];
+  const refreshToken = req.body['refreshToken'];
 
   if (!accessToken || !refreshToken) {
     throw errorGenerator({
-      msg: "토큰이 존재하지 않습니다.",
+      msg: '토큰이 존재하지 않습니다.',
       statusCode: statusCode.NOT_FOUND,
     });
   }
@@ -56,7 +53,7 @@ const refresh = async (req: Request, res: Response): Promise<void> => {
       res.status(statusCode.FORBIDDEN);
     }
 
-    res.status(statusCode.OK).json({ accessToken: data });
+    res.status(statusCode.OK).json({accessToken: data});
   } catch (error) {
     res
       .status(statusCode.INTERNAL_SERVER_ERROR)
@@ -65,17 +62,17 @@ const refresh = async (req: Request, res: Response): Promise<void> => {
 };
 
 const logout = async (req: Request, res: Response): Promise<void> => {
-  const userId = req.body["userId"];
-  const fcmToken = req.body["fcmToken"];
+  const userId = req.body['userId'];
+  const fcmToken = req.body['fcmToken'];
 
   if (!fcmToken) {
     throw errorGenerator({
-      msg: "토큰이 존재하지 않습니다.",
+      msg: '토큰이 존재하지 않습니다.',
       statusCode: statusCode.NOT_FOUND,
     });
   } else if (!userId) {
     throw errorGenerator({
-      msg: "유저가 존재하지 않습니다.",
+      msg: '유저가 존재하지 않습니다.',
       statusCode: statusCode.NOT_FOUND,
     });
   }
@@ -86,13 +83,12 @@ const logout = async (req: Request, res: Response): Promise<void> => {
   } catch (error: any) {
     if (error.statusCode == statusCode.NOT_FOUND) {
       res.status(statusCode.NOT_FOUND).send(statusCode.NOT_FOUND);
-    } else if (error.statusCode == statusCode.BAD_REQUEST)
-    {
+    } else if (error.statusCode == statusCode.BAD_REQUEST) {
       res.status(statusCode.BAD_REQUEST).send(statusCode.BAD_REQUEST);
     }
     {
       res
-      .status(statusCode.INTERNAL_SERVER_ERROR)
+        .status(statusCode.INTERNAL_SERVER_ERROR)
         .send(statusCode.INTERNAL_SERVER_ERROR);
     }
   }
