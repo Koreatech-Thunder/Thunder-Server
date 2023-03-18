@@ -159,7 +159,8 @@ const updateThunder = async (
 
   const thunderUpdateDto: ThunderUpdateDto = req.body;
   const userId: string = req.body['userId'];
-  const thunderId: string = req.body['thunderId'];
+  const {thunderId} = req.params;
+
   try {
     await ThunderService.updateThunder(userId, thunderId, thunderUpdateDto);
 
