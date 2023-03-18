@@ -232,7 +232,7 @@ const outThunder = async (
   }
 
   const userId: string = req.body['userId'];
-  const thunderId: string = req.body['thunderId'];
+  const {thunderId} = req.params;
 
   try {
     await ThunderService.outThunder(userId, thunderId);
