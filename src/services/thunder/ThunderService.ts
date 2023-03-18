@@ -4,8 +4,11 @@ import {ThunderCreateDto} from '../../interfaces/thunder/ThunderCreateDto';
 import {ThunderResponseDto} from '../../interfaces/thunder/ThunderResponseDto';
 import {ThunderUpdateDto} from '../../interfaces/thunder/ThunderUpdateDto';
 import Thunder from '../../models/Thunder';
+<<<<<<< HEAD
+import message from '../../modules/message';
 import statusCode from '../../modules/statusCode';
-import UserServiceUtils from '../user/UserServiceUtils';
+=======
+>>>>>>> c154f483c1f2a40524556d8fefc075998f442c3f
 import ThunderServiceUtils from './ThunderServiceUtils';
 
 const createThunder = async (
@@ -168,10 +171,8 @@ const findThunderByHashtag = async (
 const findThunder = async (
   userId: string,
   thunderId: string,
-): Promise<ThunderResponseDto> => {
+): Promise<ThunderUpdateDto> => {
   try {
-    await UserServiceUtils.findUserById(userId);
-
     const thunder = await ThunderServiceUtils.findThunderById(thunderId);
 
     const isMembers: string = await ThunderServiceUtils.findMemberById(
@@ -180,34 +181,28 @@ const findThunder = async (
     );
 
     if (isMembers == 'HOST') {
-      var data: ThunderResponseDto = {
+      var data: ThunderUpdateDto = {
         title: thunder.title,
         deadline: thunder.deadline.toString(),
         content: thunder.content,
         hashtags: thunder.hashtags,
-        members: thunder.members, //id<Object>
         limitMembersCnt: thunder.limitMembersCnt,
-        thunderState: 'HOST',
       };
     } else if (isMembers == 'NON_MEMBER') {
-      var data: ThunderResponseDto = {
+      var data: ThunderUpdateDto = {
         title: thunder.title,
         deadline: thunder.deadline.toString(),
         content: thunder.content,
         hashtags: thunder.hashtags,
-        members: thunder.members, //id<Object>
         limitMembersCnt: thunder.limitMembersCnt,
-        thunderState: 'NON_MEMBER',
       };
     } else {
-      var data: ThunderResponseDto = {
+      var data: ThunderUpdateDto = {
         title: thunder.title,
         deadline: thunder.deadline.toString(),
         content: thunder.content,
         hashtags: thunder.hashtags,
-        members: thunder.members, //id<Object>
         limitMembersCnt: thunder.limitMembersCnt,
-        thunderState: 'MEMBER',
       };
     }
 
@@ -224,8 +219,6 @@ const updateThunder = async (
   thunderUpdateDto: ThunderUpdateDto,
 ): Promise<void> => {
   try {
-    await UserServiceUtils.findUserById(userId);
-
     const thunder = await ThunderServiceUtils.findThunderById(thunderId);
 
     const isMembers: string = await ThunderServiceUtils.findMemberById(
@@ -237,7 +230,7 @@ const updateThunder = async (
       await Thunder.findByIdAndUpdate(thunderId, thunderUpdateDto);
     } else {
       throw errorGenerator({
-        msg: '권한이 없는 유저의 요청입니다.',
+        msg: message.FORBIDDEN,
         statusCode: statusCode.FORBIDDEN,
       });
     }
@@ -252,13 +245,11 @@ const joinThunder = async (
   thunderId: string,
 ): Promise<void> => {
   try {
-    await UserServiceUtils.findUserById(userId);
-
     const thunder = await ThunderServiceUtils.findThunderById(thunderId);
 
     if (thunder.members.length > thunder.limitMembersCnt) {
       throw errorGenerator({
-        msg: '제한된 인원을 초과하였습니다.',
+        msg: message.OVER_LIMITMEMBERSCNT,
         statusCode: statusCode.FORBIDDEN,
       });
     }
@@ -272,7 +263,7 @@ const joinThunder = async (
       await Thunder.findByIdAndUpdate(thunderId, {$push: {members: userId}});
     } else {
       throw errorGenerator({
-        msg: '권한이 없는 유저의 요청입니다.',
+        msg: message.FORBIDDEN,
         statusCode: statusCode.FORBIDDEN,
       });
     }

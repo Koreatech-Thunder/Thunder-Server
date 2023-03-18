@@ -119,8 +119,8 @@ const findThunder = async (
   req: Request,
   res: Response,
 ): Promise<void | Response> => {
-  const userId = req.params.userId;
-  const thunderId = req.params.thunderId;
+  const userId: string = req.body['userId'];
+  const thunderId: string = req.body['thunderId'];
 
   try {
     const data: ThunderResponseDto = await ThunderService.findThunder(
@@ -130,10 +130,7 @@ const findThunder = async (
 
     res.status(statusCode.OK).send(data);
   } catch (error: any) {
-    if (error.msg == '유효하지 않은 id입니다.') {
-      console.log(error);
-      res.status(statusCode.UNAUTHORIZED).send(statusCode.UNAUTHORIZED);
-    } else if (error.msg == '존재하지 않는 방입니다.') {
+    if (error.msg == message.NOT_FOUND_ROOM) {
       console.log(error);
       res.status(statusCode.NOT_FOUND).send(statusCode.NOT_FOUND);
     } else {
@@ -160,21 +157,17 @@ const updateThunder = async (
   }
 
   const thunderUpdateDto: ThunderUpdateDto = req.body;
-  const userId = req.params.userId;
-  const thunderId = req.params.thunderId;
-
+  const userId: string = req.body['userId'];
+  const thunderId: string = req.body['thunderId'];
   try {
     await ThunderService.updateThunder(userId, thunderId, thunderUpdateDto);
 
     res.status(statusCode.OK).send(statusCode.OK);
   } catch (error: any) {
-    if (error.msg == '유효하지 않은 id입니다.') {
-      console.log(error);
-      res.status(statusCode.UNAUTHORIZED).send(statusCode.UNAUTHORIZED);
-    } else if (error.msg == '존재하지 않는 방입니다.') {
+    if (error.msg == message.NOT_FOUND_ROOM) {
       console.log(error);
       res.status(statusCode.NOT_FOUND).send(statusCode.NOT_FOUND);
-    } else if (error.msg == '권한이 없는 유저의 요청입니다.') {
+    } else if (error.msg == message.FORBIDDEN) {
       console.log(error);
       res.status(statusCode.FORBIDDEN).send(statusCode.FORBIDDEN);
     } else {
@@ -187,7 +180,7 @@ const updateThunder = async (
 
 /**
  *
- * @route PUT / thunder/join/:userId/:thunderId
+ * @route PUT / thunder/join/:thunderId
  * @desc Update Join User To Thunder
  * @access Public
  */
@@ -200,21 +193,18 @@ const joinThunder = async (
     return res.status(statusCode.BAD_REQUEST).send(message.BAD_REQUEST);
   }
 
-  const userId = req.params.userId;
-  const thunderId = req.params.thunderId;
+  const userId: string = req.body['userId'];
+  const thunderId: string = req.body['thunderId'];
 
   try {
     await ThunderService.joinThunder(userId, thunderId);
 
     res.status(statusCode.OK).send(statusCode.OK);
   } catch (error: any) {
-    if (error.msg == '유효하지 않은 id입니다.') {
-      console.log(error);
-      res.status(statusCode.UNAUTHORIZED).send(statusCode.UNAUTHORIZED);
-    } else if (error.msg == '존재하지 않는 방입니다.') {
+    if (error.msg == message.NOT_FOUND_ROOM) {
       console.log(error);
       res.status(statusCode.NOT_FOUND).send(statusCode.NOT_FOUND);
-    } else if (error.msg == '권한이 없는 유저의 요청입니다.') {
+    } else if (error.msg == message.FORBIDDEN) {
       console.log(error);
       res.status(statusCode.FORBIDDEN).send(statusCode.FORBIDDEN);
     } else {
