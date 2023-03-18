@@ -14,6 +14,6 @@ router.get(
   [query('hashtag').isString()],
   ThunderController.findThunderByHashtag,
 );
-router.get('/:thunderId', auth.auth, ThunderController.findThunder);
+router.get('/:thunderId', ThunderController.findThunder);
 
 export default router;

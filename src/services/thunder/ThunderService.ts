@@ -162,43 +162,17 @@ const findThunderByHashtag = async (
   }
 };
 
-const findThunder = async (
-  userId: string,
-  thunderId: string,
-): Promise<ThunderUpdateDto> => {
+const findThunder = async (thunderId: string): Promise<ThunderUpdateDto> => {
   try {
     const thunder = await ThunderServiceUtils.findThunderById(thunderId);
 
-    const isMembers: string = await ThunderServiceUtils.findMemberById(
-      userId,
-      thunder.members,
-    );
-
-    if (isMembers == 'HOST') {
-      var data: ThunderUpdateDto = {
-        title: thunder.title,
-        deadline: thunder.deadline.toString(),
-        content: thunder.content,
-        hashtags: thunder.hashtags,
-        limitMembersCnt: thunder.limitMembersCnt,
-      };
-    } else if (isMembers == 'NON_MEMBER') {
-      var data: ThunderUpdateDto = {
-        title: thunder.title,
-        deadline: thunder.deadline.toString(),
-        content: thunder.content,
-        hashtags: thunder.hashtags,
-        limitMembersCnt: thunder.limitMembersCnt,
-      };
-    } else {
-      var data: ThunderUpdateDto = {
-        title: thunder.title,
-        deadline: thunder.deadline.toString(),
-        content: thunder.content,
-        hashtags: thunder.hashtags,
-        limitMembersCnt: thunder.limitMembersCnt,
-      };
-    }
+    const data: ThunderUpdateDto = {
+      title: thunder.title,
+      deadline: thunder.deadline.toString(),
+      content: thunder.content,
+      hashtags: thunder.hashtags,
+      limitMembersCnt: thunder.limitMembersCnt,
+    };
 
     return data;
   } catch (error) {
