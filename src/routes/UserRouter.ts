@@ -1,11 +1,11 @@
-import {Router} from 'express';
-import {UserController} from '../controllers';
-import auth from '../middlewares/auth';
+import { Router } from "express";
+import { UserController } from "../controllers";
 
 const router: Router = Router();
 
-router.get('/', auth.auth, UserController.findUserById);
-router.delete('/', auth.auth, UserController.deleteUser);
-router.get('/profile', auth.auth, UserController.getUserForProfileUpdate);
+router.put('/:userId', UserController.updateUser);
+router.get('/:userId', UserController.findUserById);
+router.delete('/:userId', UserController.deleteUser);
+router.get('/profile/:userId', UserController.getUserForProfileUpdate);
 
 export default router;
