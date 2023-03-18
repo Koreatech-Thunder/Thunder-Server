@@ -143,7 +143,7 @@ const findThunder = async (
 
 /**
  *
- * @route PUT / thunder/:userId/:thunderId
+ * @route PUT / thunder/:thunderId
  * @desc Update Thunder
  * @access Public
  */

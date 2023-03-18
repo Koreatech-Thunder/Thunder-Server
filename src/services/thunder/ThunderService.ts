@@ -4,11 +4,8 @@ import {ThunderCreateDto} from '../../interfaces/thunder/ThunderCreateDto';
 import {ThunderResponseDto} from '../../interfaces/thunder/ThunderResponseDto';
 import {ThunderUpdateDto} from '../../interfaces/thunder/ThunderUpdateDto';
 import Thunder from '../../models/Thunder';
-<<<<<<< HEAD
 import message from '../../modules/message';
 import statusCode from '../../modules/statusCode';
-=======
->>>>>>> c154f483c1f2a40524556d8fefc075998f442c3f
 import ThunderServiceUtils from './ThunderServiceUtils';
 
 const createThunder = async (
@@ -239,7 +236,6 @@ const updateThunder = async (
     throw error;
   }
 };
-
 
 export default {
   createThunder,
