@@ -12,8 +12,6 @@ const createThunder = async (
   thunderCreateDto: ThunderCreateDto,
   userId: string,
 ): Promise<PostBaseResponseDto> => {
-  await UserServiceUtils.findUserById(userId);
-
   try {
     const thunder = new Thunder({
       title: thunderCreateDto.title,
@@ -43,8 +41,6 @@ const findThunderAll = async (
   userId: string,
 ): Promise<ThunderResponseDto[] | []> => {
   try {
-    await UserServiceUtils.findUserById(userId);
-
     const thunderlist = await Thunder.find().sort({createdAt: 'desc'});
 
     if (!thunderlist) {
@@ -106,8 +102,6 @@ const findThunderByHashtag = async (
   userId: string,
 ): Promise<ThunderResponseDto[] | []> => {
   try {
-    await UserServiceUtils.findUserById(userId);
-
     const thunderlist = await Thunder.find({hashtags: hashtag}).sort({
       createdAt: 'desc',
     });
