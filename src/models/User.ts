@@ -33,6 +33,12 @@ const UserSchema = new mongoose.Schema({
     type: [mongoose.Schema.Types.ObjectId],
     ref: 'ThunderRecords',
   },
+  isAlarm: [
+    {
+      type: Boolean,
+      default: [false, false, false],
+    },
+  ],
 });
 
 export default mongoose.model<UserInfo & mongoose.Document>('User', UserSchema);

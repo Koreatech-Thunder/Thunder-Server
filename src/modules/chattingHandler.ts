@@ -7,8 +7,11 @@ import statusCode from './statusCode';
 import {PersonalChatRoomInfo} from '../interfaces/chatting/PersonalChatRoomInfo';
 import {ChatDto} from '../interfaces/chatting/ChatDto';
 import ThunderRecord from '../models/ThunderRecord';
+import mongoose from 'mongoose';
+import {UserInfo} from '../interfaces/user/UserInfo';
+import {ThunderInfo} from '../interfaces/thunder/ThunderInfo';
 
-const getThunders = async (userId: string): Promise<any> => {
+const getThunders = async (userId: string): Promise<ThunderInfo[]> => {
   try {
     const user = await User.findById(userId);
 
@@ -47,7 +50,7 @@ const setConnectState = async (
   return member;
 };
 
-const getUser = async (userId: string) => {
+const getUser = async (userId: string): Promise<UserInfo> => {
   try {
     const user = await User.findById(userId);
     if (!user) {
@@ -64,7 +67,10 @@ const getUser = async (userId: string) => {
   }
 };
 
-const updateThunder = async (thunderId: string, members: string[]) => {
+const updateThunderMembers = async (
+  thunderId: string,
+  members: mongoose.Schema.Types.ObjectId[],
+) => {
   try {
     const thunder = await Thunder.findById(thunderId);
 
@@ -122,7 +128,7 @@ const getThunder = async (thunderId: string) => {
 
 const isAlarm = async (userId: string): Promise<Boolean> => {
   try {
-    const user = await PersonalChatRoom.findOne({userId: userId});
+    const user = await User.findById(userId);
 
     if (!user) {
       throw errorGenerator({
@@ -131,7 +137,7 @@ const isAlarm = async (userId: string): Promise<Boolean> => {
       });
     }
 
-    return user.isAlarm; // 해당 채팅방의 알람 ON/OFF 여부만 반환.
+    return user.isAlarm[2]; // 해당 채팅방의 알람 ON/OFF 여부만 반환.
   } catch (error) {
     console.log(error);
     throw error;
@@ -144,6 +150,6 @@ export default {
   isAlarm,
   getUser,
   setConnectState,
-  updateThunder,
+  updateThunderMembers,
   updateChats,
 };

@@ -5,8 +5,8 @@ export interface ThunderInfo {
   deadline: Date;
   content: string;
   hashtags: string[];
-  chats: String[];
-  members: String[]; //id<Object>
+  chats: mongoose.Schema.Types.ObjectId[];
+  members: mongoose.Schema.Types.ObjectId[]; //id<Object>
   limitMembersCnt: number;
   createdAt: Date;
   updatedAt: Date;

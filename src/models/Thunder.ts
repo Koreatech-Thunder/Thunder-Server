@@ -23,7 +23,8 @@ const ThunderSchema = new mongoose.Schema({
   ],
   chats: [
     {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Chat',
     },
   ],
   members: [

@@ -8,4 +8,5 @@ export interface UserInfo {
   kakaoId?: String;
   fcmToken: String;
   thunderRecords: [mongoose.Schema.Types.ObjectId];
+  isAlarm: Boolean[];
 }
