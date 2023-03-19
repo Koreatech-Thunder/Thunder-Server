@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
-import { ThunderInfo } from '../interfaces/thunder/ThunderInfo';
-
+import {ThunderInfo} from '../interfaces/thunder/ThunderInfo';
 
 const ThunderSchema = new mongoose.Schema({
   title: {
@@ -22,9 +21,14 @@ const ThunderSchema = new mongoose.Schema({
       required: true,
     },
   ],
+  chats: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+    },
+  ],
   members: [
     {
-      type: String, //PersonalChatRoomInfo.id
+      type: mongoose.Schema.Types.ObjectId, //PersonalChatRoomInfo.id
       required: false,
       ref: 'User',
       default: [],

@@ -6,4 +6,5 @@ export interface UserInfo {
   isLogOut: Boolean;
   kakaoId?: String;
   fcmToken: String;
+  thunderRecords: [String];
 }

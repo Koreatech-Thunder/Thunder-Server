@@ -1,14 +1,14 @@
-import mongoose from "mongoose";
-import { UserInfo } from "../interfaces/user/UserInfo";
+import mongoose from 'mongoose';
+import {UserInfo} from '../interfaces/user/UserInfo';
 
 const UserSchema = new mongoose.Schema({
   name: {
     type: String,
-    default: "",
+    default: '',
   },
   introduction: {
     type: String,
-    default: "",
+    default: '',
   },
   mannerTemperature: {
     type: Number,
@@ -27,11 +27,11 @@ const UserSchema = new mongoose.Schema({
   },
   fcmToken: {
     type: String,
-    required: true
+    required: true,
   },
   thunderRecords: {
-    type: [mongoose.Schema.Types.ObjectId]
-  }
+    type: [mongoose.Schema.Types.ObjectId],
+  },
 });
 
-export default mongoose.model<UserInfo & mongoose.Document>("User", UserSchema);
+export default mongoose.model<UserInfo & mongoose.Document>('User', UserSchema);
