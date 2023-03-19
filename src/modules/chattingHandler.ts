@@ -4,9 +4,9 @@ import PersonalChatRoom from '../models/PersonalChatRoom';
 import errorGenerator from '../errors/errorGenerator';
 import message from './message';
 import statusCode from './statusCode';
-import mongoose from 'mongoose';
 import {PersonalChatRoomInfo} from '../interfaces/chatting/PersonalChatRoomInfo';
 import {ChatDto} from '../interfaces/chatting/ChatDto';
+import ThunderRecord from '../models/ThunderRecord';
 
 const getThunders = async (userId: string): Promise<any> => {
   try {
@@ -14,13 +14,20 @@ const getThunders = async (userId: string): Promise<any> => {
 
     if (!user) {
       throw errorGenerator({
-        msg: message.NOT_FOUND,
+        msg: message.NOT_FOUND_USER,
         statusCode: statusCode.NOT_FOUND,
       });
     }
 
+    const thunderList = [];
+
+    for (let record of user.thunderRecords) {
+      const thunder = await ThunderRecord.findById(record);
+      thunderList.push(thunder?.thunderId);
+    }
+
     const result = await Thunder.find({
-      _id: {$in: user.thunderRecords}, // 유저 정보의 thunderRecords 중에서
+      _id: {$in: thunderList}, // 유저 정보의 thunderRecords 안의 정보 중에서
       deadline: {$gt: new Date()}, // deadline이 아직 안 지난 것만 쿼리. new Date()는 현재 날짜시간
     });
 
@@ -45,7 +52,7 @@ const getUser = async (userId: string) => {
     const user = await User.findById(userId);
     if (!user) {
       throw errorGenerator({
-        msg: message.NOT_FOUND,
+        msg: message.NOT_FOUND_USER,
         statusCode: statusCode.NOT_FOUND,
       });
     }
@@ -63,7 +70,7 @@ const updateThunder = async (thunderId: string, members: string[]) => {
 
     if (!thunder) {
       throw errorGenerator({
-        msg: message.NOT_FOUND,
+        msg: message.NOT_FOUND_ROOM,
         statusCode: statusCode.NOT_FOUND,
       });
     }
@@ -82,7 +89,7 @@ const updateChats = async (thunderId: string, chat: ChatDto) => {
 
     if (!thunder) {
       throw errorGenerator({
-        msg: message.NOT_FOUND,
+        msg: message.NOT_FOUND_ROOM,
         statusCode: statusCode.NOT_FOUND,
       });
     }
@@ -101,7 +108,7 @@ const getThunder = async (thunderId: string) => {
 
     if (!thunder) {
       throw errorGenerator({
-        msg: message.NOT_FOUND,
+        msg: message.NOT_FOUND_ROOM,
         statusCode: statusCode.NOT_FOUND,
       });
     }
@@ -119,7 +126,7 @@ const isAlarm = async (userId: string): Promise<Boolean> => {
 
     if (!user) {
       throw errorGenerator({
-        msg: message.NOT_FOUND,
+        msg: message.NOT_FOUND_USER,
         statusCode: statusCode.NOT_FOUND,
       });
     }
