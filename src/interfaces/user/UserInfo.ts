@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 export interface UserInfo {
   name: String;
   introduction: String;
@@ -6,5 +7,5 @@ export interface UserInfo {
   isLogOut: Boolean;
   kakaoId?: String;
   fcmToken: String;
-  thunderRecords: [String];
+  thunderRecords: [mongoose.Schema.Types.ObjectId];
 }

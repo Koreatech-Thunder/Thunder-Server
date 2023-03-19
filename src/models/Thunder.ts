@@ -23,14 +23,14 @@ const ThunderSchema = new mongoose.Schema({
   ],
   chats: [
     {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
     },
   ],
   members: [
     {
-      type: mongoose.Schema.Types.ObjectId, //PersonalChatRoomInfo.id
+      type: mongoose.Schema.Types.ObjectId,
       required: false,
-      ref: 'User',
+      ref: 'PersonalChatRoom',
       default: [],
     },
   ],

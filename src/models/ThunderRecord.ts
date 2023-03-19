@@ -7,6 +7,7 @@ const ThunderRecordSchema = new mongoose.Schema({
   },
   thunderId: {
     type: mongoose.Schema.Types.ObjectId,
+    ref: 'Thunder',
   },
   isEvaluate: {
     type: Boolean,

@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
-import { ChatInfo } from "../interfaces/chatting/ChatInfo";
+import mongoose from 'mongoose';
+import {ChatInfo} from '../interfaces/chatting/ChatInfo';
 
 const ChatSchema = new mongoose.Schema({
   id: {
@@ -14,7 +14,7 @@ const ChatSchema = new mongoose.Schema({
   },
   createdAt: {
     type: Date,
-  }
+  },
 });
 
-export default mongoose.model<ChatInfo & mongoose.Document>("Chat", ChatSchema);
+export default mongoose.model<ChatInfo & mongoose.Document>('Chat', ChatSchema);
