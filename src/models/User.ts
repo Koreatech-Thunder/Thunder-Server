@@ -36,7 +36,7 @@ const UserSchema = new mongoose.Schema({
   isAlarm: [
     {
       type: Boolean,
-      default: [false, false, false],
+      default: [true, true, true],
     },
   ],
 });

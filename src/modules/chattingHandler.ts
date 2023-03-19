@@ -1,6 +1,5 @@
 import Thunder from '../models/Thunder';
 import User from '../models/User';
-import PersonalChatRoom from '../models/PersonalChatRoom';
 import errorGenerator from '../errors/errorGenerator';
 import message from './message';
 import statusCode from './statusCode';
