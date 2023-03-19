@@ -1,4 +1,3 @@
-
 import express, {Request, Response} from 'express';
 const app = express();
 import connectDB from './loaders/db';
@@ -21,7 +20,6 @@ interface ErrorType {
   status: number;
 }
 
-
 app.use(function (err: ErrorType, req: Request, res: Response) {
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'production' ? err : {};
@@ -29,7 +27,6 @@ app.use(function (err: ErrorType, req: Request, res: Response) {
   // render the error page
   res.status(err.status || 500);
   res.render('error');
-
 });
 
 app

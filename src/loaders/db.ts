@@ -6,6 +6,7 @@ import errorGenerator from '../errors/errorGenerator';
 import statusCode from '../modules/statusCode';
 import User from '../models/User';
 import message from '../modules/message';
+import {pushMessageTemplate} from '../modules/pushMessageTemplate';
 
 const connectDB = async () => {
   try {
