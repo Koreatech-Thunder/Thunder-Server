@@ -163,10 +163,48 @@ const updateThunder = async (
   }
 };
 
+/**
+ *
+ * @route PUT / thunder/join/:thunderId
+ * @desc Update Join User To Thunder
+ * @access Public
+ */
+const joinThunder = async (
+  req: Request,
+  res: Response,
+): Promise<void | Response> => {
+  const errors: Result<ValidationError> = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(statusCode.BAD_REQUEST).send(message.BAD_REQUEST);
+  }
+
+  const userId: string = req.body['userId'];
+  const {thunderId} = req.params;
+
+  try {
+    await ThunderService.joinThunder(userId, thunderId);
+
+    res.status(statusCode.OK).send(statusCode.OK);
+  } catch (error: any) {
+    if (error.msg == message.NOT_FOUND_ROOM) {
+      console.log(error);
+      res.status(statusCode.NOT_FOUND).send(statusCode.NOT_FOUND);
+    } else if (error.msg == message.FORBIDDEN) {
+      console.log(error);
+      res.status(statusCode.FORBIDDEN).send(statusCode.FORBIDDEN);
+    } else {
+      res
+        .status(statusCode.INTERNAL_SERVER_ERROR)
+        .send(statusCode.INTERNAL_SERVER_ERROR);
+    }
+  }
+};
+
 export default {
   createThunder,
   findThunderAll,
   findThunderByHashtag,
   findThunder,
   updateThunder,
+  joinThunder,
 };
