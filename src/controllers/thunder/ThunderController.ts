@@ -106,14 +106,11 @@ const findThunder = async (
   req: Request,
   res: Response,
 ): Promise<void | Response> => {
-  const userId: string = req.body['userId'];
-  const thunderId: string = req.body['thunderId'];
+
+  const {thunderId} = req.params;
 
   try {
-    const data: ThunderUpdateDto = await ThunderService.findThunder(
-      userId,
-      thunderId,
-    );
+    const data: ThunderUpdateDto = await ThunderService.findThunder(thunderId);
 
     res.status(statusCode.OK).send(data);
   } catch (error: any) {
