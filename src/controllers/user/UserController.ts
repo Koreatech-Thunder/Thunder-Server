@@ -8,6 +8,7 @@ import {UserInfoDto} from '../../interfaces/user/UserInfoDto';
 import message from '../../modules/message';
 import {UserCreateDto} from '../../interfaces/user/UserCreateDto';
 import {UserHashtagResponseDto} from '../../interfaces/user/UserHashtagResponseDto';
+import {UserThunderRecordResponseDto} from '../../interfaces/user/UserThunderRecordResponseDto';
 
 /**
  *
@@ -57,6 +58,31 @@ const findUserHashtag = async (req: Request, res: Response): Promise<void> => {
     const data: UserHashtagResponseDto = await UserService.findUserHashtag(
       userId,
     );
+
+    res.status(statusCode.OK).send(data);
+  } catch (error: any) {
+    console.log(error);
+    res
+      .status(statusCode.INTERNAL_SERVER_ERROR)
+      .send(statusCode.INTERNAL_SERVER_ERROR);
+  }
+};
+
+/**
+ *
+ * @route GET / user/record
+ * @desc Read User ThunderRecord
+ * @access Public
+ */
+const findUserThunderRecord = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  const userId: string = req.body['userId'];
+
+  try {
+    const data: UserThunderRecordResponseDto =
+      await UserService.findUserThunderRecord(userId);
 
     res.status(statusCode.OK).send(data);
   } catch (error: any) {
@@ -144,4 +170,5 @@ export default {
   deleteUser,
   getUserForProfileUpdate,
   findUserHashtag,
+  findUserThunderRecord,
 };

@@ -4,7 +4,6 @@ import {ThunderCreateDto} from '../../interfaces/thunder/ThunderCreateDto';
 import {ThunderResponseDto} from '../../interfaces/thunder/ThunderResponseDto';
 import {ThunderUpdateDto} from '../../interfaces/thunder/ThunderUpdateDto';
 import {PostBaseResponseDto} from '../../interfaces/common/PostBaseResponseDto';
-import {ThunderUpdateDto} from '../../interfaces/thunder/ThunderUpdateDto';
 import statusCode from '../../modules/statusCode';
 import ThunderService from '../../services/thunder/ThunderService';
 import message from '../../modules/message';
@@ -106,7 +105,6 @@ const findThunder = async (
   req: Request,
   res: Response,
 ): Promise<void | Response> => {
-
   const {thunderId} = req.params;
 
   try {
