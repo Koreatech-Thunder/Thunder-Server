@@ -1,6 +1,7 @@
 import {PostBaseResponseDto} from '../../interfaces/common/PostBaseResponseDto';
 import {ThunderCreateDto} from '../../interfaces/thunder/ThunderCreateDto';
 import {ThunderResponseDto} from '../../interfaces/thunder/ThunderResponseDto';
+import {ThunderUpdateDto} from '../../interfaces/thunder/ThunderUpdateDto';
 import Thunder from '../../models/Thunder';
 import ThunderServiceUtils from './ThunderServiceUtils';
 
@@ -155,8 +156,28 @@ const findThunderByHashtag = async (
   }
 };
 
+const findThunder = async (thunderId: string): Promise<ThunderUpdateDto> => {
+  try {
+    const thunder = await ThunderServiceUtils.findThunderById(thunderId);
+
+    const data: ThunderUpdateDto = {
+      title: thunder.title,
+      deadline: thunder.deadline.toString(),
+      content: thunder.content,
+      hashtags: thunder.hashtags,
+      limitMembersCnt: thunder.limitMembersCnt,
+    };
+
+    return data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
 export default {
   createThunder,
   findThunderAll,
   findThunderByHashtag,
+  findThunder,
 };

@@ -2,6 +2,7 @@ import {Request, Response} from 'express';
 import {Result, ValidationError, validationResult} from 'express-validator';
 import {ThunderCreateDto} from '../../interfaces/thunder/ThunderCreateDto';
 import {ThunderResponseDto} from '../../interfaces/thunder/ThunderResponseDto';
+import {ThunderUpdateDto} from '../../interfaces/thunder/ThunderUpdateDto';
 import {PostBaseResponseDto} from '../../interfaces/common/PostBaseResponseDto';
 import statusCode from '../../modules/statusCode';
 import ThunderService from '../../services/thunder/ThunderService';
@@ -94,8 +95,37 @@ const findThunderByHashtag = async (
   }
 };
 
+/**
+ *
+ * @route GET / thunder/:thunderId
+ * @desc Get Thunder Details
+ * @access Public
+ */
+const findThunder = async (
+  req: Request,
+  res: Response,
+): Promise<void | Response> => {
+  const {thunderId} = req.params;
+
+  try {
+    const data: ThunderUpdateDto = await ThunderService.findThunder(thunderId);
+
+    res.status(statusCode.OK).send(data);
+  } catch (error: any) {
+    if (error.msg == message.NOT_FOUND_ROOM) {
+      console.log(error);
+      res.status(statusCode.NOT_FOUND).send(statusCode.NOT_FOUND);
+    } else {
+      res
+        .status(statusCode.INTERNAL_SERVER_ERROR)
+        .send(statusCode.INTERNAL_SERVER_ERROR);
+    }
+  }
+};
+
 export default {
   createThunder,
   findThunderAll,
   findThunderByHashtag,
+  findThunder,
 };
