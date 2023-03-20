@@ -4,6 +4,7 @@ import {ThunderCreateDto} from '../../interfaces/thunder/ThunderCreateDto';
 import {ThunderResponseDto} from '../../interfaces/thunder/ThunderResponseDto';
 import {ThunderUpdateDto} from '../../interfaces/thunder/ThunderUpdateDto';
 import {PostBaseResponseDto} from '../../interfaces/common/PostBaseResponseDto';
+import {ThunderUpdateDto} from '../../interfaces/thunder/ThunderUpdateDto';
 import statusCode from '../../modules/statusCode';
 import ThunderService from '../../services/thunder/ThunderService';
 import message from '../../modules/message';
@@ -105,6 +106,7 @@ const findThunder = async (
   req: Request,
   res: Response,
 ): Promise<void | Response> => {
+
   const {thunderId} = req.params;
 
   try {
@@ -123,9 +125,48 @@ const findThunder = async (
   }
 };
 
+/**
+ *
+ * @route PUT / thunder/:thunderId
+ * @desc Update Thunder
+ * @access Public
+ */
+const updateThunder = async (
+  req: Request,
+  res: Response,
+): Promise<void | Response> => {
+  const errors: Result<ValidationError> = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(statusCode.BAD_REQUEST).send(message.BAD_REQUEST);
+  }
+
+  const thunderUpdateDto: ThunderUpdateDto = req.body;
+  const userId: string = req.body['userId'];
+  const {thunderId} = req.params;
+
+  try {
+    await ThunderService.updateThunder(userId, thunderId, thunderUpdateDto);
+
+    res.status(statusCode.OK).send(statusCode.OK);
+  } catch (error: any) {
+    if (error.msg == message.NOT_FOUND_ROOM) {
+      console.log(error);
+      res.status(statusCode.NOT_FOUND).send(statusCode.NOT_FOUND);
+    } else if (error.msg == message.FORBIDDEN) {
+      console.log(error);
+      res.status(statusCode.FORBIDDEN).send(statusCode.FORBIDDEN);
+    } else {
+      res
+        .status(statusCode.INTERNAL_SERVER_ERROR)
+        .send(statusCode.INTERNAL_SERVER_ERROR);
+    }
+  }
+};
+
 export default {
   createThunder,
   findThunderAll,
   findThunderByHashtag,
   findThunder,
+  updateThunder,
 };

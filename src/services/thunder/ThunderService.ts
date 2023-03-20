@@ -1,8 +1,11 @@
+import errorGenerator from '../../errors/errorGenerator';
 import {PostBaseResponseDto} from '../../interfaces/common/PostBaseResponseDto';
 import {ThunderCreateDto} from '../../interfaces/thunder/ThunderCreateDto';
 import {ThunderResponseDto} from '../../interfaces/thunder/ThunderResponseDto';
 import {ThunderUpdateDto} from '../../interfaces/thunder/ThunderUpdateDto';
 import Thunder from '../../models/Thunder';
+import message from '../../modules/message';
+import statusCode from '../../modules/statusCode';
 import ThunderServiceUtils from './ThunderServiceUtils';
 
 const createThunder = async (
@@ -175,9 +178,38 @@ const findThunder = async (thunderId: string): Promise<ThunderUpdateDto> => {
   }
 };
 
+
+const updateThunder = async (
+  userId: string,
+  thunderId: string,
+  thunderUpdateDto: ThunderUpdateDto,
+): Promise<void> => {
+  try {
+    const thunder = await ThunderServiceUtils.findThunderById(thunderId);
+
+    const isMembers: string = await ThunderServiceUtils.findMemberById(
+      userId,
+      thunder.members,
+    );
+
+    if (isMembers == 'HOST') {
+      await Thunder.findByIdAndUpdate(thunderId, thunderUpdateDto);
+    } else {
+      throw errorGenerator({
+        msg: message.FORBIDDEN,
+        statusCode: statusCode.FORBIDDEN,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
 export default {
   createThunder,
   findThunderAll,
   findThunderByHashtag,
   findThunder,
+  updateThunder,
 };

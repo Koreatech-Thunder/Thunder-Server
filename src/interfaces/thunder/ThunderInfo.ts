@@ -9,5 +9,4 @@ export interface ThunderInfo {
   limitMembersCnt: number;
   createdAt: Date;
   updatedAt: Date;
-  thunderState: Enumerator;
 }

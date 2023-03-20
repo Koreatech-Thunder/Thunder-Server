@@ -15,5 +15,6 @@ router.get(
   ThunderController.findThunderByHashtag,
 );
 router.get('/:thunderId', auth.auth, ThunderController.findThunder);
+router.put('/:thunderId', auth.auth, ThunderController.updateThunder);
 
 export default router;
