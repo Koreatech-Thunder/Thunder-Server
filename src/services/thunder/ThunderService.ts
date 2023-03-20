@@ -239,6 +239,29 @@ const joinThunder = async (
   }
 };
 
+const outThunder = async (userId: string, thunderId: string): Promise<void> => {
+  try {
+    const thunder = await ThunderServiceUtils.findThunderById(thunderId);
+
+    const isMembers: string = await ThunderServiceUtils.findMemberById(
+      userId,
+      thunder.members,
+    );
+
+    if (isMembers == 'MEMBER') {
+      await Thunder.updateOne({_id: thunderId}, {$pull: {members: userId}});
+    } else {
+      throw errorGenerator({
+        msg: message.FORBIDDEN,
+        statusCode: statusCode.FORBIDDEN,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
 export default {
   createThunder,
   findThunderAll,
@@ -246,4 +269,5 @@ export default {
   findThunder,
   updateThunder,
   joinThunder,
+  outThunder,
 };
