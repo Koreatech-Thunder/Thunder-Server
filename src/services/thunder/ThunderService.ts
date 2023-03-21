@@ -3,10 +3,12 @@ import {PostBaseResponseDto} from '../../interfaces/common/PostBaseResponseDto';
 import {ThunderCreateDto} from '../../interfaces/thunder/ThunderCreateDto';
 import {ThunderResponseDto} from '../../interfaces/thunder/ThunderResponseDto';
 import {ThunderUpdateDto} from '../../interfaces/thunder/ThunderUpdateDto';
+import {ThunderMembersDto} from '../../interfaces/thunder/ThunderMembersDto';
 import Thunder from '../../models/Thunder';
 import message from '../../modules/message';
 import statusCode from '../../modules/statusCode';
 import ThunderServiceUtils from './ThunderServiceUtils';
+import User from '../../models/User';
 
 const createThunder = async (
   thunderCreateDto: ThunderCreateDto,
@@ -56,33 +58,50 @@ const findThunderAll = async (
           thunder.members,
         );
 
+        const thunderMembers: ThunderMembersDto[] = [];
+        await Promise.all(
+          thunder.members.map(async (member: any) => {
+            const user = await User.findById(member);
+
+            thunderMembers.push({
+              name: user!.name,
+              introduction: user!.introduction,
+              hashtags: user!.hashtags,
+              mannerTemperature: user!.mannerTemperature,
+            });
+          }),
+        );
+
         if (isMembers == 'HOST') {
           allThunder.push({
+            thunderid: thunder._id,
             title: thunder.title,
             deadline: thunder.deadline.toString(),
             content: thunder.content,
             hashtags: thunder.hashtags,
-            members: thunder.members, //id<Object>
+            members: thunderMembers,
             limitMembersCnt: thunder.limitMembersCnt,
             thunderState: 'HOST',
           });
         } else if (isMembers == 'NON_MEMBER') {
           allThunder.push({
+            thunderid: thunder._id,
             title: thunder.title,
             deadline: thunder.deadline.toString(),
             content: thunder.content,
             hashtags: thunder.hashtags,
-            members: thunder.members, //id<Object>
+            members: thunderMembers,
             limitMembersCnt: thunder.limitMembersCnt,
             thunderState: 'NON_MEMBER',
           });
         } else {
           allThunder.push({
+            thunderid: thunder._id,
             title: thunder.title,
             deadline: thunder.deadline.toString(),
             content: thunder.content,
             hashtags: thunder.hashtags,
-            members: thunder.members, //id<Object>
+            members: thunderMembers,
             limitMembersCnt: thunder.limitMembersCnt,
             thunderState: 'MEMBER',
           });
@@ -120,6 +139,7 @@ const findThunderByHashtag = async (
 
         if (isMembers == 'HOST') {
           hashtagthunder.push({
+            thunderid: thunder._id,
             title: thunder.title,
             deadline: thunder.deadline.toString(),
             content: thunder.content,
@@ -130,6 +150,7 @@ const findThunderByHashtag = async (
           });
         } else if (isMembers == 'NON_MEMBER') {
           hashtagthunder.push({
+            thunderid: thunder._id,
             title: thunder.title,
             deadline: thunder.deadline.toString(),
             content: thunder.content,
@@ -140,6 +161,7 @@ const findThunderByHashtag = async (
           });
         } else {
           hashtagthunder.push({
+            thunderid: thunder._id,
             title: thunder.title,
             deadline: thunder.deadline.toString(),
             content: thunder.content,
@@ -177,7 +199,6 @@ const findThunder = async (thunderId: string): Promise<ThunderUpdateDto> => {
     throw error;
   }
 };
-
 
 const updateThunder = async (
   userId: string,
