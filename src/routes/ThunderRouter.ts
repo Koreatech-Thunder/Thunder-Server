@@ -7,7 +7,7 @@ import auth from '../middlewares/auth';
 const router: Router = Router();
 
 router.post('/', auth.auth, ThunderController.createThunder);
-router.get('/:userId', ThunderController.findThunderAll);
+router.get('/', auth.auth, ThunderController.findThunderAll);
 router.get(
   '/hashtags',
   auth.auth,

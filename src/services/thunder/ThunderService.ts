@@ -74,7 +74,7 @@ const findThunderAll = async (
 
         if (isMembers == 'HOST') {
           allThunder.push({
-            thunderid: thunder._id,
+            thunderId: thunder._id,
             title: thunder.title,
             deadline: thunder.deadline.toString(),
             content: thunder.content,
@@ -85,7 +85,7 @@ const findThunderAll = async (
           });
         } else if (isMembers == 'NON_MEMBER') {
           allThunder.push({
-            thunderid: thunder._id,
+            thunderId: thunder._id,
             title: thunder.title,
             deadline: thunder.deadline.toString(),
             content: thunder.content,
@@ -96,7 +96,7 @@ const findThunderAll = async (
           });
         } else {
           allThunder.push({
-            thunderid: thunder._id,
+            thunderId: thunder._id,
             title: thunder.title,
             deadline: thunder.deadline.toString(),
             content: thunder.content,
@@ -139,7 +139,7 @@ const findThunderByHashtag = async (
 
         if (isMembers == 'HOST') {
           hashtagthunder.push({
-            thunderid: thunder._id,
+            thunderId: thunder._id,
             title: thunder.title,
             deadline: thunder.deadline.toString(),
             content: thunder.content,
@@ -150,7 +150,7 @@ const findThunderByHashtag = async (
           });
         } else if (isMembers == 'NON_MEMBER') {
           hashtagthunder.push({
-            thunderid: thunder._id,
+            thunderId: thunder._id,
             title: thunder.title,
             deadline: thunder.deadline.toString(),
             content: thunder.content,
@@ -161,7 +161,7 @@ const findThunderByHashtag = async (
           });
         } else {
           hashtagthunder.push({
-            thunderid: thunder._id,
+            thunderId: thunder._id,
             title: thunder.title,
             deadline: thunder.deadline.toString(),
             content: thunder.content,

@@ -2,7 +2,7 @@ import {ThunderMembersDto} from './ThunderMembersDto';
 import mongoose from 'mongoose';
 
 export interface ThunderResponseDto {
-  thunderid: mongoose.Types.ObjectId;
+  thunderId: mongoose.Types.ObjectId;
   title: string;
   deadline: string;
   content: string;
