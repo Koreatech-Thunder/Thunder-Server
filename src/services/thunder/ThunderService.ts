@@ -28,6 +28,10 @@ const createThunder = async (
 
     await thunder.save();
 
+    await User.findByIdAndUpdate(userId, {
+      $push: {thunderRecords: thunder._id},
+    });
+
     const data = {
       _id: thunder._id,
     };

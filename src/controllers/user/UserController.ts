@@ -81,7 +81,7 @@ const findUserThunderRecord = async (
   const userId: string = req.body['userId'];
 
   try {
-    const data: UserThunderRecordResponseDto =
+    const data: UserThunderRecordResponseDto[] =
       await UserService.findUserThunderRecord(userId);
 
     res.status(statusCode.OK).send(data);

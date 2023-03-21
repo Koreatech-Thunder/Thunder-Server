@@ -27,7 +27,6 @@ const createThunder = async (
   const userId: string = req.body['userId'];
 
   try {
-    //data is _id(IdObject)
     const data: PostBaseResponseDto = await ThunderService.createThunder(
       thunderCreateDto,
       userId,

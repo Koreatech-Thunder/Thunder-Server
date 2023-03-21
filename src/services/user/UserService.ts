@@ -8,6 +8,7 @@ import {UserHashtagResponseDto} from '../../interfaces/user/UserHashtagResponseD
 import {UserThunderRecordResponseDto} from '../../interfaces/user/UserThunderRecordResponseDto';
 import {UserInfo} from '../../interfaces/user/UserInfo';
 import message from '../../modules/message';
+import Thunder from '../../models/Thunder';
 
 const findUserById = async (userId: string) => {
   try {
@@ -116,15 +117,25 @@ const findUserHashtag = async (
 
 const findUserThunderRecord = async (
   userId: string,
-): Promise<UserThunderRecordResponseDto> => {
+): Promise<UserThunderRecordResponseDto[]> => {
   try {
     const user = await User.findById(userId);
 
-    const data: UserThunderRecordResponseDto = {
-      thunderRecords: user!.thunderRecords,
-    };
+    const thunderRecord: UserThunderRecordResponseDto[] = [];
 
-    return data;
+    await Promise.all(
+      user!.thunderRecords.map(async (record: any) => {
+        const thunder = await Thunder.findById(record);
+
+        thunderRecord.push({
+          thunderId: thunder!._id,
+          title: thunder!.title,
+          deadline: thunder!.deadline.toString(),
+        });
+      }),
+    );
+
+    return thunderRecord;
   } catch (error) {
     console.log(error);
     throw error;

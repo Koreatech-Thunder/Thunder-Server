@@ -9,6 +9,6 @@ router.get('/:userId', UserController.findUserById);
 router.delete('/:userId', UserController.deleteUser);
 router.get('/profile/:userId', UserController.getUserForProfileUpdate);
 router.get('/hashtags', auth.auth, UserController.findUserHashtag);
-router.get('/record', UserController.findUserThunderRecord);
+router.get('/record/', auth.auth, UserController.findUserThunderRecord);
 
 export default router;
