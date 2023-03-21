@@ -137,6 +137,20 @@ const findThunderByHashtag = async (
           thunder.members,
         );
 
+        const thunderMembers: ThunderMembersDto[] = [];
+        await Promise.all(
+          thunder.members.map(async (member: any) => {
+            const user = await User.findById(member);
+
+            thunderMembers.push({
+              name: user!.name,
+              introduction: user!.introduction,
+              hashtags: user!.hashtags,
+              mannerTemperature: user!.mannerTemperature,
+            });
+          }),
+        );
+
         if (isMembers == 'HOST') {
           hashtagthunder.push({
             thunderId: thunder._id,
@@ -144,7 +158,7 @@ const findThunderByHashtag = async (
             deadline: thunder.deadline.toString(),
             content: thunder.content,
             hashtags: thunder.hashtags,
-            members: thunder.members, //id<Object>
+            members: thunderMembers,
             limitMembersCnt: thunder.limitMembersCnt,
             thunderState: 'HOST',
           });
@@ -155,7 +169,7 @@ const findThunderByHashtag = async (
             deadline: thunder.deadline.toString(),
             content: thunder.content,
             hashtags: thunder.hashtags,
-            members: thunder.members, //id<Object>
+            members: thunderMembers,
             limitMembersCnt: thunder.limitMembersCnt,
             thunderState: 'NON_MEMBER',
           });
@@ -166,7 +180,7 @@ const findThunderByHashtag = async (
             deadline: thunder.deadline.toString(),
             content: thunder.content,
             hashtags: thunder.hashtags,
-            members: thunder.members, //id<Object>
+            members: thunderMembers,
             limitMembersCnt: thunder.limitMembersCnt,
             thunderState: 'MEMBER',
           });
