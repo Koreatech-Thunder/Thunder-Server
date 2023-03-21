@@ -266,6 +266,10 @@ const joinThunder = async (
 
     if (isMembers == 'NON_MEMBER') {
       await Thunder.findByIdAndUpdate(thunderId, {$push: {members: userId}});
+
+      await User.findByIdAndUpdate(userId, {
+        $push: {thunderRecords: thunderId},
+      });
     } else {
       throw errorGenerator({
         msg: message.FORBIDDEN,
@@ -289,6 +293,10 @@ const outThunder = async (userId: string, thunderId: string): Promise<void> => {
 
     if (isMembers == 'MEMBER') {
       await Thunder.updateOne({_id: thunderId}, {$pull: {members: userId}});
+
+      await User.findByIdAndUpdate(userId, {
+        $pull: {thunderRecords: thunderId},
+      });
     } else {
       throw errorGenerator({
         msg: message.FORBIDDEN,
