@@ -35,12 +35,10 @@ const UserSchema = new mongoose.Schema({
     ref: 'ThunderRecords',
     default: [],
   },
-  isAlarms: [
-    {
-      type: Boolean,
-      default: [true, true, true],
-    },
-  ],
+  isAlarms: {
+    type: [Boolean],
+    default: [true, true, true],
+  },
 });
 
 export default mongoose.model<UserInfo & mongoose.Document>('User', UserSchema);

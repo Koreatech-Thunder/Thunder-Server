@@ -1,3 +1,3 @@
 export interface UserAlarmStateResponseDto {
-  isAlarms: [Boolean];
+  isAlarms: Boolean[];
 }
