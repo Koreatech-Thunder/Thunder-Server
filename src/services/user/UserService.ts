@@ -6,6 +6,7 @@ import {UserInfoDto} from '../../interfaces/user/UserInfoDto';
 import {UserUpdateDto} from '../../interfaces/user/UserUpdateDto';
 import {UserHashtagResponseDto} from '../../interfaces/user/UserHashtagResponseDto';
 import {UserThunderRecordResponseDto} from '../../interfaces/user/UserThunderRecordResponseDto';
+import {UserAlarmStateResponseDto} from '../../interfaces/user/UserAlarmStateResponseDto';
 import {UserInfo} from '../../interfaces/user/UserInfo';
 import message from '../../modules/message';
 import Thunder from '../../models/Thunder';
@@ -142,6 +143,23 @@ const findUserThunderRecord = async (
   }
 };
 
+const findUserAlarmState = async (
+  userId: string,
+): Promise<UserAlarmStateResponseDto> => {
+  try {
+    const user = await User.findById(userId);
+
+    const data: UserAlarmStateResponseDto = {
+      isAlarm: user!.isAlarm,
+    };
+
+    return data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
 export default {
   findUserById,
   findUserByKakao,
@@ -150,4 +168,5 @@ export default {
   updateUser,
   findUserHashtag,
   findUserThunderRecord,
+  findUserAlarmState,
 };
