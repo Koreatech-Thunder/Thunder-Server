@@ -25,7 +25,6 @@ const message = {
   //user
   NOT_FOUND_USER: '조회할 사용자 정보가 없습니다.',
   CONFLICT_USER: '이미 가입한 사용자입니다.',
-  CONFLICT_USER_NAME: '사용자 닉네임 중복입니다.',
   READ_USER_SUCCESS: '사용자 정보 조회 성공입니다.',
   UPDATE_USER_SUCCESS: '사용자 정보 수정 성공입니다.',
   DELETE_USER_SUCCESS: '사용자 탈퇴 성공입니다.',

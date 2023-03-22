@@ -40,7 +40,6 @@ const createThunder = async (
     const user = await User.find({
       hashtags: {$in: thunderCreateDto.hashtags},
     });
-    console.log(user);
 
     for (var i = 0; i < user.length; i++) {
       if (user[i].isAlarms[0]) {
@@ -91,7 +90,7 @@ const findThunderAll = async (
           allThunder.push({
             thunderId: thunder._id,
             title: thunder.title,
-            deadline: thunder.deadline.toString(),
+            deadline: await ThunderServiceUtils.dateFormat(thunder.deadline),
             content: thunder.content,
             hashtags: thunder.hashtags,
             members: thunderMembers,
@@ -102,7 +101,7 @@ const findThunderAll = async (
           allThunder.push({
             thunderId: thunder._id,
             title: thunder.title,
-            deadline: thunder.deadline.toString(),
+            deadline: await ThunderServiceUtils.dateFormat(thunder.deadline),
             content: thunder.content,
             hashtags: thunder.hashtags,
             members: thunderMembers,
@@ -113,7 +112,7 @@ const findThunderAll = async (
           allThunder.push({
             thunderId: thunder._id,
             title: thunder.title,
-            deadline: thunder.deadline.toString(),
+            deadline: await ThunderServiceUtils.dateFormat(thunder.deadline),
             content: thunder.content,
             hashtags: thunder.hashtags,
             members: thunderMembers,
@@ -168,7 +167,7 @@ const findThunderByHashtag = async (
           hashtagthunder.push({
             thunderId: thunder._id,
             title: thunder.title,
-            deadline: thunder.deadline.toString(),
+            deadline: await ThunderServiceUtils.dateFormat(thunder.deadline),
             content: thunder.content,
             hashtags: thunder.hashtags,
             members: thunderMembers,
@@ -179,7 +178,7 @@ const findThunderByHashtag = async (
           hashtagthunder.push({
             thunderId: thunder._id,
             title: thunder.title,
-            deadline: thunder.deadline.toString(),
+            deadline: await ThunderServiceUtils.dateFormat(thunder.deadline),
             content: thunder.content,
             hashtags: thunder.hashtags,
             members: thunderMembers,
@@ -190,7 +189,7 @@ const findThunderByHashtag = async (
           hashtagthunder.push({
             thunderId: thunder._id,
             title: thunder.title,
-            deadline: thunder.deadline.toString(),
+            deadline: await ThunderServiceUtils.dateFormat(thunder.deadline),
             content: thunder.content,
             hashtags: thunder.hashtags,
             members: thunderMembers,
@@ -214,7 +213,7 @@ const findThunder = async (thunderId: string): Promise<ThunderUpdateDto> => {
 
     const data: ThunderUpdateDto = {
       title: thunder.title,
-      deadline: thunder.deadline.toString(),
+      deadline: await ThunderServiceUtils.dateFormat(thunder.deadline),
       content: thunder.content,
       hashtags: thunder.hashtags,
       limitMembersCnt: thunder.limitMembersCnt,

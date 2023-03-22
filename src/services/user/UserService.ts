@@ -8,6 +8,7 @@ import {UserHashtagResponseDto} from '../../interfaces/user/UserHashtagResponseD
 import {UserThunderRecordResponseDto} from '../../interfaces/user/UserThunderRecordResponseDto';
 import {UserAlarmStateResponseDto} from '../../interfaces/user/UserAlarmStateResponseDto';
 import {UserInfo} from '../../interfaces/user/UserInfo';
+import ThunderServiceUtils from '../../services/Thunder/ThunderServiceUtils';
 import message from '../../modules/message';
 import Thunder from '../../models/Thunder';
 
@@ -82,16 +83,6 @@ const updateUser = async (
   userId: string,
 ): Promise<void> => {
   try {
-    const existUsername = await User.findOne({
-      name: userUpdateDto.name,
-    });
-    if (existUsername) {
-      throw errorGenerator({
-        msg: message.CONFLICT_USER_NAME,
-        statusCode: statusCode.CONFLICT,
-      });
-    }
-
     await User.findByIdAndUpdate(userId, userUpdateDto);
   } catch (error) {
     console.log(error);
@@ -131,7 +122,7 @@ const findUserThunderRecord = async (
         thunderRecord.push({
           thunderId: thunder!._id,
           title: thunder!.title,
-          deadline: thunder!.deadline.toString(),
+          deadline: await ThunderServiceUtils.dateFormat(thunder!.deadline),
         });
       }),
     );
