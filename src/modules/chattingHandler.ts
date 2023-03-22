@@ -69,7 +69,7 @@ const getUser = async (userId: string): Promise<UserInfo> => {
 const updateThunderMembers = async (
   thunderId: string,
   members: mongoose.Schema.Types.ObjectId[],
-) => {
+): Promise<void> => {
   try {
     const thunder = await Thunder.findById(thunderId);
 

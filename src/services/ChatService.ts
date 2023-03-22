@@ -8,9 +8,12 @@ import {ChatDto} from '../interfaces/chatting/ChatDto';
 import Chat from '../models/Chat';
 import {ChatRoomDto} from '../interfaces/chatting/ChatRoomDto';
 import chattingHandler from '../modules/chattingHandler';
-import { ObjectId } from 'mongoose';
+import {ObjectId} from 'mongoose';
+import PersonalChatRoom from '../models/PersonalChatRoom';
+import {ChatRoomDetailDto} from '../interfaces/chatting/ChatRoomDetailDto';
+import {ChatUserDto} from '../interfaces/chatting/ChatUserDto';
 
-const getChatRooms = async (userId: string) => {
+const getChatRooms = async (userId: string): Promise<ChatRoomDto[]> => {
   try {
     const user = await User.findById(userId);
 
@@ -25,25 +28,25 @@ const getChatRooms = async (userId: string) => {
       _id: {$in: user.thunderRecords},
     });
 
-    const resultList = [];
+    let resultList = [];
 
     for (let record of recordList) {
       if (!record.isEvaluate) {
-        const thunder = await Thunder.findById(record.thunderId);
+        let thunder = await Thunder.findById(record.thunderId);
         if (!thunder) {
           throw errorGenerator({
             msg: message.NOT_FOUND_ROOM,
             statusCode: statusCode.NOT_FOUND,
           });
         }
-        const endTime = new Date(
+        let endTime = new Date(
           thunder.deadline.setDate(thunder.deadline.getDate() + 1),
         );
-        const lastChat: ChatDto | null = await Chat.findById(
+        let lastChat: ChatDto | null = await Chat.findById(
           thunder.chats[thunder.chats.length - 1],
         );
 
-        const result: ChatRoomDto = {
+        let result: ChatRoomDto = {
           id: thunder.id,
           title: thunder.title,
           limitMemberCnt: thunder.limitMembersCnt,
@@ -63,14 +66,98 @@ const getChatRooms = async (userId: string) => {
   }
 };
 
-const getChatRoomDetail = async (userId: string, thunderId: string) => {
+const getChatRoomDetail = async (
+  userId: string,
+  thunderId: string,
+): Promise<ChatRoomDetailDto> => {
   try {
     const thunder = await chattingHandler.getThunder(thunderId);
 
-    const chats: ObjectId[] = thunder.chats;
-    const chatDtos: 
+    if (!thunder) {
+      throw errorGenerator({
+        msg: message.NOT_FOUND_ROOM,
+        statusCode: statusCode.NOT_FOUND,
+      });
+    }
 
-  } catch (error) {}
+    const chats: ObjectId[] = thunder.chats;
+    let chatDtos: ChatDto[] = [];
+
+    for (let chat of chats) {
+      let result = await Chat.findById(chat);
+      if (!result) {
+        throw errorGenerator({
+          msg: message.NOT_FOUND,
+          statusCode: statusCode.NOT_FOUND,
+        });
+      }
+
+      let sender = await User.findById(result.sender);
+
+      if (!sender) {
+        throw errorGenerator({
+          msg: message.NOT_FOUND_USER,
+          statusCode: statusCode.NOT_FOUND,
+        });
+      }
+
+      let userDto: ChatUserDto = {
+        id: sender.id,
+        profile: sender.introduction,
+        name: sender.name as string,
+      };
+
+      let state;
+
+      if (chat.toString() == userId) {
+        state = 'ME';
+      } else {
+        state = 'OTHER';
+      }
+
+      let chatDto: ChatDto = {
+        id: chat,
+        message: result.message,
+        user: userDto,
+        createdAt: result.createdAt,
+        thunderId: thunderId,
+        state: state,
+      };
+
+      chatDtos.push(chatDto);
+    }
+
+    const memberIds = thunder.members;
+    let isAlarm;
+
+    for (let memberId of memberIds) {
+      let member = await PersonalChatRoom.findById(memberId);
+
+      if (!member) {
+        throw errorGenerator({
+          msg: message.NOT_FOUND,
+          statusCode: statusCode.NOT_FOUND,
+        });
+      }
+
+      if (member.userId.toString() == userId) {
+        isAlarm = member.isAlarm;
+      }
+    }
+
+    const resultDto: ChatRoomDetailDto = {
+      title: thunder.title,
+      limitMemberCnt: thunder.limitMembersCnt,
+      joinMemberCnt: thunder.members.length,
+      chats: chatDtos,
+      isAlarm: isAlarm as boolean,
+    };
+
+    return resultDto;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
 };
 
 const putChatRoomAlarm = async (
@@ -81,8 +168,32 @@ const putChatRoomAlarm = async (
   try {
     const thunder = await chattingHandler.getThunder(thunderId);
 
-    const member = thunder.members;
-  } catch (error: any) {}
+    const memberIds = thunder.members;
+
+    for (let memberId of memberIds) {
+      let result /*: PersonalChatRoomInfo */ = await PersonalChatRoom.findById(
+        memberId,
+      ); //PersonalChatRoom에서 members 안에 든 id를 검색.
+
+      if (!result) {
+        // 검색 결과가 안나오면 에러
+        throw errorGenerator({
+          msg: message.NOT_FOUND_ROOM,
+          statusCode: statusCode.NOT_FOUND,
+        });
+      }
+      console.log(result);
+
+      if (result.userId.toString() == userId) {
+        // PersonalChatRoom 안의 userId가 현재 조작하는 유저의 ID와 같다면 알람 ON/OFF 여부 변경.
+        result.isAlarm = isAlarm;
+        result.save(); // 변경후 저장.
+      }
+    }
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
 };
 
 export default {
