@@ -1,12 +1,11 @@
-import { UserUpdateDto } from "../interfaces/user/UserUpdateDto";
-import { UserResponseDto } from "../interfaces/user/UserResponseDto";
-import User from "../models/User";
+import {UserUpdateDto} from '../interfaces/user/UserUpdateDto';
+import {UserResponseDto} from '../interfaces/user/UserResponseDto';
+import User from '../models/User';
 import errorGenerator from '../errors/errorGenerator';
 import statusCode from '../modules/statusCode';
-import { UserInfoDto } from '../interfaces/user/UserInfoDto';
-import { UserInfo } from '../interfaces/user/UserInfo';
+import {UserInfoDto} from '../interfaces/user/UserInfoDto';
+import {UserInfo} from '../interfaces/user/UserInfo';
 import message from '../modules/message';
-
 
 const updateUser = async (userId: any, userUpdateDto: UserUpdateDto) => {
   try {
@@ -18,6 +17,8 @@ const updateUser = async (userId: any, userUpdateDto: UserUpdateDto) => {
       isLogOut: userUpdateDto.isLogOut,
       kakaoId: userUpdateDto.kakaoId,
       fcmToken: userUpdateDto.fcmToken,
+      thunderRecords: userUpdateDto.thunderRecords,
+      isAlarms: userUpdateDto.isAlarms,
     };
 
     await User.findByIdAndUpdate(userId, updatedUser);
@@ -51,58 +52,48 @@ const findUserByKakao = async (kakaoId: any) => {
   }
 };
 
-
-
 const deleteUser = async (userId: string) => {
-    try {
+  try {
+    const user = await User.findById(userId);
 
-        const user = await User.findById(userId);
+    if (!user) {
+      throw errorGenerator({
+        msg: message.NOT_FOUND_USER,
+        statusCode: statusCode.NOT_FOUND,
+      });
+    }
 
-        if (!user) {
-            throw errorGenerator({
-                msg: message.NOT_FOUND_USER,
-                statusCode: statusCode.NOT_FOUND
-            })
-        }
-
-        await User.findByIdAndDelete(userId);
-
-    } catch (error) {
-        console.log(error);
-        throw (error);
-    };
+    await User.findByIdAndDelete(userId);
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
 };
 
-
 const getUserForProfileUpdate = async (userId: string) => {
+  try {
+    const data: UserInfo | null = await User.findById(userId);
 
-    try {
-        const data: UserInfo | null = await User.findById(userId);
-
-        if (!data) {
-            throw errorGenerator ({
-                msg: message.NOT_FOUND_USER,
-                statusCode: statusCode.NOT_FOUND
-            })
-        }
-        
-        const result: UserInfoDto = {
-            "name": data.name,
-            "introduction": data.introduction,
-            "hashtags" : data.hashtags
-        }
-
-        return result;
+    if (!data) {
+      throw errorGenerator({
+        msg: message.NOT_FOUND_USER,
+        statusCode: statusCode.NOT_FOUND,
+      });
     }
 
-    catch (error) {
-        console.log(error);
-        throw (error);
-    }
-    
+    const result: UserInfoDto = {
+      name: data.name as string,
+      introduction: data.introduction as string,
+      hashtags: data.hashtags as [string],
+      mannerTemperature: data.mannerTemperature as number,
+    };
 
-}
-
+    return result;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
 
 export default {
   updateUser,

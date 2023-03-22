@@ -38,14 +38,13 @@ const message = {
   READ_THUNDER_SUCCESS: '번개 정보 조회 성공입니다',
   JOIN_ROOM_SUCCESS: '번개 참가 성공입니다.',
   LEAVE_ROOM_SUCCESS: '번개 나가기 성공입니다.',
+  OVER_LIMITMEMBERSCNT: '제한된 인원을 초과하였습니다.',
 
   //token
   NOT_FOUND_TOKEN: '토큰이 존재하지 않습니다.',
   NOT_FOUND_FCM: '파이어베이스 키가 존재하지 않습니다.',
   FCM_ERROR: 'FCM 메시지 오류',
   KAKAO_SERVER_ERROR: '카카오 서버에서 값을 받아오지 못했습니다.',
-
-  
 };
 
 export default message;

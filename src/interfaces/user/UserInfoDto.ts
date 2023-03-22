@@ -1,5 +1,6 @@
 export interface UserInfoDto {
-    name: String;
-    introduction: String;
-    hashtags: [String];
+  name: String;
+  introduction: String;
+  hashtags: [String];
+  mannerTemperature: Number;
 }
