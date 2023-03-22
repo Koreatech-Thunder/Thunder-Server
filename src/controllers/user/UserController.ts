@@ -68,7 +68,7 @@ const findUserHashtag = async (req: Request, res: Response): Promise<void> => {
 };
 
 const findUserById = async (req: Request, res: Response): Promise<void> => {
-  const {userId} = req.params;
+  const userId = req.body['userId'];
 
   try {
     const data: UserResponseDto | null = await UserService.findUserById(userId);
@@ -95,7 +95,7 @@ const findUserByKakao = async (req: Request, res: Response): Promise<void> => {
 };
 
 const deleteUser = async (req: Request, res: Response): Promise<void> => {
-  const {userId} = req.params;
+  const userId = req.body['userId'];
 
   try {
     await UserService.deleteUser(userId);
@@ -117,8 +117,7 @@ const getUserForProfileUpdate = async (
   req: Request,
   res: Response,
 ): Promise<void> => {
-  const {userId} = req.params;
-
+  const userId = req.body['userId'];
   try {
     const data: UserInfoDto | null = await UserService.getUserForProfileUpdate(
       userId,
