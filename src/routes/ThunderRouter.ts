@@ -9,7 +9,8 @@ const router: Router = Router();
 router.post('/', auth.auth, ThunderController.createThunder);
 router.get('/', auth.auth, ThunderController.findThunderAll);
 router.get(
-  '/:userId/hashtags',
+  '/hashtags',
+  auth.auth,
   [query('hashtag').isString().trim()],
   ThunderController.findThunderByHashtag,
 );
