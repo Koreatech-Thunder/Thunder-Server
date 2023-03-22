@@ -35,7 +35,7 @@ const UserSchema = new mongoose.Schema({
     ref: 'ThunderRecords',
     default: [],
   },
-  isAlarm: [
+  isAlarms: [
     {
       type: Boolean,
       default: [true, true, true],

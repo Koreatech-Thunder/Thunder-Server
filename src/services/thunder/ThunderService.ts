@@ -38,8 +38,11 @@ const createThunder = async (
     };
 
     const user = await User.find({hashtags: {$in: thunderCreateDto.hashtags}});
-    for (var i = 0; i < user.length; i++) {
-      pushHandler.pushAlarmToUser(user[i].toString());
+
+    if (user!.isAlarms[0]) {
+      for (var i = 0; i < user.length; i++) {
+        pushHandler.pushAlarmToUser(user[i].toString());
+      }
     }
 
     return data;
