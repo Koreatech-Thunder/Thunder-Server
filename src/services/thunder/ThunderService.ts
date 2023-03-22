@@ -47,7 +47,10 @@ const findThunderAll = async (
   userId: string,
 ): Promise<ThunderResponseDto[] | []> => {
   try {
-    const thunderlist = await Thunder.find().sort({createdAt: 'desc'});
+    const currentTime = new Date(); //현재 날짜 및 시간
+    const thunderlist = await Thunder.find({
+      createdAt: {$gt: currentTime.setDate(currentTime.getDate() - 1)},
+    }).sort({createdAt: 'desc'});
 
     if (!thunderlist) {
       return [];
@@ -125,7 +128,11 @@ const findThunderByHashtag = async (
   userId: string,
 ): Promise<ThunderResponseDto[] | []> => {
   try {
-    const thunderlist = await Thunder.find({hashtags: hashtag}).sort({
+    const currentTime = new Date();
+    const thunderlist = await Thunder.find(
+      {hashtags: hashtag},
+      {createdAt: {$gt: currentTime.setDate(currentTime.getDate() - 1)}},
+    ).sort({
       createdAt: 'desc',
     });
 
