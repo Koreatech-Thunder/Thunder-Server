@@ -3,7 +3,6 @@ import {Result, ValidationError, validationResult} from 'express-validator';
 import {ThunderCreateDto} from '../../interfaces/thunder/ThunderCreateDto';
 import {ThunderResponseDto} from '../../interfaces/thunder/ThunderResponseDto';
 import {PostBaseResponseDto} from '../../interfaces/common/PostBaseResponseDto';
-import {ThunderUpdateDto} from '../../interfaces/thunder/ThunderUpdateDto';
 import statusCode from '../../modules/statusCode';
 import ThunderService from '../../services/thunder/ThunderService';
 import message from '../../modules/message';
@@ -27,7 +26,6 @@ const createThunder = async (
   const userId: string = req.body['userId'];
 
   try {
-    //data is _id(IdObject)
     const data: PostBaseResponseDto = await ThunderService.createThunder(
       thunderCreateDto,
       userId,
@@ -105,7 +103,6 @@ const findThunder = async (
   req: Request,
   res: Response,
 ): Promise<void | Response> => {
-
   const {thunderId} = req.params;
 
   try {

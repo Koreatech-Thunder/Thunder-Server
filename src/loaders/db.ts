@@ -36,7 +36,7 @@ const connectDB = async () => {
     mongoose.set('autoCreate', true);
 
     console.log('Mongoose Connected ...');
-
+    /*
     const user = await User.find({isLogOut: false});
 
     for (let i = 0; i < user.length; i++) {
@@ -63,6 +63,7 @@ const connectDB = async () => {
           });
         });
     }
+    */
   } catch (err: any) {
     console.error(err.message);
     process.exit(1);

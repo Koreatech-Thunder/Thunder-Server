@@ -3,10 +3,12 @@ import {PostBaseResponseDto} from '../../interfaces/common/PostBaseResponseDto';
 import {ThunderCreateDto} from '../../interfaces/thunder/ThunderCreateDto';
 import {ThunderResponseDto} from '../../interfaces/thunder/ThunderResponseDto';
 import {ThunderUpdateDto} from '../../interfaces/thunder/ThunderUpdateDto';
+import {ThunderMembersDto} from '../../interfaces/thunder/ThunderMembersDto';
 import Thunder from '../../models/Thunder';
 import message from '../../modules/message';
 import statusCode from '../../modules/statusCode';
 import ThunderServiceUtils from './ThunderServiceUtils';
+import User from '../../models/User';
 
 const createThunder = async (
   thunderCreateDto: ThunderCreateDto,
@@ -26,6 +28,10 @@ const createThunder = async (
 
     await thunder.save();
 
+    await User.findByIdAndUpdate(userId, {
+      $push: {thunderRecords: thunder._id},
+    });
+
     const data = {
       _id: thunder._id,
     };
@@ -41,7 +47,10 @@ const findThunderAll = async (
   userId: string,
 ): Promise<ThunderResponseDto[] | []> => {
   try {
-    const thunderlist = await Thunder.find().sort({createdAt: 'desc'});
+    const currentTime = new Date(); //현재 날짜 및 시간
+    const thunderlist = await Thunder.find({
+      deadline: {$gt: currentTime},
+    }).sort({createdAt: 'desc'});
 
     if (!thunderlist) {
       return [];
@@ -56,33 +65,50 @@ const findThunderAll = async (
           thunder.members,
         );
 
+        const thunderMembers: ThunderMembersDto[] = [];
+        await Promise.all(
+          thunder.members.map(async (member: any) => {
+            const user = await User.findById(member);
+
+            thunderMembers.push({
+              name: user!.name,
+              introduction: user!.introduction,
+              hashtags: user!.hashtags,
+              mannerTemperature: user!.mannerTemperature,
+            });
+          }),
+        );
+
         if (isMembers == 'HOST') {
           allThunder.push({
+            thunderId: thunder._id,
             title: thunder.title,
             deadline: thunder.deadline.toString(),
             content: thunder.content,
             hashtags: thunder.hashtags,
-            members: thunder.members, //id<Object>
+            members: thunderMembers,
             limitMembersCnt: thunder.limitMembersCnt,
             thunderState: 'HOST',
           });
         } else if (isMembers == 'NON_MEMBER') {
           allThunder.push({
+            thunderId: thunder._id,
             title: thunder.title,
             deadline: thunder.deadline.toString(),
             content: thunder.content,
             hashtags: thunder.hashtags,
-            members: thunder.members, //id<Object>
+            members: thunderMembers,
             limitMembersCnt: thunder.limitMembersCnt,
             thunderState: 'NON_MEMBER',
           });
         } else {
           allThunder.push({
+            thunderId: thunder._id,
             title: thunder.title,
             deadline: thunder.deadline.toString(),
             content: thunder.content,
             hashtags: thunder.hashtags,
-            members: thunder.members, //id<Object>
+            members: thunderMembers,
             limitMembersCnt: thunder.limitMembersCnt,
             thunderState: 'MEMBER',
           });
@@ -102,7 +128,11 @@ const findThunderByHashtag = async (
   userId: string,
 ): Promise<ThunderResponseDto[] | []> => {
   try {
-    const thunderlist = await Thunder.find({hashtags: hashtag}).sort({
+    const currentTime = new Date();
+    const thunderlist = await Thunder.find(
+      {hashtags: hashtag},
+      {createdAt: {$gt: currentTime}},
+    ).sort({
       createdAt: 'desc',
     });
 
@@ -118,33 +148,50 @@ const findThunderByHashtag = async (
           thunder.members,
         );
 
+        const thunderMembers: ThunderMembersDto[] = [];
+        await Promise.all(
+          thunder.members.map(async (member: any) => {
+            const user = await User.findById(member);
+
+            thunderMembers.push({
+              name: user!.name,
+              introduction: user!.introduction,
+              hashtags: user!.hashtags,
+              mannerTemperature: user!.mannerTemperature,
+            });
+          }),
+        );
+
         if (isMembers == 'HOST') {
           hashtagthunder.push({
+            thunderId: thunder._id,
             title: thunder.title,
             deadline: thunder.deadline.toString(),
             content: thunder.content,
             hashtags: thunder.hashtags,
-            members: thunder.members, //id<Object>
+            members: thunderMembers,
             limitMembersCnt: thunder.limitMembersCnt,
             thunderState: 'HOST',
           });
         } else if (isMembers == 'NON_MEMBER') {
           hashtagthunder.push({
+            thunderId: thunder._id,
             title: thunder.title,
             deadline: thunder.deadline.toString(),
             content: thunder.content,
             hashtags: thunder.hashtags,
-            members: thunder.members, //id<Object>
+            members: thunderMembers,
             limitMembersCnt: thunder.limitMembersCnt,
             thunderState: 'NON_MEMBER',
           });
         } else {
           hashtagthunder.push({
+            thunderId: thunder._id,
             title: thunder.title,
             deadline: thunder.deadline.toString(),
             content: thunder.content,
             hashtags: thunder.hashtags,
-            members: thunder.members, //id<Object>
+            members: thunderMembers,
             limitMembersCnt: thunder.limitMembersCnt,
             thunderState: 'MEMBER',
           });
@@ -177,7 +224,6 @@ const findThunder = async (thunderId: string): Promise<ThunderUpdateDto> => {
     throw error;
   }
 };
-
 
 const updateThunder = async (
   userId: string,
@@ -227,6 +273,10 @@ const joinThunder = async (
 
     if (isMembers == 'NON_MEMBER') {
       await Thunder.findByIdAndUpdate(thunderId, {$push: {members: userId}});
+
+      await User.findByIdAndUpdate(userId, {
+        $push: {thunderRecords: thunderId},
+      });
     } else {
       throw errorGenerator({
         msg: message.FORBIDDEN,
@@ -250,6 +300,10 @@ const outThunder = async (userId: string, thunderId: string): Promise<void> => {
 
     if (isMembers == 'MEMBER') {
       await Thunder.updateOne({_id: thunderId}, {$pull: {members: userId}});
+
+      await User.findByIdAndUpdate(userId, {
+        $pull: {thunderRecords: thunderId},
+      });
     } else {
       throw errorGenerator({
         msg: message.FORBIDDEN,
