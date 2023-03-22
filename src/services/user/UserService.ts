@@ -1,32 +1,12 @@
-import {UserUpdateDto} from '../interfaces/user/UserUpdateDto';
-import {UserResponseDto} from '../interfaces/user/UserResponseDto';
-import User from '../models/User';
-import errorGenerator from '../errors/errorGenerator';
-import statusCode from '../modules/statusCode';
-import {UserInfoDto} from '../interfaces/user/UserInfoDto';
-import {UserInfo} from '../interfaces/user/UserInfo';
-import message from '../modules/message';
-
-const updateUser = async (userId: any, userUpdateDto: UserUpdateDto) => {
-  try {
-    const updatedUser = {
-      name: userUpdateDto.name,
-      introduction: userUpdateDto.introduction,
-      mannerTemperature: userUpdateDto.mannerTemperature,
-      hashtags: userUpdateDto.hashtags,
-      isLogOut: userUpdateDto.isLogOut,
-      kakaoId: userUpdateDto.kakaoId,
-      fcmToken: userUpdateDto.fcmToken,
-      thunderRecords: userUpdateDto.thunderRecords,
-      isAlarms: userUpdateDto.isAlarms,
-    };
-
-    await User.findByIdAndUpdate(userId, updatedUser);
-  } catch (error) {
-    console.log(error);
-    throw error;
-  }
-};
+import {UserUpdateDto} from '../../interfaces/user/UserUpdateDto';
+import {UserResponseDto} from '../../interfaces/user/UserResponseDto';
+import User from '../../models/User';
+import errorGenerator from '../../errors/errorGenerator';
+import statusCode from '../../modules/statusCode';
+import {UserInfoDto} from '../../interfaces/user/UserInfoDto';
+import {UserInfo} from '../../interfaces/user/UserInfo';
+import message from '../../modules/message';
+import {UserHashtagResponseDto} from '../../interfaces/user/UserHashtagResponseDto';
 
 const findUserById = async (userId: string) => {
   try {
@@ -95,10 +75,50 @@ const getUserForProfileUpdate = async (userId: string) => {
   }
 };
 
+const updateUser = async (
+  userUpdateDto: UserUpdateDto,
+  userId: string,
+): Promise<void> => {
+  try {
+    const existUsername = await User.findOne({
+      name: userUpdateDto.name,
+    });
+    if (existUsername) {
+      throw errorGenerator({
+        msg: message.CONFLICT_USER_NAME,
+        statusCode: statusCode.CONFLICT,
+      });
+    }
+
+    await User.findByIdAndUpdate(userId, userUpdateDto);
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+const findUserHashtag = async (
+  userId: string,
+): Promise<UserHashtagResponseDto> => {
+  try {
+    const user = await User.findById(userId);
+
+    const data: UserHashtagResponseDto = {
+      hashtags: user!.hashtags,
+    };
+
+    return data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
 export default {
   updateUser,
   findUserById,
   findUserByKakao,
   deleteUser,
   getUserForProfileUpdate,
+  findUserHashtag,
 };

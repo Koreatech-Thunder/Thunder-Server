@@ -1,13 +1,13 @@
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
-import UserService from './UserService';
-import User from '../models/User';
-import jwtHandler from '../modules/jwtHandler';
-import errorGenerator from '../errors/errorGenerator';
-import statusCode from '../modules/statusCode';
-import tokenStatus from '../modules/tokenStatus';
-import {AuthResponseDto} from '../interfaces/auth/AuthResponseDto';
-import message from '../modules/message';
+import UserService from '../user/UserService';
+import User from '../../models/User';
+import jwtHandler from '../../modules/jwtHandler';
+import errorGenerator from '../../errors/errorGenerator';
+import statusCode from '../../modules/statusCode';
+import tokenStatus from '../../modules/tokenStatus';
+import {AuthResponseDto} from '../../interfaces/auth/AuthResponseDto';
+import message from '../../modules/message';
 
 const login = async (kakaoToken: string, fcmToken: string) => {
   try {

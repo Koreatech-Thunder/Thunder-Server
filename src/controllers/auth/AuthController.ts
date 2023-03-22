@@ -1,9 +1,9 @@
-import statusCode from '../modules/statusCode';
+import statusCode from '../../modules/statusCode';
 import {Request, Response} from 'express';
-import AuthService from '../services/AuthService';
-import errorGenerator from '../errors/errorGenerator';
-import tokenStatus from '../modules/tokenStatus';
-import message from '../modules/message';
+import AuthService from '../../services/auth/AuthService';
+import errorGenerator from '../../errors/errorGenerator';
+import tokenStatus from '../../modules/tokenStatus';
+import message from '../../modules/message';
 
 const login = async (req: Request, res: Response): Promise<void> => {
   const fcmToken = req.body['fcmToken'];

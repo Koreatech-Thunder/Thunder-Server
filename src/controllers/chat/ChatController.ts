@@ -1,8 +1,8 @@
-import statusCode from '../modules/statusCode';
+import statusCode from '../../modules/statusCode';
 import {Request, Response} from 'express';
-import ChatService from '../services/ChatService';
-import errorGenerator from '../errors/errorGenerator';
-import message from '../modules/message';
+import ChatService from '../../services/chat/ChatService';
+import errorGenerator from '../../errors/errorGenerator';
+import message from '../../modules/message';
 
 const getChatRooms = async (req: Request, res: Response): Promise<void> => {
   const userId = req.body['userId'];

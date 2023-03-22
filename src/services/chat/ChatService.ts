@@ -1,17 +1,17 @@
-import statusCode from '../modules/statusCode';
-import errorGenerator from '../errors/errorGenerator';
-import message from '../modules/message';
-import User from '../models/User';
-import Thunder from '../models/Thunder';
-import ThunderRecord from '../models/ThunderRecord';
-import {ChatDto} from '../interfaces/chatting/ChatDto';
-import Chat from '../models/Chat';
-import {ChatRoomDto} from '../interfaces/chatting/ChatRoomDto';
-import chattingHandler from '../modules/chattingHandler';
+import statusCode from '../../modules/statusCode';
+import errorGenerator from '../../errors/errorGenerator';
+import message from '../../modules/message';
+import User from '../../models/User';
+import Thunder from '../../models/Thunder';
+import ThunderRecord from '../../models/ThunderRecord';
+import {ChatDto} from '../../interfaces/chatting/ChatDto';
+import Chat from '../../models/Chat';
+import {ChatRoomDto} from '../../interfaces/chatting/ChatRoomDto';
+import chattingHandler from '../../modules/chattingHandler';
 import {ObjectId} from 'mongoose';
-import PersonalChatRoom from '../models/PersonalChatRoom';
-import {ChatRoomDetailDto} from '../interfaces/chatting/ChatRoomDetailDto';
-import {ChatUserDto} from '../interfaces/chatting/ChatUserDto';
+import PersonalChatRoom from '../../models/PersonalChatRoom';
+import {ChatRoomDetailDto} from '../../interfaces/chatting/ChatRoomDetailDto';
+import {ChatUserDto} from '../../interfaces/chatting/ChatUserDto';
 
 const getChatRooms = async (userId: string): Promise<ChatRoomDto[]> => {
   try {
@@ -87,7 +87,7 @@ const getChatRoomDetail = async (
       let result = await Chat.findById(chat);
       if (!result) {
         throw errorGenerator({
-          msg: message.NOT_FOUND,
+          msg: message.NOT_FOUND_CHAT,
           statusCode: statusCode.NOT_FOUND,
         });
       }
@@ -135,7 +135,7 @@ const getChatRoomDetail = async (
 
       if (!member) {
         throw errorGenerator({
-          msg: message.NOT_FOUND,
+          msg: message.NOT_FOUND_MEMBER,
           statusCode: statusCode.NOT_FOUND,
         });
       }
@@ -171,23 +171,23 @@ const putChatRoomAlarm = async (
     const memberIds = thunder.members;
 
     for (let memberId of memberIds) {
-      let result /*: PersonalChatRoomInfo */ = await PersonalChatRoom.findById(
+      let member /*: PersonalChatRoomInfo */ = await PersonalChatRoom.findById(
         memberId,
       ); //PersonalChatRoom에서 members 안에 든 id를 검색.
 
-      if (!result) {
+      if (!member) {
         // 검색 결과가 안나오면 에러
         throw errorGenerator({
-          msg: message.NOT_FOUND_ROOM,
+          msg: message.NOT_FOUND_MEMBER,
           statusCode: statusCode.NOT_FOUND,
         });
       }
-      console.log(result);
+      console.log(member);
 
-      if (result.userId.toString() == userId) {
+      if (member.userId.toString() == userId) {
         // PersonalChatRoom 안의 userId가 현재 조작하는 유저의 ID와 같다면 알람 ON/OFF 여부 변경.
-        result.isAlarm = isAlarm;
-        result.save(); // 변경후 저장.
+        member.isAlarm = isAlarm;
+        member.save(); // 변경후 저장.
       }
     }
   } catch (error) {
