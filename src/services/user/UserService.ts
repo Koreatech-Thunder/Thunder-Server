@@ -150,7 +150,7 @@ const findUserAlarmState = async (
     const user = await User.findById(userId);
 
     const data: UserAlarmStateResponseDto = {
-      isAlarm: user!.isAlarm,
+      isAlarms: user!.isAlarms,
     };
 
     return data;
