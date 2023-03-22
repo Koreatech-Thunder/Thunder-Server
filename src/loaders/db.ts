@@ -7,7 +7,6 @@ import statusCode from '../modules/statusCode';
 import User from '../models/User';
 import message from '../modules/message';
 import {pushMessageTemplate} from '../modules/pushMessageTemplate';
-import chattingHandler from '../modules/chattingHandler';
 
 const connectDB = async () => {
   try {
@@ -37,7 +36,7 @@ const connectDB = async () => {
     mongoose.set('autoCreate', true);
 
     console.log('Mongoose Connected ...');
-
+    /*
     const user = await User.find({isLogOut: false});
 
     for (let i = 0; i < user.length; i++) {
@@ -49,7 +48,7 @@ const connectDB = async () => {
         },
         token: user[i].fcmToken as string,
       };
-
+      
       firebase
         .messaging()
         .send(alarm)
@@ -64,6 +63,7 @@ const connectDB = async () => {
           });
         });
     }
+    */
   } catch (err: any) {
     console.error(err.message);
     process.exit(1);

@@ -1,12 +1,15 @@
+
+import {ThunderMembersDto} from './ThunderMembersDto';
 import mongoose from 'mongoose';
 
 export interface ThunderResponseDto {
+  thunderId: mongoose.Types.ObjectId;
   title: string;
   deadline: string;
   content: string;
   hashtags: string[];
   chats: mongoose.Types.ObjectId[];
-  members: mongoose.Types.ObjectId[]; //id<Object>
+  members: ThunderMembersDto[];
   limitMembersCnt: number;
   thunderState: string;
 }

@@ -5,3 +5,4 @@ import ThunderService from './thunder/ThunderService';
 
 //service index file
 export {UserService, AuthService, ChatService, ThunderService};
+

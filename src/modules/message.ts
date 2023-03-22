@@ -46,9 +46,11 @@ const message = {
   FCM_ERROR: 'FCM 메시지 오류',
   KAKAO_SERVER_ERROR: '카카오 서버에서 값을 받아오지 못했습니다.',
 
+
   //chat
   NOT_FOUND_MEMBER: '채팅방 정보를 찾을 수 없습니다.',
   NOT_FOUND_CHAT: '해당 채팅을 찾을 수 없습니다.',
+
 };
 
 export default message;

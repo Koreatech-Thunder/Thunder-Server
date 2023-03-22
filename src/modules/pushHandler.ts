@@ -37,6 +37,7 @@ const pushAlarmToUser = async (userId: string, title: string, body: string) => {
       .catch(function (err: any) {
         console.log('다음 메시지를 보내는 데 에러 발생: ', err);
         console.log('\ntitle: ' + title + '\nbody: ' + body);
+
         throw errorGenerator({
           msg: message.FCM_ERROR,
           statusCode: statusCode.INTERNAL_SERVER_ERROR,

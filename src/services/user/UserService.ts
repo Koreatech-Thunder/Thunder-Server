@@ -1,12 +1,15 @@
-import {UserUpdateDto} from '../../interfaces/user/UserUpdateDto';
-import {UserResponseDto} from '../../interfaces/user/UserResponseDto';
+
 import User from '../../models/User';
+import {UserResponseDto} from '../../interfaces/user/UserResponseDto';
 import errorGenerator from '../../errors/errorGenerator';
 import statusCode from '../../modules/statusCode';
 import {UserInfoDto} from '../../interfaces/user/UserInfoDto';
+import {UserUpdateDto} from '../../interfaces/user/UserUpdateDto';
+import {UserHashtagResponseDto} from '../../interfaces/user/UserHashtagResponseDto';
+import {UserThunderRecordResponseDto} from '../../interfaces/user/UserThunderRecordResponseDto';
 import {UserInfo} from '../../interfaces/user/UserInfo';
 import message from '../../modules/message';
-import {UserHashtagResponseDto} from '../../interfaces/user/UserHashtagResponseDto';
+import Thunder from '../../models/Thunder';
 
 const findUserById = async (userId: string) => {
   try {
@@ -114,11 +117,39 @@ const findUserHashtag = async (
   }
 };
 
+const findUserThunderRecord = async (
+  userId: string,
+): Promise<UserThunderRecordResponseDto[]> => {
+  try {
+    const user = await User.findById(userId);
+
+    const thunderRecord: UserThunderRecordResponseDto[] = [];
+
+    await Promise.all(
+      user!.thunderRecords.map(async (record: any) => {
+        const thunder = await Thunder.findById(record);
+
+        thunderRecord.push({
+          thunderId: thunder!._id,
+          title: thunder!.title,
+          deadline: thunder!.deadline.toString(),
+        });
+      }),
+    );
+
+    return thunderRecord;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
 export default {
-  updateUser,
   findUserById,
   findUserByKakao,
   deleteUser,
   getUserForProfileUpdate,
+  updateUser,
   findUserHashtag,
+  findUserThunderRecord,
 };

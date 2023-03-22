@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 
 export interface ThunderInfo {
+  thunderId: mongoose.Types.ObjectId;
   title: string;
   deadline: Date;
   content: string;
