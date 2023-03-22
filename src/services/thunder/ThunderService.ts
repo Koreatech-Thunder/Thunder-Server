@@ -9,6 +9,7 @@ import message from '../../modules/message';
 import statusCode from '../../modules/statusCode';
 import ThunderServiceUtils from './ThunderServiceUtils';
 import User from '../../models/User';
+import pushHandler from '../../modules/pushHandler';
 
 const createThunder = async (
   thunderCreateDto: ThunderCreateDto,
@@ -35,6 +36,11 @@ const createThunder = async (
     const data = {
       _id: thunder._id,
     };
+
+    const user = await User.find({hashtags: {$in: thunderCreateDto.hashtags}});
+    for (var i = 0; i < user.length; i++) {
+      pushHandler.pushAlarmToUser(user[i].toString());
+    }
 
     return data;
   } catch (error) {
