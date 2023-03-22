@@ -2,7 +2,6 @@ import {Request, Response} from 'express';
 import {Result, ValidationError, validationResult} from 'express-validator';
 import {ThunderCreateDto} from '../../interfaces/thunder/ThunderCreateDto';
 import {ThunderResponseDto} from '../../interfaces/thunder/ThunderResponseDto';
-import {ThunderUpdateDto} from '../../interfaces/thunder/ThunderUpdateDto';
 import {PostBaseResponseDto} from '../../interfaces/common/PostBaseResponseDto';
 import {ThunderUpdateDto} from '../../interfaces/thunder/ThunderUpdateDto';
 import statusCode from '../../modules/statusCode';

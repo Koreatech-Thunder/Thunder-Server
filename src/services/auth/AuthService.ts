@@ -95,7 +95,7 @@ const existLogin = async (kakaoToken: string, fcmToken: string) => {
       await UserService.updateUser({
         isLogOut: false,
         fcmToken: fcmToken,
-      }, existUser._id);
+      }, existUser._id as string);
 
       const userId = existUser._id;
       console.log(userId);
