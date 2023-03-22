@@ -42,9 +42,9 @@ const createThunder = async (
     });
     console.log(user);
 
-    for(var i = 0; i < user.length; i++){
+    for (var i = 0; i < user.length; i++) {
       if (user[i].isAlarms[0]) {
-        pushHandler.pushAlarmToUser(user[i].toString());
+        pushHandler.pushAlarmToUser(user[i]._id.toString());
       }
     }
 
