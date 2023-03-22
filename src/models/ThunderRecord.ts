@@ -8,6 +8,7 @@ const ThunderRecordSchema = new mongoose.Schema({
   },
   isEvaluate: {
     type: Boolean,
+    default: false,
   },
 });
 

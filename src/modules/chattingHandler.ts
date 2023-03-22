@@ -4,13 +4,13 @@ import errorGenerator from '../errors/errorGenerator';
 import message from './message';
 import statusCode from './statusCode';
 import {PersonalChatRoomInfo} from '../interfaces/chatting/PersonalChatRoomInfo';
-import {ChatDto} from '../interfaces/chatting/ChatDto';
 import ThunderRecord from '../models/ThunderRecord';
-import mongoose from 'mongoose';
+import {ObjectId} from 'mongoose';
 import {UserInfo} from '../interfaces/user/UserInfo';
 import {ThunderInfo} from '../interfaces/thunder/ThunderInfo';
+import {ChatInfo} from '../interfaces/chatting/ChatInfo';
 
-const getThunders = async (userId: string): Promise<ThunderInfo[]> => {
+const getThunders = async (userId: string): Promise<ThunderInfo[] | null> => {
   try {
     const user = await User.findById(userId);
 
@@ -21,17 +21,28 @@ const getThunders = async (userId: string): Promise<ThunderInfo[]> => {
       });
     }
 
+    const records = user.thunderRecords;
+
+    if (!records) {
+      return null;
+    }
+
     const thunderList = [];
 
-    for (let record of user.thunderRecords) {
+    for (let record of records) {
       const thunder = await ThunderRecord.findById(record);
       thunderList.push(thunder?.thunderId);
     }
 
-    const result = await Thunder.find({
+    const result: ThunderInfo[] = await Thunder.find({
       _id: {$in: thunderList}, // 유저 정보의 thunderRecords 안의 정보 중에서
       deadline: {$gt: new Date()}, // deadline이 아직 안 지난 것만 쿼리. new Date()는 현재 날짜시간
     });
+
+    if (!result) {
+      // 아무것도 없으면 null
+      return null;
+    }
 
     return result;
   } catch (error) {
@@ -68,7 +79,7 @@ const getUser = async (userId: string): Promise<UserInfo> => {
 
 const updateThunderMembers = async (
   thunderId: string,
-  members: mongoose.Schema.Types.ObjectId[],
+  members: ObjectId[],
 ): Promise<void> => {
   try {
     const thunder = await Thunder.findById(thunderId);
@@ -88,7 +99,10 @@ const updateThunderMembers = async (
   }
 };
 
-const updateChats = async (thunderId: string, chat: ChatDto) => {
+const updateChats = async (
+  thunderId: string,
+  chat: ChatInfo,
+): Promise<void> => {
   try {
     const thunder = await Thunder.findById(thunderId);
 
@@ -107,7 +121,7 @@ const updateChats = async (thunderId: string, chat: ChatDto) => {
   }
 };
 
-const getThunder = async (thunderId: string) => {
+const getThunder = async (thunderId: string): Promise<ThunderInfo> => {
   try {
     const thunder = await Thunder.findById(thunderId); // 해당 thunderId를 가진 thunder 하나 get.
 
@@ -136,7 +150,9 @@ const isAlarm = async (userId: string): Promise<Boolean> => {
       });
     }
 
-    return user.isAlarm[2]; // 해당 채팅방의 알람 ON/OFF 여부만 반환.
+    const alarm = user.isAlarms?.[0] as boolean;
+
+    return alarm; // 해당 채팅방의 알람 ON/OFF 여부만 반환.
   } catch (error) {
     console.log(error);
     throw error;

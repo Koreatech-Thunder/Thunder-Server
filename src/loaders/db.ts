@@ -49,7 +49,7 @@ const connectDB = async () => {
         },
         token: user[i].fcmToken as string,
       };
-      /*
+
       firebase
         .messaging()
         .send(alarm)
@@ -62,7 +62,7 @@ const connectDB = async () => {
             msg: message.FCM_ERROR,
             statusCode: statusCode.INTERNAL_SERVER_ERROR,
           });
-        });*/
+        });
     }
   } catch (err: any) {
     console.error(err.message);
