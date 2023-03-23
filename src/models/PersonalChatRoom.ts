@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import {PersonalChatRoomInfo} from '../interfaces/chatting/PersonalChatRoomInfo';
+import {PersonalChatRoomInfo} from '../interfaces/chat/PersonalChatRoomInfo';
 
 const PersonalChatRoomSchema = new mongoose.Schema({
   userId: {

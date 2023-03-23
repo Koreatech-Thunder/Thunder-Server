@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import {ThunderRecordInfo} from '../interfaces/chatting/ThunderRecordInfo';
+import {ThunderRecordInfo} from '../interfaces/chat/ThunderRecordInfo';
 
 const ThunderRecordSchema = new mongoose.Schema({
   thunderId: {

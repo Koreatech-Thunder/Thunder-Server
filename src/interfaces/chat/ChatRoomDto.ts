@@ -1,4 +1,4 @@
-import {ChatDto} from './ChatDto';
+import {ChatInfo} from './ChatInfo';
 
 export interface ChatRoomDto {
   id: string;
@@ -6,5 +6,5 @@ export interface ChatRoomDto {
   limitMemberCnt: number;
   joinMemberCnt: number;
   endTime: Date;
-  lastChat: ChatDto | null;
+  lastChat: ChatInfo | null;
 }

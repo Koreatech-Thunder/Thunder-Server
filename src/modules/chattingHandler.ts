@@ -3,12 +3,12 @@ import User from '../models/User';
 import errorGenerator from '../errors/errorGenerator';
 import message from './message';
 import statusCode from './statusCode';
-import {PersonalChatRoomInfo} from '../interfaces/chatting/PersonalChatRoomInfo';
+import {PersonalChatRoomInfo} from '../interfaces/chat/PersonalChatRoomInfo';
 import ThunderRecord from '../models/ThunderRecord';
 import {ObjectId} from 'mongoose';
 import {UserInfo} from '../interfaces/user/UserInfo';
 import {ThunderInfo} from '../interfaces/thunder/ThunderInfo';
-import {ChatInfo} from '../interfaces/chatting/ChatInfo';
+import {ChatInfo} from '../interfaces/chat/ChatInfo';
 
 const getThunders = async (userId: string): Promise<ThunderInfo[] | null> => {
   try {
