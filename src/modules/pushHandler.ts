@@ -5,7 +5,7 @@ import User from '../models/User';
 import message from './message';
 import {pushMessageTemplate} from './pushMessageTemplate';
 
-const pushAlarmToUser = async (userId: string) => {
+const pushAlarmToUser = async (userId: string, title: string, body: string) => {
   try {
     const user = await User.findById(userId);
     if (!user) {
@@ -21,8 +21,8 @@ const pushAlarmToUser = async (userId: string) => {
 
     let alarm = {
       notification: {
-        title: pushMessageTemplate.title,
-        body: pushMessageTemplate.body,
+        title: title,
+        body: body,
       },
       token: user.fcmToken as string,
     };
@@ -32,9 +32,12 @@ const pushAlarmToUser = async (userId: string) => {
       .send(alarm)
       .then(function (res: any) {
         console.log('성공적으로 메시지 발송 완료: ', res);
+        console.log('\ntitle: ' + title + '\nbody: ' + body);
       })
       .catch(function (err: any) {
         console.log('다음 메시지를 보내는 데 에러 발생: ', err);
+        console.log('\ntitle: ' + title + '\nbody: ' + body);
+
         throw errorGenerator({
           msg: message.FCM_ERROR,
           statusCode: statusCode.INTERNAL_SERVER_ERROR,

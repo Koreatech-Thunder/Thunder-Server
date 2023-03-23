@@ -179,8 +179,9 @@ const logout = async (userId: string) => {
         isLogOut: true,
         fcmToken: 'NoToken',
       },
-      userId,
-    ); //로그아웃 여부 true로 변경하고 fcm 토큰은 다음에 다시 로그인할때 새로 받기 전까지 삭제.
+      userId
+    ); 
+    
   } catch (error) {
     console.log(error);
     throw error;

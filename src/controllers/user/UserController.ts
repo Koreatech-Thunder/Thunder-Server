@@ -10,6 +10,7 @@ import {UserCreateDto} from '../../interfaces/user/UserCreateDto';
 import {UserHashtagResponseDto} from '../../interfaces/user/UserHashtagResponseDto';
 import {UserThunderRecordResponseDto} from '../../interfaces/user/UserThunderRecordResponseDto';
 
+
 /**
  *
  * @route PUT / user
@@ -92,6 +93,7 @@ const findUserThunderRecord = async (
       .send(statusCode.INTERNAL_SERVER_ERROR);
   }
 };
+
 
 const findUserById = async (req: Request, res: Response): Promise<void> => {
   const userId = req.body['userId'];

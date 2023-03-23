@@ -12,7 +12,7 @@ const UserSchema = new mongoose.Schema({
   },
   mannerTemperature: {
     type: Number,
-    default: 36.5,
+    default: 36,
   },
   hashtags: {
     type: [String],
@@ -24,22 +24,22 @@ const UserSchema = new mongoose.Schema({
   },
   kakaoId: {
     type: String,
+    unique: true,
   },
   fcmToken: {
     type: String,
     required: true,
+    unique: true,
   },
   thunderRecords: {
     type: [mongoose.Schema.Types.ObjectId],
     ref: 'ThunderRecords',
     default: [],
   },
-  isAlarm: [
-    {
-      type: Boolean,
-      default: [true, true, true],
-    },
-  ],
+  isAlarms: {
+    type: [Boolean],
+    default: [true, true, true],
+  },
 });
 
 export default mongoose.model<UserInfo & mongoose.Document>('User', UserSchema);

@@ -1,3 +1,4 @@
+
 import User from '../../models/User';
 import {UserResponseDto} from '../../interfaces/user/UserResponseDto';
 import errorGenerator from '../../errors/errorGenerator';
@@ -64,9 +65,10 @@ const getUserForProfileUpdate = async (userId: string) => {
     }
 
     const result: UserInfoDto = {
-      name: data.name,
-      introduction: data.introduction,
-      hashtags: data.hashtags,
+      name: data.name as string,
+      introduction: data.introduction as string,
+      hashtags: data.hashtags as [string],
+      mannerTemperature: data.mannerTemperature as number,
     };
 
     return result;
