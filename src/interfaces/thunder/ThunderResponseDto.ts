@@ -7,6 +7,7 @@ export interface ThunderResponseDto {
   deadline: string;
   content: string;
   hashtags: string[];
+  chats: mongoose.Types.ObjectId[];
   members: ThunderMembersDto[];
   limitMembersCnt: number;
   thunderState: string;

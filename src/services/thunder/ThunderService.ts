@@ -78,10 +78,10 @@ const findThunderAll = async (
             const user = await User.findById(member);
 
             thunderMembers.push({
-              name: user!.name,
-              introduction: user!.introduction,
-              hashtags: user!.hashtags,
-              mannerTemperature: user!.mannerTemperature,
+              name: user!.name as string,
+              introduction: user!.introduction as string,
+              hashtags: user!.hashtags as [string],
+              mannerTemperature: user!.mannerTemperature as number,
             });
           }),
         );
@@ -93,6 +93,7 @@ const findThunderAll = async (
             deadline: await ThunderServiceUtils.dateFormat(thunder.deadline),
             content: thunder.content,
             hashtags: thunder.hashtags,
+            chats: thunder.chats,
             members: thunderMembers,
             limitMembersCnt: thunder.limitMembersCnt,
             thunderState: 'HOST',
@@ -104,6 +105,7 @@ const findThunderAll = async (
             deadline: await ThunderServiceUtils.dateFormat(thunder.deadline),
             content: thunder.content,
             hashtags: thunder.hashtags,
+            chats: thunder.chats,
             members: thunderMembers,
             limitMembersCnt: thunder.limitMembersCnt,
             thunderState: 'NON_MEMBER',
@@ -115,6 +117,7 @@ const findThunderAll = async (
             deadline: await ThunderServiceUtils.dateFormat(thunder.deadline),
             content: thunder.content,
             hashtags: thunder.hashtags,
+            chats: thunder.chats,
             members: thunderMembers,
             limitMembersCnt: thunder.limitMembersCnt,
             thunderState: 'MEMBER',
@@ -170,6 +173,7 @@ const findThunderByHashtag = async (
             deadline: await ThunderServiceUtils.dateFormat(thunder.deadline),
             content: thunder.content,
             hashtags: thunder.hashtags,
+            chats: thunder.chats,
             members: thunderMembers,
             limitMembersCnt: thunder.limitMembersCnt,
             thunderState: 'HOST',
@@ -181,6 +185,7 @@ const findThunderByHashtag = async (
             deadline: await ThunderServiceUtils.dateFormat(thunder.deadline),
             content: thunder.content,
             hashtags: thunder.hashtags,
+            chats: thunder.chats,
             members: thunderMembers,
             limitMembersCnt: thunder.limitMembersCnt,
             thunderState: 'NON_MEMBER',
@@ -192,6 +197,7 @@ const findThunderByHashtag = async (
             deadline: await ThunderServiceUtils.dateFormat(thunder.deadline),
             content: thunder.content,
             hashtags: thunder.hashtags,
+            chats: thunder.chats,
             members: thunderMembers,
             limitMembersCnt: thunder.limitMembersCnt,
             thunderState: 'MEMBER',

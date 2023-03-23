@@ -1,8 +1,12 @@
 import mongoose from 'mongoose';
 import config from '../config';
+
 import * as firebase from 'firebase-admin';
 import errorGenerator from '../errors/errorGenerator';
 import statusCode from '../modules/statusCode';
+import message from '../modules/message';
+import {pushMessageTemplate} from '../modules/pushMessageTemplate';
+import chattingHandler from '../modules/chattingHandler';
 import User from '../models/User';
 
 const connectDB = async () => {
@@ -11,7 +15,7 @@ const connectDB = async () => {
 
     if (!firebaseKey) {
       throw errorGenerator({
-        msg: '파이어베이스 키가 존재하지 않습니다.',
+        msg: message.NOT_FOUND_FCM,
         statusCode: statusCode.NOT_FOUND,
       });
     }
@@ -33,7 +37,7 @@ const connectDB = async () => {
     mongoose.set('autoCreate', true);
 
     console.log('Mongoose Connected ...');
-    /*
+
     const user = await User.find({isLogOut: false});
 
     for (let i = 0; i < user.length; i++) {
@@ -49,18 +53,17 @@ const connectDB = async () => {
       firebase
         .messaging()
         .send(alarm)
-        .then(function (res) {
+        .then(function (res: any) {
           console.log('성공적으로 메시지 발송 완료: ', res);
         })
-        .catch(function (err) {
+        .catch(function (err: any) {
           console.log('다음 메시지를 보내는 데 에러 발생: ', err);
           throw errorGenerator({
-            msg: 'FCM 메시지 오류.',
+            msg: message.FCM_ERROR,
             statusCode: statusCode.INTERNAL_SERVER_ERROR,
           });
         });
     }
-    */
   } catch (err: any) {
     console.error(err.message);
     process.exit(1);

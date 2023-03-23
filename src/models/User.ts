@@ -5,7 +5,6 @@ const UserSchema = new mongoose.Schema({
   name: {
     type: String,
     default: '',
-    unique: true,
   },
   introduction: {
     type: String,
@@ -13,7 +12,7 @@ const UserSchema = new mongoose.Schema({
   },
   mannerTemperature: {
     type: Number,
-    default: 36.5,
+    default: 36,
   },
   hashtags: {
     type: [String],
@@ -25,10 +24,12 @@ const UserSchema = new mongoose.Schema({
   },
   kakaoId: {
     type: String,
+    unique: true,
   },
   fcmToken: {
     type: String,
     required: true,
+    unique: true,
   },
   thunderRecords: {
     type: [mongoose.Schema.Types.ObjectId],
