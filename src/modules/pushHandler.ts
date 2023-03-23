@@ -5,7 +5,7 @@ import User from '../models/User';
 import message from './message';
 import {pushMessageTemplate} from './pushMessageTemplate';
 
-const pushAlarmToUser = async (userId: string, title: string, body: string) => {
+const pushAlarmToUser = async (userId: string, title: string, body: string): Promise<void> => {
   try {
     const user = await User.findById(userId);
     if (!user) {
