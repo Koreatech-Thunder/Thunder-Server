@@ -50,7 +50,7 @@ const createThunder = async (
 const findThunderAll = async (req: Request, res: Response): Promise<void> => {
   try {
     const userId: string = req.body['userId'];
-    const data: ThunderResponseDto[] | [] = await ThunderService.findThunderAll(
+    const data: ThunderResponseDto[] = await ThunderService.findThunderAll(
       userId,
     );
 
@@ -82,7 +82,7 @@ const findThunderByHashtag = async (
   const {hashtag} = req.query;
 
   try {
-    const data: ThunderResponseDto[] | [] =
+    const data: ThunderResponseDto[] =
       await ThunderService.findThunderByHashtag(hashtag as string, userId);
 
     res.status(statusCode.OK).send(data);

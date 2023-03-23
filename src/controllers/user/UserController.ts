@@ -35,15 +35,10 @@ const updateUser = async (
 
     res.status(statusCode.CREATED).send(statusCode.CREATED);
   } catch (error: any) {
-    if (error.msg == message.CONFLICT_USER_NAME) {
-      console.log(error);
-      res.status(statusCode.CONFLICT).send(statusCode.CONFLICT);
-    } else {
-      console.log(error);
-      res
-        .status(statusCode.INTERNAL_SERVER_ERROR)
-        .send(statusCode.INTERNAL_SERVER_ERROR);
-    }
+    console.log(error);
+    res
+      .status(statusCode.INTERNAL_SERVER_ERROR)
+      .send(statusCode.INTERNAL_SERVER_ERROR);
   }
 };
 
