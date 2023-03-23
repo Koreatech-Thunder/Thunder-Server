@@ -28,25 +28,25 @@ const getChatRooms = async (userId: string): Promise<ChatRoomDto[]> => {
       _id: {$in: user.thunderRecords},
     });
 
-    let resultList = [];
+    const resultList = [];
 
     for (let record of recordList) {
       if (!record.isEvaluate) {
-        let thunder = await Thunder.findById(record.thunderId);
+        const thunder = await Thunder.findById(record.thunderId);
         if (!thunder) {
           throw errorGenerator({
             msg: message.NOT_FOUND_ROOM,
             statusCode: statusCode.NOT_FOUND,
           });
         }
-        let endTime = new Date(
+        const endTime = new Date(
           thunder.deadline.setDate(thunder.deadline.getDate() + 1),
         );
-        let lastChat: ChatDto | null = await Chat.findById(
+        const lastChat: ChatDto | null = await Chat.findById(
           thunder.chats[thunder.chats.length - 1],
         );
 
-        let result: ChatRoomDto = {
+        const result: ChatRoomDto = {
           id: thunder.id,
           title: thunder.title,
           limitMemberCnt: thunder.limitMembersCnt,
@@ -81,10 +81,10 @@ const getChatRoomDetail = async (
     }
 
     const chats: ObjectId[] = thunder.chats;
-    let chatDtos: ChatDto[] = [];
+    const chatDtos: ChatDto[] = [];
 
     for (let chat of chats) {
-      let result = await Chat.findById(chat);
+      const result = await Chat.findById(chat);
       if (!result) {
         throw errorGenerator({
           msg: message.NOT_FOUND_CHAT,
@@ -92,30 +92,32 @@ const getChatRoomDetail = async (
         });
       }
 
-      let sender = await User.findById(result.sender);
+      const sender = await User.findById(result.sender);
+      let state;
+      let userDto: ChatUserDto;
 
       if (!sender) {
-        throw errorGenerator({
-          msg: message.NOT_FOUND_USER,
-          statusCode: statusCode.NOT_FOUND,
-        });
-      }
-
-      let userDto: ChatUserDto = {
-        id: sender.id,
-        profile: sender.introduction,
-        name: sender.name as string,
-      };
-
-      let state;
-
-      if (chat.toString() == userId) {
-        state = 'ME';
-      } else {
         state = 'OTHER';
+        userDto = {
+          id: '',
+          profile: '(알 수 없음)',
+          name: '(알 수 없음)',
+        };
+      } else {
+        if (sender.id == userId) {
+          state = 'ME';
+        } else {
+          state = 'OTHER';
+        }
+
+        userDto = {
+          id: sender.id,
+          profile: sender.introduction,
+          name: sender.name as string,
+        };
       }
 
-      let chatDto: ChatDto = {
+      const chatDto: ChatDto = {
         id: chat,
         message: result.message,
         user: userDto,
@@ -131,7 +133,7 @@ const getChatRoomDetail = async (
     let isAlarm;
 
     for (let memberId of memberIds) {
-      let member = await PersonalChatRoom.findById(memberId);
+      const member = await PersonalChatRoom.findById(memberId);
 
       if (!member) {
         throw errorGenerator({

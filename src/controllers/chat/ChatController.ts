@@ -3,6 +3,7 @@ import {Request, Response} from 'express';
 import ChatService from '../../services/chat/ChatService';
 import errorGenerator from '../../errors/errorGenerator';
 import message from '../../modules/message';
+import chattingHandler from '../../modules/chattingHandler';
 
 const getChatRooms = async (req: Request, res: Response): Promise<void> => {
   const userId = req.body['userId'];

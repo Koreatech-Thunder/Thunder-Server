@@ -15,6 +15,7 @@ const getThunders = async (userId: string): Promise<ThunderInfo[] | null> => {
     const user = await User.findById(userId);
 
     if (!user) {
+      // 유저 정보가 존재하지 않으면 에러.
       throw errorGenerator({
         msg: message.NOT_FOUND_USER,
         statusCode: statusCode.NOT_FOUND,
@@ -24,7 +25,8 @@ const getThunders = async (userId: string): Promise<ThunderInfo[] | null> => {
     const records = user.thunderRecords;
 
     if (!records) {
-      return null;
+      // 유저의 번개 기록이 아무것도 없으면 빈 리스트 반환.
+      return [];
     }
 
     const thunderList = [];
@@ -40,9 +42,11 @@ const getThunders = async (userId: string): Promise<ThunderInfo[] | null> => {
     });
 
     if (!result) {
-      // 아무것도 없으면 null
-      return null;
+      // 아무것도 없으면 빈 리스트 반환.
+      return [];
     }
+
+    console.log(result);
 
     return result;
   } catch (error) {
@@ -143,16 +147,16 @@ const isAlarm = async (userId: string): Promise<Boolean> => {
   try {
     const user = await User.findById(userId);
 
-    if (!user) {
+    if (!user || !user.isAlarms) {
       throw errorGenerator({
         msg: message.NOT_FOUND_USER,
         statusCode: statusCode.NOT_FOUND,
       });
     }
 
-    const alarm = user.isAlarms?.[0] as boolean;
+    const isAlarms = user.isAlarms as Boolean[];
 
-    return alarm; // 해당 채팅방의 알람 ON/OFF 여부만 반환.
+    return isAlarms[2]; // 해당 채팅방의 알람 ON/OFF 여부만 반환.
   } catch (error) {
     console.log(error);
     throw error;

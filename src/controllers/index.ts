@@ -5,4 +5,3 @@ import ThunderController from './ThunderController';
 
 // controller index file
 export {UserController, AuthController, ChatController, ThunderController};
-
