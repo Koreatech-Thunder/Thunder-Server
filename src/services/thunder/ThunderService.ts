@@ -49,7 +49,7 @@ const findThunderAll = async (
   try {
     const currentTime = new Date(); //현재 날짜 및 시간
     const thunderlist = await Thunder.find({
-      createdAt: {$gt: currentTime.setDate(currentTime.getDate() - 1)},
+      deadline: {$gt: currentTime},
     }).sort({createdAt: 'desc'});
 
     if (!thunderlist) {
@@ -71,10 +71,10 @@ const findThunderAll = async (
             const user = await User.findById(member);
 
             thunderMembers.push({
-              name: user!.name,
-              introduction: user!.introduction,
-              hashtags: user!.hashtags,
-              mannerTemperature: user!.mannerTemperature,
+              name: user!.name as string,
+              introduction: user!.introduction as string,
+              hashtags: user!.hashtags as [string],
+              mannerTemperature: user!.mannerTemperature as number,
             });
           }),
         );
@@ -86,6 +86,7 @@ const findThunderAll = async (
             deadline: thunder.deadline.toString(),
             content: thunder.content,
             hashtags: thunder.hashtags,
+            chats: thunder.chats,
             members: thunderMembers,
             limitMembersCnt: thunder.limitMembersCnt,
             thunderState: 'HOST',
@@ -97,6 +98,7 @@ const findThunderAll = async (
             deadline: thunder.deadline.toString(),
             content: thunder.content,
             hashtags: thunder.hashtags,
+            chats: thunder.chats,
             members: thunderMembers,
             limitMembersCnt: thunder.limitMembersCnt,
             thunderState: 'NON_MEMBER',
@@ -108,6 +110,7 @@ const findThunderAll = async (
             deadline: thunder.deadline.toString(),
             content: thunder.content,
             hashtags: thunder.hashtags,
+            chats: thunder.chats,
             members: thunderMembers,
             limitMembersCnt: thunder.limitMembersCnt,
             thunderState: 'MEMBER',
@@ -131,7 +134,7 @@ const findThunderByHashtag = async (
     const currentTime = new Date();
     const thunderlist = await Thunder.find(
       {hashtags: hashtag},
-      {createdAt: {$gt: currentTime.setDate(currentTime.getDate() - 1)}},
+      {createdAt: {$gt: currentTime}},
     ).sort({
       createdAt: 'desc',
     });
@@ -169,6 +172,7 @@ const findThunderByHashtag = async (
             deadline: thunder.deadline.toString(),
             content: thunder.content,
             hashtags: thunder.hashtags,
+            chats: thunder.chats,
             members: thunderMembers,
             limitMembersCnt: thunder.limitMembersCnt,
             thunderState: 'HOST',
@@ -180,6 +184,7 @@ const findThunderByHashtag = async (
             deadline: thunder.deadline.toString(),
             content: thunder.content,
             hashtags: thunder.hashtags,
+            chats: thunder.chats,
             members: thunderMembers,
             limitMembersCnt: thunder.limitMembersCnt,
             thunderState: 'NON_MEMBER',
@@ -191,6 +196,7 @@ const findThunderByHashtag = async (
             deadline: thunder.deadline.toString(),
             content: thunder.content,
             hashtags: thunder.hashtags,
+            chats: thunder.chats,
             members: thunderMembers,
             limitMembersCnt: thunder.limitMembersCnt,
             thunderState: 'MEMBER',

@@ -41,7 +41,7 @@ const deleteUser = async (userId: string) => {
 
     if (!user) {
       throw errorGenerator({
-        msg: '유저 정보를 불러올 수 없습니다.',
+        msg: message.NOT_FOUND_USER,
         statusCode: statusCode.NOT_FOUND,
       });
     }
@@ -59,15 +59,16 @@ const getUserForProfileUpdate = async (userId: string) => {
 
     if (!data) {
       throw errorGenerator({
-        msg: '유저 정보를 불러오지 못했습니다.',
+        msg: message.NOT_FOUND_USER,
         statusCode: statusCode.NOT_FOUND,
       });
     }
 
     const result: UserInfoDto = {
-      name: data.name,
-      introduction: data.introduction,
-      hashtags: data.hashtags,
+      name: data.name as string,
+      introduction: data.introduction as string,
+      hashtags: data.hashtags as [string],
+      mannerTemperature: data.mannerTemperature as number,
     };
 
     return result;
@@ -106,7 +107,7 @@ const findUserHashtag = async (
     const user = await User.findById(userId);
 
     const data: UserHashtagResponseDto = {
-      hashtags: user!.hashtags,
+      hashtags: user!.hashtags as [string],
     };
 
     return data;

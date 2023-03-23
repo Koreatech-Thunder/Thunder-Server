@@ -2,11 +2,11 @@ import {Request, Response} from 'express';
 import {Result, ValidationError, validationResult} from 'express-validator';
 import {ThunderCreateDto} from '../../interfaces/thunder/ThunderCreateDto';
 import {ThunderResponseDto} from '../../interfaces/thunder/ThunderResponseDto';
-import {ThunderUpdateDto} from '../../interfaces/thunder/ThunderUpdateDto';
 import {PostBaseResponseDto} from '../../interfaces/common/PostBaseResponseDto';
 import statusCode from '../../modules/statusCode';
 import ThunderService from '../../services/thunder/ThunderService';
 import message from '../../modules/message';
+import {ThunderUpdateDto} from '../../interfaces/thunder/ThunderUpdateDto';
 
 /**
  *

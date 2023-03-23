@@ -29,6 +29,8 @@ const message = {
   READ_USER_SUCCESS: '사용자 정보 조회 성공입니다.',
   UPDATE_USER_SUCCESS: '사용자 정보 수정 성공입니다.',
   DELETE_USER_SUCCESS: '사용자 탈퇴 성공입니다.',
+  USER_ALREADY_LOGOUT: '로그아웃한 유저입니다.',
+  USER_CREATION_ERROR: '유저 생성 오류입니다.',
 
   //thunder
   NOT_FOUND_ROOM: '존재하지 않는 방입니다.',
@@ -37,6 +39,18 @@ const message = {
   JOIN_ROOM_SUCCESS: '번개 참가 성공입니다.',
   LEAVE_ROOM_SUCCESS: '번개 나가기 성공입니다.',
   OVER_LIMITMEMBERSCNT: '제한된 인원을 초과하였습니다.',
+
+  //token
+  NOT_FOUND_TOKEN: '토큰이 존재하지 않습니다.',
+  NOT_FOUND_FCM: '파이어베이스 키가 존재하지 않습니다.',
+  FCM_ERROR: 'FCM 메시지 오류',
+  KAKAO_SERVER_ERROR: '카카오 서버에서 값을 받아오지 못했습니다.',
+
+
+  //chat
+  NOT_FOUND_MEMBER: '채팅방 정보를 찾을 수 없습니다.',
+  NOT_FOUND_CHAT: '해당 채팅을 찾을 수 없습니다.',
+
 };
 
 export default message;
