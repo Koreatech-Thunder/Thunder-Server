@@ -9,6 +9,7 @@ import message from '../../modules/message';
 import {UserCreateDto} from '../../interfaces/user/UserCreateDto';
 import {UserHashtagResponseDto} from '../../interfaces/user/UserHashtagResponseDto';
 import {UserThunderRecordResponseDto} from '../../interfaces/user/UserThunderRecordResponseDto';
+import {UserAlarmStateResponseDto} from '../../interfaces/user/UserAlarmStateResponseDto';
 
 
 /**
@@ -94,6 +95,30 @@ const findUserThunderRecord = async (
   }
 };
 
+/**
+ *
+ * @route GET / user/alarm
+ * @desc Read User AlarmState
+ * @access Public
+ */
+const findUserAlarmState = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  const userId: string = req.body['userId'];
+
+  try {
+    const data: UserAlarmStateResponseDto =
+      await UserService.findUserAlarmState(userId);
+
+    res.status(statusCode.OK).send(data);
+  } catch (error: any) {
+    console.log(error);
+    res
+      .status(statusCode.INTERNAL_SERVER_ERROR)
+      .send(statusCode.INTERNAL_SERVER_ERROR);
+  }
+};
 
 const findUserById = async (req: Request, res: Response): Promise<void> => {
   const userId = req.body['userId'];
@@ -172,4 +197,5 @@ export default {
   getUserForProfileUpdate,
   findUserHashtag,
   findUserThunderRecord,
+  findUserAlarmState,
 };
