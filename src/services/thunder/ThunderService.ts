@@ -43,7 +43,11 @@ const createThunder = async (
 
     for (var i = 0; i < user.length; i++) {
       if (user[i].isAlarms[0]) {
-        pushHandler.pushAlarmToUser(user[i]._id.toString());
+        pushHandler.pushAlarmToUser(
+          user[i]._id.toString(),
+          '번개방이 생성됐어요~! 확인해 볼까요?',
+          '',
+        );
       }
     }
 
@@ -78,6 +82,7 @@ const findThunderAll = async (
             const user = await User.findById(member);
 
             thunderMembers.push({
+              userId: user!._id,
               name: user!.name as string,
               introduction: user!.introduction as string,
               hashtags: user!.hashtags as [string],
@@ -158,6 +163,7 @@ const findThunderByHashtag = async (
             const user = await User.findById(member);
 
             thunderMembers.push({
+              userId: user!._id,
               name: user!.name,
               introduction: user!.introduction,
               hashtags: user!.hashtags,
