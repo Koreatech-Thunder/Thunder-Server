@@ -10,27 +10,45 @@ import statusCode from '../../modules/statusCode';
 import ThunderServiceUtils from './ThunderServiceUtils';
 import User from '../../models/User';
 import pushHandler from '../../modules/pushHandler';
+import PersonalChatRoom from '../../models/PersonalChatRoom';
+import ThunderRecord from '../../models/ThunderRecord';
 
 const createThunder = async (
   thunderCreateDto: ThunderCreateDto,
   userId: string,
 ): Promise<PostBaseResponseDto> => {
   try {
+    const newThunder = new PersonalChatRoom({
+      userId: userId,
+      enterAt: Date.now() + 3600000 * 9,
+      isAlarm: true,
+      isConnect: false,
+    });
+
+    newThunder.save();
+
     const thunder = new Thunder({
       title: thunderCreateDto.title,
-      deadline: new Date(thunderCreateDto.deadline),
+      deadline: new Date(thunderCreateDto.deadline).getTime() + 3600000 * 9,
       hashtags: thunderCreateDto.hashtags,
       content: thunderCreateDto.content,
       limitMembersCnt: thunderCreateDto.limitMembersCnt,
-      members: [userId],
-      createdAt: Date.now(),
-      updatedAt: Date.now(),
+      members: [newThunder._id],
+      createdAt: Date.now() + 3600000 * 9,
+      updatedAt: Date.now() + 3600000 * 9,
     });
 
     await thunder.save();
 
+    const newRecord = new ThunderRecord({
+      thunderId: thunder._id,
+      isEvaluate: false,
+    });
+
+    newRecord.save();
+
     await User.findByIdAndUpdate(userId, {
-      $push: {thunderRecords: thunder._id},
+      $push: {thunderRecords: newRecord._id},
     });
 
     const data = {
