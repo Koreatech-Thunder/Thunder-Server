@@ -38,7 +38,7 @@ const getThunders = async (userId: string): Promise<ThunderInfo[] | null> => {
 
     const result: ThunderInfo[] = await Thunder.find({
       _id: {$in: thunderList}, // 유저 정보의 thunderRecords 안의 정보 중에서
-      deadline: {$gt: new Date()}, // deadline이 아직 안 지난 것만 쿼리. new Date()는 현재 날짜시간
+      deadline: {$gt: new Date().getTime() + 3600000 * 9}, // deadline이 아직 안 지난 것만 쿼리. new Date()는 현재 날짜시간
     });
 
     if (!result) {

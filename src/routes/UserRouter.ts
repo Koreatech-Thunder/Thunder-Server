@@ -11,6 +11,5 @@ router.get('/alarm', auth.auth, UserController.findUserAlarmState);
 router.put('/', auth.auth, UserController.updateUser);
 router.get('/', auth.auth, UserController.findUserById);
 router.delete('/', auth.auth, UserController.deleteUser);
-router.get('/profile', auth.auth, UserController.getUserForProfileUpdate);
 
 export default router;

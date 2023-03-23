@@ -3,7 +3,6 @@ import {Request, Response} from 'express';
 import ChatService from '../../services/chat/ChatService';
 import errorGenerator from '../../errors/errorGenerator';
 import message from '../../modules/message';
-import chattingHandler from '../../modules/chattingHandler';
 
 const getChatRooms = async (req: Request, res: Response): Promise<void> => {
   const userId = req.body['userId'];
@@ -18,7 +17,7 @@ const getChatRooms = async (req: Request, res: Response): Promise<void> => {
   try {
     const data = await ChatService.getChatRooms(userId);
 
-    res.status(statusCode.OK).json({data: data});
+    res.status(statusCode.OK).json(data);
   } catch (error: any) {
     if (error.statusCode == statusCode.NOT_FOUND) {
       //찾을 수 없는 정보가 있었다면 NOT FOUND 발송.

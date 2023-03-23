@@ -8,9 +8,10 @@ import {UserHashtagResponseDto} from '../../interfaces/user/UserHashtagResponseD
 import {UserThunderRecordResponseDto} from '../../interfaces/user/UserThunderRecordResponseDto';
 import {UserAlarmStateResponseDto} from '../../interfaces/user/UserAlarmStateResponseDto';
 import {UserInfo} from '../../interfaces/user/UserInfo';
-import ThunderServiceUtils from '../../services/Thunder/ThunderServiceUtils';
+import ThunderServiceUtils from '../../services/thunder/ThunderServiceUtils';
 import message from '../../modules/message';
 import Thunder from '../../models/Thunder';
+import PersonalChatRoom from '../../models/PersonalChatRoom';
 
 const findUserById = async (userId: string) => {
   try {
@@ -45,6 +46,31 @@ const deleteUser = async (userId: string) => {
         msg: message.NOT_FOUND_USER,
         statusCode: statusCode.NOT_FOUND,
       });
+    }
+
+    const idList = [];
+
+    const personalRoomInfo = await PersonalChatRoom.find(
+      {
+        userId: userId,
+      },
+      '_id',
+    ); // 해당 userId를 포함한 PersonalRoomInfo 전부 검색.
+
+    for (let info of personalRoomInfo) {
+      idList.push(info._id);
+      await PersonalChatRoom.findByIdAndDelete(info);
+    }
+    console.log(idList);
+
+    const thunderToDelete = await Thunder.find({
+      'members.0': {$in: idList},
+    });
+
+    console.log(thunderToDelete);
+
+    for (let thunder of thunderToDelete) {
+      await Thunder.findByIdAndDelete(thunder._id);
     }
 
     await User.findByIdAndDelete(userId);
