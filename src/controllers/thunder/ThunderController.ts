@@ -6,6 +6,7 @@ import {PostBaseResponseDto} from '../../interfaces/common/PostBaseResponseDto';
 import statusCode from '../../modules/statusCode';
 import ThunderService from '../../services/thunder/ThunderService';
 import message from '../../modules/message';
+import {ThunderUpdateDto} from '../../interfaces/thunder/ThunderUpdateDto';
 
 /**
  *

@@ -1,4 +1,3 @@
-
 import {ThunderMembersDto} from './ThunderMembersDto';
 import mongoose from 'mongoose';
 

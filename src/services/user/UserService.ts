@@ -1,4 +1,3 @@
-
 import User from '../../models/User';
 import {UserResponseDto} from '../../interfaces/user/UserResponseDto';
 import errorGenerator from '../../errors/errorGenerator';
@@ -107,7 +106,7 @@ const findUserHashtag = async (
     const user = await User.findById(userId);
 
     const data: UserHashtagResponseDto = {
-      hashtags: user!.hashtags,
+      hashtags: user!.hashtags as [string],
     };
 
     return data;
