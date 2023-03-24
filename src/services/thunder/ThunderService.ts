@@ -344,6 +344,8 @@ const outThunder = async (userId: string, thunderId: string): Promise<void> => {
     if (isMembers == 'MEMBER') {
       await Thunder.updateOne({_id: thunderId}, {$pull: {members: myInfo._id}});
 
+      await PersonalChatRoom.findByIdAndDelete(myInfo._id);
+
       await User.findByIdAndUpdate(userId, {
         $pull: {thunderRecords: thunderId},
       });
