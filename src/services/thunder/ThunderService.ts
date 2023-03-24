@@ -18,14 +18,14 @@ const createThunder = async (
   userId: string,
 ): Promise<PostBaseResponseDto> => {
   try {
-    const newThunder = new PersonalChatRoom({
+    const newThunderRoomInfo = new PersonalChatRoom({
       userId: userId,
       enterAt: Date.now() + 3600000 * 9,
       isAlarm: true,
       isConnect: false,
     });
 
-    newThunder.save();
+    await newThunderRoomInfo.save();
 
     const thunder = new Thunder({
       title: thunderCreateDto.title,
@@ -33,7 +33,7 @@ const createThunder = async (
       hashtags: thunderCreateDto.hashtags,
       content: thunderCreateDto.content,
       limitMembersCnt: thunderCreateDto.limitMembersCnt,
-      members: [newThunder._id],
+      members: [newThunderRoomInfo._id],
       createdAt: Date.now() + 3600000 * 9,
       updatedAt: Date.now() + 3600000 * 9,
     });
@@ -45,7 +45,7 @@ const createThunder = async (
       isEvaluate: false,
     });
 
-    newRecord.save();
+    await newRecord.save();
 
     await User.findByIdAndUpdate(userId, {
       $push: {thunderRecords: newRecord._id},
@@ -324,13 +324,25 @@ const outThunder = async (userId: string, thunderId: string): Promise<void> => {
   try {
     const thunder = await ThunderServiceUtils.findThunderById(thunderId);
 
+    const members = thunder.members;
+    const idList = [];
+    let myInfo;
+
+    for (let member of members) {
+      const info = await PersonalChatRoom.findById(member);
+      if (info.userId.toString() == userId) {
+        myInfo = info;
+      }
+      idList.push(info._id);
+    }
+
     const isMembers: string = await ThunderServiceUtils.findMemberById(
       userId,
-      thunder.members,
+      idList,
     );
 
     if (isMembers == 'MEMBER') {
-      await Thunder.updateOne({_id: thunderId}, {$pull: {members: userId}});
+      await Thunder.updateOne({_id: thunderId}, {$pull: {members: myInfo._id}});
 
       await User.findByIdAndUpdate(userId, {
         $pull: {thunderRecords: thunderId},
