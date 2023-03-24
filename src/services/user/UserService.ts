@@ -59,7 +59,6 @@ const deleteUser = async (userId: string) => {
 
     for (let info of personalRoomInfo) {
       idList.push(info._id);
-      await PersonalChatRoom.findByIdAndDelete(info);
     }
     console.log(idList);
 
@@ -71,6 +70,10 @@ const deleteUser = async (userId: string) => {
 
     for (let thunder of thunderToDelete) {
       await Thunder.findByIdAndDelete(thunder._id);
+    }
+
+    for (let id of idList) {
+      await PersonalChatRoom.findByIdAndDelete(id);
     }
 
     await User.findByIdAndDelete(userId);
