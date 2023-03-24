@@ -264,9 +264,15 @@ const updateThunder = async (
   try {
     const thunder = await ThunderServiceUtils.findThunderById(thunderId);
 
+    const idList = [];
+    for (let member of thunder.members) {
+      const info = await PersonalChatRoom.findById(member);
+      idList.push(info._id);
+    }
+
     const isMembers: string = await ThunderServiceUtils.findMemberById(
       userId,
-      thunder.members,
+      idList,
     );
 
     if (isMembers == 'HOST') {
@@ -297,13 +303,26 @@ const joinThunder = async (
       });
     }
 
+    const idList = [];
+    let myInfo;
+    for (let member of thunder.members) {
+      const info = await PersonalChatRoom.findById(member);
+      if (info.userId.toString() == userId) {
+        // 해당 Info의 userId가 현재 userId와 같으면
+        myInfo = info; //members에 추가할 info를 따로 저장.
+      }
+      idList.push(info._id);
+    }
+
     const isMembers: string = await ThunderServiceUtils.findMemberById(
       userId,
-      thunder.members,
+      idList,
     );
 
     if (isMembers == 'NON_MEMBER') {
-      await Thunder.findByIdAndUpdate(thunderId, {$push: {members: userId}});
+      await Thunder.findByIdAndUpdate(thunderId, {
+        $push: {members: myInfo._id},
+      });
 
       await User.findByIdAndUpdate(userId, {
         $push: {thunderRecords: thunderId},
@@ -324,14 +343,15 @@ const outThunder = async (userId: string, thunderId: string): Promise<void> => {
   try {
     const thunder = await ThunderServiceUtils.findThunderById(thunderId);
 
-    const members = thunder.members;
-    const idList = [];
+    const members = thunder.members; // members = [ObjectId] -> ref: PersonalRoomInfo
+    const idList = []; // PersonalRoomInfo에 저장된 UserId.
     let myInfo;
 
     for (let member of members) {
       const info = await PersonalChatRoom.findById(member);
       if (info.userId.toString() == userId) {
-        myInfo = info;
+        // 해당 Info의 userId가 현재 userId와 같으면
+        myInfo = info; //현재 유저 정보의 Info는 나중에 삭제.
       }
       idList.push(info._id);
     }
@@ -339,7 +359,7 @@ const outThunder = async (userId: string, thunderId: string): Promise<void> => {
     const isMembers: string = await ThunderServiceUtils.findMemberById(
       userId,
       idList,
-    );
+    ); //idList에 있는 ID들을 가진 유저 정보를 검색.
 
     if (isMembers == 'MEMBER') {
       await Thunder.updateOne({_id: thunderId}, {$pull: {members: myInfo._id}});
