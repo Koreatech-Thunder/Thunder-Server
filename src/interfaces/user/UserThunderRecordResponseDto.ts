@@ -4,4 +4,5 @@ export interface UserThunderRecordResponseDto {
   thunderId: mongoose.Types.ObjectId;
   title: string;
   deadline: string;
+  hashtags: string[];
 }

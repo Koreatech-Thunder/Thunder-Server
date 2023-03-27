@@ -11,7 +11,6 @@ import {UserHashtagResponseDto} from '../../interfaces/user/UserHashtagResponseD
 import {UserThunderRecordResponseDto} from '../../interfaces/user/UserThunderRecordResponseDto';
 import {UserAlarmStateResponseDto} from '../../interfaces/user/UserAlarmStateResponseDto';
 
-
 /**
  *
  * @route PUT / user

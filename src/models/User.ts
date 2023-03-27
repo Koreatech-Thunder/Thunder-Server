@@ -14,10 +14,12 @@ const UserSchema = new mongoose.Schema({
     type: Number,
     default: 36,
   },
-  hashtags: {
-    type: [String],
-    default: [],
-  },
+  hashtags: [
+    {
+      type: String,
+      default: [],
+    },
+  ],
   isLogOut: {
     type: Boolean,
     default: true,
@@ -31,11 +33,13 @@ const UserSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
-  thunderRecords: {
-    type: [mongoose.Schema.Types.ObjectId],
-    ref: 'ThunderRecords',
-    default: [],
-  },
+  thunderRecords: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'ThunderRecords',
+      default: [],
+    },
+  ],
   isAlarms: {
     type: [Boolean],
     default: [true, true, true],

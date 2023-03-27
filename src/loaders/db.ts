@@ -37,11 +37,12 @@ const connectDB = async () => {
     mongoose.set('autoCreate', true);
 
     console.log('Mongoose Connected ...');
-
+    /*
     const user = await User.find({isLogOut: false});
 
     for (let i = 0; i < user.length; i++) {
       //서버 켜졌을 시 푸시알림 테스트용
+
       let alarm = {
         notification: {
           title: pushMessageTemplate.title,
@@ -64,6 +65,7 @@ const connectDB = async () => {
           });
         });
     }
+    */
   } catch (err: any) {
     console.error(err.message);
     process.exit(1);

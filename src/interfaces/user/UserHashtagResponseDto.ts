@@ -1,3 +1,3 @@
 export interface UserHashtagResponseDto {
-  hashtags: [String];
+  hashtags: string[];
 }

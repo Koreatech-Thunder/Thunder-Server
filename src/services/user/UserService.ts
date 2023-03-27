@@ -112,18 +112,23 @@ const findUserThunderRecord = async (
   userId: string,
 ): Promise<UserThunderRecordResponseDto[]> => {
   try {
+    const currentTime = new Date(); //현재 날짜 및 시간
     const user = await User.findById(userId);
+
+    const thunder = await Thunder.find({
+      deadline: {$lt: currentTime},
+      _id: {$in: user.thunderRecords},
+    });
 
     const thunderRecord: UserThunderRecordResponseDto[] = [];
 
     await Promise.all(
-      user!.thunderRecords.map(async (record: any) => {
-        const thunder = await Thunder.findById(record);
-
+      thunder.map(async (record: any) => {
         thunderRecord.push({
-          thunderId: thunder!._id,
-          title: thunder!.title,
-          deadline: await ThunderServiceUtils.dateFormat(thunder!.deadline),
+          thunderId: record._id,
+          title: record.title,
+          deadline: await ThunderServiceUtils.dateFormat(record.deadline),
+          hashtags: record.hashtags,
         });
       }),
     );
