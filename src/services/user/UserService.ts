@@ -62,21 +62,18 @@ const deleteUser = async (userId: string) => {
     }
     console.log(idList);
 
-    const thunderToDelete = await Thunder.find({
+    const thunderNotToDelete = await Thunder.find({
       'members.0': {$in: idList},
     });
 
-    console.log(thunderToDelete);
-
-    for (let thunder of thunderToDelete) {
-      await Thunder.findByIdAndDelete(thunder._id);
+    if (thunderNotToDelete) {
+      throw errorGenerator({
+        msg: message.USER_CANNOT_DELETE,
+        statusCode: statusCode.FORBIDDEN,
+      });
+    } else {
+      await User.findByIdAndDelete(userId);
     }
-
-    for (let id of idList) {
-      await PersonalChatRoom.findByIdAndDelete(id);
-    }
-
-    await User.findByIdAndDelete(userId);
   } catch (error) {
     console.log(error);
     throw error;
