@@ -12,6 +12,8 @@ import ThunderServiceUtils from '../../services/thunder/ThunderServiceUtils';
 import message from '../../modules/message';
 import Thunder from '../../models/Thunder';
 import PersonalChatRoom from '../../models/PersonalChatRoom';
+import mongoose from 'mongoose';
+import ThunderRecord from '../../models/ThunderRecord';
 
 const findUserById = async (userId: string) => {
   try {
@@ -143,8 +145,9 @@ const findUserThunderRecord = async (
     const thunderRecord: UserThunderRecordResponseDto[] = [];
 
     await Promise.all(
-      user!.thunderRecords.map(async (record: any) => {
-        const thunder = await Thunder.findById(record);
+      user!.thunderRecords.map(async (id: mongoose.Schema.Types.ObjectId) => {
+        const record = await ThunderRecord.findById(id);
+        const thunder = await Thunder.findById(record.thunderId);
 
         thunderRecord.push({
           thunderId: thunder!._id,
