@@ -152,6 +152,7 @@ const findUserThunderRecord = async (
         thunderRecord.push({
           thunderId: thunder!._id,
           title: thunder!.title,
+          hashtags: thunder!.hashtags,
           deadline: await ThunderServiceUtils.dateFormat(thunder!.deadline),
         });
       }),
