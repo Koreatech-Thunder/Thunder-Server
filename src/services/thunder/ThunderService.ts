@@ -341,8 +341,15 @@ const joinThunder = async (
         $push: {members: myJoinInfo._id},
       });
 
+      const newRecord = new ThunderRecord({
+        thunderId: thunderId,
+        isEvaluate: false,
+      });
+
+      await newRecord.save();
+
       await User.findByIdAndUpdate(userId, {
-        $push: {thunderRecords: thunderId},
+        $push: {thunderRecords: newRecord._id},
       });
     } else {
       throw errorGenerator({
@@ -383,9 +390,16 @@ const outThunder = async (userId: string, thunderId: string): Promise<void> => {
 
       await PersonalChatRoom.findByIdAndDelete(myInfo._id);
 
-      await User.findByIdAndUpdate(userId, {
-        $pull: {thunderRecords: thunderId},
+      const record = await ThunderRecord.findByIdAndDelete({
+        thunderId: thunderId,
+        userId: userId,
       });
+
+      await User.findByIdAndUpdate(userId, {
+        $pull: {thunderRecords: record._id},
+      });
+
+      await ThunderRecord.findByIdAndDelete(record._id);
     } else {
       throw errorGenerator({
         msg: message.FORBIDDEN,

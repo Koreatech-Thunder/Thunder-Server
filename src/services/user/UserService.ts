@@ -51,6 +51,7 @@ const deleteUser = async (userId: string) => {
     }
 
     const idList = [];
+    const thunderList = [];
 
     const personalRoomInfo = await PersonalChatRoom.find(
       {
@@ -62,9 +63,14 @@ const deleteUser = async (userId: string) => {
     for (let info of personalRoomInfo) {
       idList.push(info._id);
     }
-    console.log(idList);
+
+    for (let recordId of user.thunderRecords) {
+      const record = await ThunderRecord.findById(recordId);
+      thunderList.push(record.thunderId);
+    }
 
     const thunderNotToDelete = await Thunder.find({
+      $in: thunderList,
       'members.0': {$in: idList},
     });
 
@@ -74,7 +80,24 @@ const deleteUser = async (userId: string) => {
         statusCode: statusCode.FORBIDDEN,
       });
     } else {
-      await User.findByIdAndDelete(userId);
+      for (let thunderId of thunderList) {
+        // 번개에서 사용자 id 빼기.
+        await Thunder.findByIdAndUpdate(thunderId, {
+          $pull: {members: {$in: idList}},
+        });
+      }
+
+      for (let record of user.thunderRecords) {
+        //사용자 명의로 된 thunderRecord 삭제.
+        await ThunderRecord.findByIdAndDelete(record);
+      }
+
+      for (let info of idList) {
+        //사용자 명의로 된 PersonalRoomInfo 삭제.
+        await PersonalChatRoom.findByIdAndDelete(info);
+      }
+
+      await User.findByIdAndDelete(userId); //최종적으로 사용자 정보 삭제.
     }
   } catch (error) {
     console.log(error);
