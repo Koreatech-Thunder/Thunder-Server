@@ -91,8 +91,7 @@ const findThunderAll = async (
       thunderlist.map(async (thunder: any) => {
         const idList = []; // User._id[]
 
-        for (let member of thunder.member) {
-          //PersonalRoomInfo.id
+        for (let member of thunder.members) {
           const info = await PersonalChatRoom.findById(member); //PersonalRoomInfo
           idList.push(info.userId);
         }
@@ -179,7 +178,7 @@ const findThunderByHashtag = async (
       thunderlist.map(async (thunder: any) => {
         const idList = []; // User._id[]
 
-        for (let member of thunder.member) {
+        for (let member of thunder.members) {
           const info = await PersonalChatRoom.findById(member);
           idList.push(info.userId);
         }
