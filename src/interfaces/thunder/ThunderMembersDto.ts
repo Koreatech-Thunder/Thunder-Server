@@ -5,6 +5,6 @@ export interface ThunderMembersDto {
   name: String;
   userId: mongoose.Types.ObjectId;
   introduction: String;
-  hashtags: [String];
+  hashtags: string[];
   mannerTemperature: Number;
 }

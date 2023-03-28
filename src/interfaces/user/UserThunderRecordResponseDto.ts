@@ -5,4 +5,5 @@ export interface UserThunderRecordResponseDto {
   title: string;
   hashtags: string[];
   deadline: string;
+  hashtags: string[];
 }

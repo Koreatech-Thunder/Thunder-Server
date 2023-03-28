@@ -166,7 +166,13 @@ const findUserThunderRecord = async (
   userId: string,
 ): Promise<UserThunderRecordResponseDto[]> => {
   try {
+    const currentTime = new Date(); //현재 날짜 및 시간
     const user = await User.findById(userId);
+
+    const thunder = await Thunder.find({
+      deadline: {$lt: currentTime},
+      _id: {$in: user.thunderRecords},
+    });
 
     const thunderRecord: UserThunderRecordResponseDto[] = [];
 

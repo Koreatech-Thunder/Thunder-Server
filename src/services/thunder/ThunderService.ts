@@ -81,6 +81,7 @@ const findThunderAll = async (
 ): Promise<ThunderResponseDto[]> => {
   try {
     const currentTime = new Date().getTime() + 3600000 * 9; //현재 날짜 및 시간
+
     const thunderlist = await Thunder.find({
       deadline: {$gt: currentTime},
     }).sort({createdAt: 'desc'});
@@ -103,14 +104,18 @@ const findThunderAll = async (
 
         const thunderMembers: ThunderMembersDto[] = [];
         await Promise.all(
-          idList.map(async (member: any) => {
-            const user = await User.findById(member);
+
+          thunder.members.map(async (member: any) => {
+            const user = await PersonalChatRoom.findById(member).populate(
+              'userId',
+            );
+
             thunderMembers.push({
-              userId: user!._id,
-              name: user!.name as string,
-              introduction: user!.introduction as string,
-              hashtags: user!.hashtags as [string],
-              mannerTemperature: user!.mannerTemperature as number,
+              userId: (user.userId as any)._id,
+              name: (user.userId as any).name,
+              introduction: (user.userId as any).introduction,
+              hashtags: (user.userId as any).hashtags,
+              mannerTemperature: (user.userId as any).mannerTemperature,
             });
           }),
         );
@@ -190,15 +195,18 @@ const findThunderByHashtag = async (
 
         const thunderMembers: ThunderMembersDto[] = [];
         await Promise.all(
-          idList.map(async (member: any) => {
-            const user = await User.findById(member);
+
+          thunder.members.map(async (member: any) => {
+            const user = await PersonalChatRoom.findById(member).populate(
+              'userId',
+            );
 
             thunderMembers.push({
-              userId: user!._id,
-              name: user!.name,
-              introduction: user!.introduction,
-              hashtags: user!.hashtags,
-              mannerTemperature: user!.mannerTemperature,
+              userId: (user.userId as any)._id,
+              name: (user.userId as any).name,
+              introduction: (user.userId as any).introduction,
+              hashtags: (user.userId as any).hashtags,
+              mannerTemperature: (user.userId as any).mannerTemperature,
             });
           }),
         );
@@ -281,6 +289,7 @@ const updateThunder = async (
     for (let member of thunder.members) {
       const info = await PersonalChatRoom.findById(member);
       idList.push(info.userId);
+
     }
 
     const isMembers: string = await ThunderServiceUtils.findMemberById(
@@ -317,6 +326,7 @@ const joinThunder = async (
     }
 
     const idList = [];
+
     for (let member of thunder.members) {
       const info = await PersonalChatRoom.findById(member);
       idList.push(info.userId);
@@ -377,7 +387,9 @@ const outThunder = async (userId: string, thunderId: string): Promise<void> => {
         // 해당 Info의 userId가 현재 userId와 같으면
         myInfo = info; //현재 유저 정보의 Info는 나중에 삭제.
       }
+
       idList.push(info.userId);
+
     }
 
     const isMembers: string = await ThunderServiceUtils.findMemberById(
