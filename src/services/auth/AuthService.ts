@@ -8,6 +8,7 @@ import statusCode from '../../modules/statusCode';
 import tokenStatus from '../../modules/tokenStatus';
 import {AuthResponseDto} from '../../interfaces/auth/AuthResponseDto';
 import message from '../../modules/message';
+import Thunder from '../../models/Thunder';
 
 const login = async (kakaoToken: string, fcmToken: string) => {
   try {
@@ -179,9 +180,8 @@ const logout = async (userId: string) => {
         isLogOut: true,
         fcmToken: 'NoToken',
       },
-      userId
-    ); 
-    
+      userId,
+    );
   } catch (error) {
     console.log(error);
     throw error;

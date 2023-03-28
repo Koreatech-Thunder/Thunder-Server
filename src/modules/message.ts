@@ -30,6 +30,10 @@ const message = {
   DELETE_USER_SUCCESS: '사용자 탈퇴 성공입니다.',
   USER_ALREADY_LOGOUT: '로그아웃한 유저입니다.',
   USER_CREATION_ERROR: '유저 생성 오류입니다.',
+  USER_DELETION_FAIL: '유저 삭제 오류입니다.',
+  USER_CANNOT_DELETE:
+    '사용자 명의로 만들어진 번개가 있으면 탈퇴할 수 없습니다.',
+  USER_ALREADY_IN: '이미 해당 번개에 가입해 있는 유저입니다.',
 
   //thunder
   NOT_FOUND_ROOM: '존재하지 않는 방입니다.',
@@ -45,11 +49,9 @@ const message = {
   FCM_ERROR: 'FCM 메시지 오류',
   KAKAO_SERVER_ERROR: '카카오 서버에서 값을 받아오지 못했습니다.',
 
-
   //chat
   NOT_FOUND_MEMBER: '채팅방 정보를 찾을 수 없습니다.',
   NOT_FOUND_CHAT: '해당 채팅을 찾을 수 없습니다.',
-
 };
 
 export default message;

@@ -123,7 +123,9 @@ const findUserById = async (req: Request, res: Response): Promise<void> => {
     res.status(statusCode.OK).send(util.success(data));
   } catch (error) {
     console.log(error);
-    res.status(statusCode.INTERNAL_SERVER_ERROR).send(util.fail());
+    res
+      .status(statusCode.INTERNAL_SERVER_ERROR)
+      .send(statusCode.INTERNAL_SERVER_ERROR);
   }
 };
 
@@ -137,7 +139,9 @@ const findUserByKakao = async (req: Request, res: Response): Promise<void> => {
     res.status(statusCode.OK).send(util.success(data));
   } catch (error) {
     console.log(error);
-    res.status(statusCode.INTERNAL_SERVER_ERROR).send(util.fail());
+    res
+      .status(statusCode.INTERNAL_SERVER_ERROR)
+      .send(statusCode.INTERNAL_SERVER_ERROR);
   }
 };
 
@@ -152,6 +156,8 @@ const deleteUser = async (req: Request, res: Response): Promise<void> => {
     console.log(error);
     if (error.statusCode == statusCode.NOT_FOUND) {
       res.status(statusCode.NOT_FOUND).send(statusCode.NOT_FOUND);
+    } else if (error.statusCode.FORBIDDEN) {
+      res.status(statusCode.FORBIDDEN).send(statusCode.FORBIDDEN);
     } else {
       res
         .status(statusCode.INTERNAL_SERVER_ERROR)
