@@ -4,6 +4,7 @@ import {ThunderCreateDto} from '../../interfaces/thunder/ThunderCreateDto';
 import {ThunderResponseDto} from '../../interfaces/thunder/ThunderResponseDto';
 import {ThunderUpdateDto} from '../../interfaces/thunder/ThunderUpdateDto';
 import {ThunderMembersDto} from '../../interfaces/thunder/ThunderMembersDto';
+import {ThunderFindResponseDto} from '../../interfaces/thunder/ThunderFindResponseDto';
 import Thunder from '../../models/Thunder';
 import message from '../../modules/message';
 import statusCode from '../../modules/statusCode';
@@ -256,11 +257,14 @@ const findThunderByHashtag = async (
   }
 };
 
-const findThunder = async (thunderId: string): Promise<ThunderUpdateDto> => {
+const findThunder = async (
+  thunderId: string,
+): Promise<ThunderFindResponseDto> => {
   try {
     const thunder = await ThunderServiceUtils.findThunderById(thunderId);
 
-    const data: ThunderUpdateDto = {
+    const data: ThunderFindResponseDto = {
+      thunderId: thunder.thunderId,
       title: thunder.title,
       deadline: await ThunderServiceUtils.dateFormat(thunder.deadline),
       content: thunder.content,
