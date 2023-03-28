@@ -75,7 +75,7 @@ const findThunderByHashtag = async (
 ): Promise<void | Response> => {
   const errors: Result<ValidationError> = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(statusCode.BAD_REQUEST).send(message.BAD_REQUEST);
+    return res.status(statusCode.BAD_REQUEST).send(statusCode.BAD_REQUEST);
   }
 
   const userId: string = req.body['userId'];
@@ -111,7 +111,7 @@ const findThunder = async (
 
     res.status(statusCode.OK).send(data);
   } catch (error: any) {
-    if (error.msg == message.NOT_FOUND_ROOM) {
+    if (error.statusCode == statusCode.NOT_FOUND) {
       console.log(error);
       res.status(statusCode.NOT_FOUND).send(statusCode.NOT_FOUND);
     } else {
@@ -134,7 +134,7 @@ const updateThunder = async (
 ): Promise<void | Response> => {
   const errors: Result<ValidationError> = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(statusCode.BAD_REQUEST).send(message.BAD_REQUEST);
+    return res.status(statusCode.BAD_REQUEST).send(statusCode.BAD_REQUEST);
   }
 
   const thunderUpdateDto: ThunderUpdateDto = req.body;
@@ -146,10 +146,10 @@ const updateThunder = async (
 
     res.status(statusCode.OK).send(statusCode.OK);
   } catch (error: any) {
-    if (error.msg == message.NOT_FOUND_ROOM) {
+    if (error.statusCode == statusCode.NOT_FOUND) {
       console.log(error);
       res.status(statusCode.NOT_FOUND).send(statusCode.NOT_FOUND);
-    } else if (error.msg == message.FORBIDDEN) {
+    } else if (error.statusCode == statusCode.FORBIDDEN) {
       console.log(error);
       res.status(statusCode.FORBIDDEN).send(statusCode.FORBIDDEN);
     } else {
@@ -172,7 +172,7 @@ const joinThunder = async (
 ): Promise<void | Response> => {
   const errors: Result<ValidationError> = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(statusCode.BAD_REQUEST).send(message.BAD_REQUEST);
+    return res.status(statusCode.BAD_REQUEST).send(statusCode.BAD_REQUEST);
   }
 
   const userId: string = req.body['userId'];
@@ -183,10 +183,10 @@ const joinThunder = async (
 
     res.status(statusCode.OK).send(statusCode.OK);
   } catch (error: any) {
-    if (error.msg == message.NOT_FOUND_ROOM) {
+    if (error.statusCode == statusCode.NOT_FOUND) {
       console.log(error);
       res.status(statusCode.NOT_FOUND).send(statusCode.NOT_FOUND);
-    } else if (error.msg == message.FORBIDDEN) {
+    } else if (error.statusCode == statusCode.FORBIDDEN) {
       console.log(error);
       res.status(statusCode.FORBIDDEN).send(statusCode.FORBIDDEN);
     } else {
@@ -209,7 +209,7 @@ const outThunder = async (
 ): Promise<void | Response> => {
   const errors: Result<ValidationError> = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(statusCode.BAD_REQUEST).send(message.BAD_REQUEST);
+    return res.status(statusCode.BAD_REQUEST).send(statusCode.BAD_REQUEST);
   }
 
   const userId: string = req.body['userId'];
@@ -220,10 +220,10 @@ const outThunder = async (
 
     res.status(statusCode.OK).send(statusCode.OK);
   } catch (error: any) {
-    if (error.msg == message.NOT_FOUND_ROOM) {
+    if (error.statusCode == statusCode.NOT_FOUND) {
       console.log(error);
       res.status(statusCode.NOT_FOUND).send(statusCode.NOT_FOUND);
-    } else if (error.msg == message.FORBIDDEN) {
+    } else if (error.statusCode == statusCode.FORBIDDEN) {
       console.log(error);
       res.status(statusCode.FORBIDDEN).send(statusCode.FORBIDDEN);
     } else {

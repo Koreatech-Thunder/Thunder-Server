@@ -6,7 +6,6 @@ import errorGenerator from '../errors/errorGenerator';
 import statusCode from '../modules/statusCode';
 import message from '../modules/message';
 import {pushMessageTemplate} from '../modules/pushMessageTemplate';
-import chattingHandler from '../modules/chattingHandler';
 import User from '../models/User';
 
 const connectDB = async () => {
@@ -50,7 +49,7 @@ const connectDB = async () => {
         token: user[i].fcmToken as string,
       };
 
-      firebase
+      /*firebase
         .messaging()
         .send(alarm)
         .then(function (res: any) {
@@ -62,7 +61,7 @@ const connectDB = async () => {
             msg: message.FCM_ERROR,
             statusCode: statusCode.INTERNAL_SERVER_ERROR,
           });
-        });
+        });*/
     }
   } catch (err: any) {
     console.error(err.message);

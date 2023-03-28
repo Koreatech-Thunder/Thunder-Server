@@ -43,12 +43,12 @@ const ThunderSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     required: false,
-    defalut: Date.now,
+    defalut: Date.now() + 3600000 * 9,
   },
   updatedAt: {
     type: Date,
     required: false,
-    defalut: Date.now,
+    defalut: Date.now() + 3600000 * 9,
   },
 });
 

@@ -6,15 +6,14 @@ import auth from '../middlewares/auth';
 
 const router: Router = Router();
 
-router.post('/', auth.auth, ThunderController.createThunder);
-router.get('/', auth.auth, ThunderController.findThunderAll);
 router.get(
   '/hashtags',
   auth.auth,
   [query('hashtag').isString().trim()],
   ThunderController.findThunderByHashtag,
 );
-
+router.post('/', auth.auth, ThunderController.createThunder);
+router.get('/', auth.auth, ThunderController.findThunderAll);
 router.get('/:thunderId', auth.auth, ThunderController.findThunder);
 router.put('/:thunderId', auth.auth, ThunderController.updateThunder);
 router.put('/join/:thunderId', auth.auth, ThunderController.joinThunder);

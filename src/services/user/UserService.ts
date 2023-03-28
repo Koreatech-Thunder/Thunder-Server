@@ -8,9 +8,12 @@ import {UserHashtagResponseDto} from '../../interfaces/user/UserHashtagResponseD
 import {UserThunderRecordResponseDto} from '../../interfaces/user/UserThunderRecordResponseDto';
 import {UserAlarmStateResponseDto} from '../../interfaces/user/UserAlarmStateResponseDto';
 import {UserInfo} from '../../interfaces/user/UserInfo';
-import ThunderServiceUtils from '../../services/Thunder/ThunderServiceUtils';
+import ThunderServiceUtils from '../../services/thunder/ThunderServiceUtils';
 import message from '../../modules/message';
 import Thunder from '../../models/Thunder';
+import PersonalChatRoom from '../../models/PersonalChatRoom';
+import mongoose from 'mongoose';
+import ThunderRecord from '../../models/ThunderRecord';
 
 const findUserById = async (userId: string) => {
   try {
@@ -47,7 +50,58 @@ const deleteUser = async (userId: string) => {
       });
     }
 
-    await User.findByIdAndDelete(userId);
+    const idList = [];
+    const thunderList = [];
+
+    const personalRoomInfo = await PersonalChatRoom.find(
+      {
+        userId: userId,
+      },
+      '_id',
+    ); // 해당 userId를 포함한 PersonalRoomInfo 전부 검색.
+
+    for (let info of personalRoomInfo) {
+      idList.push(info._id);
+    }
+
+    for (let recordId of user.thunderRecords) {
+      const record = await ThunderRecord.findById(recordId);
+      thunderList.push(record.thunderId);
+    }
+
+    const currentTime = new Date().getDate() + 3600000 * 9;
+
+    const thunderNotToDelete = await Thunder.find({
+      $in: thunderList,
+      'members.0': {$in: idList},
+      deadline: {$gt: currentTime},
+    });
+
+    if (thunderNotToDelete) {
+      throw errorGenerator({
+        msg: message.USER_CANNOT_DELETE,
+        statusCode: statusCode.FORBIDDEN,
+      });
+    } else {
+      for (let thunderId of thunderList) {
+        // 번개에서 사용자 id 빼기.
+        await Thunder.findByIdAndUpdate(thunderId, {
+          $pull: {members: {$in: idList}},
+        });
+      }
+
+      for (let record of user.thunderRecords) {
+        //사용자 명의로 된 thunderRecord 삭제.
+        await ThunderRecord.findByIdAndDelete(record);
+      }
+
+      for (let info of idList) {
+        //사용자 명의로 된 PersonalRoomInfo 삭제.
+        await PersonalChatRoom.findByIdAndDelete(info);
+      }
+
+      await User.findByIdAndDelete(userId); //최종적으로 사용자 정보 삭제.
+    }
   } catch (error) {
     console.log(error);
     throw error;
@@ -117,12 +171,14 @@ const findUserThunderRecord = async (
     const thunderRecord: UserThunderRecordResponseDto[] = [];
 
     await Promise.all(
-      user!.thunderRecords.map(async (record: any) => {
-        const thunder = await Thunder.findById(record);
+      user!.thunderRecords.map(async (id: mongoose.Schema.Types.ObjectId) => {
+        const record = await ThunderRecord.findById(id);
+        const thunder = await Thunder.findById(record.thunderId);
 
         thunderRecord.push({
           thunderId: thunder!._id,
           title: thunder!.title,
+          hashtags: thunder!.hashtags,
           deadline: await ThunderServiceUtils.dateFormat(thunder!.deadline),
         });
       }),

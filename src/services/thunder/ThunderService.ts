@@ -10,27 +10,45 @@ import statusCode from '../../modules/statusCode';
 import ThunderServiceUtils from './ThunderServiceUtils';
 import User from '../../models/User';
 import pushHandler from '../../modules/pushHandler';
+import PersonalChatRoom from '../../models/PersonalChatRoom';
+import ThunderRecord from '../../models/ThunderRecord';
 
 const createThunder = async (
   thunderCreateDto: ThunderCreateDto,
   userId: string,
 ): Promise<PostBaseResponseDto> => {
   try {
+    const newThunderRoomInfo = new PersonalChatRoom({
+      userId: userId,
+      enterAt: Date.now() + 3600000 * 9,
+      isAlarm: true,
+      isConnect: false,
+    });
+
+    await newThunderRoomInfo.save();
+
     const thunder = new Thunder({
       title: thunderCreateDto.title,
-      deadline: new Date(thunderCreateDto.deadline),
+      deadline: new Date(thunderCreateDto.deadline).getTime() + 3600000 * 9,
       hashtags: thunderCreateDto.hashtags,
       content: thunderCreateDto.content,
       limitMembersCnt: thunderCreateDto.limitMembersCnt,
-      members: [userId],
-      createdAt: Date.now(),
-      updatedAt: Date.now(),
+      members: [newThunderRoomInfo._id],
+      createdAt: Date.now() + 3600000 * 9,
+      updatedAt: Date.now() + 3600000 * 9,
     });
 
     await thunder.save();
 
+    const newRecord = new ThunderRecord({
+      thunderId: thunder._id,
+      isEvaluate: false,
+    });
+
+    await newRecord.save();
+
     await User.findByIdAndUpdate(userId, {
-      $push: {thunderRecords: thunder._id},
+      $push: {thunderRecords: newRecord._id},
     });
 
     const data = {
@@ -62,7 +80,7 @@ const findThunderAll = async (
   userId: string,
 ): Promise<ThunderResponseDto[]> => {
   try {
-    const currentTime = new Date(); //현재 날짜 및 시간
+    const currentTime = new Date().getTime() + 3600000 * 9; //현재 날짜 및 시간
     const thunderlist = await Thunder.find({
       deadline: {$gt: currentTime},
     }).sort({createdAt: 'desc'});
@@ -71,16 +89,22 @@ const findThunderAll = async (
 
     await Promise.all(
       thunderlist.map(async (thunder: any) => {
+        const idList = []; // User._id[]
+
+        for (let member of thunder.members) {
+          const info = await PersonalChatRoom.findById(member); //PersonalRoomInfo
+          idList.push(info.userId);
+        }
+
         const isMembers = await ThunderServiceUtils.findMemberById(
           userId,
-          thunder.members,
+          idList,
         );
 
         const thunderMembers: ThunderMembersDto[] = [];
         await Promise.all(
-          thunder.members.map(async (member: any) => {
+          idList.map(async (member: any) => {
             const user = await User.findById(member);
-
             thunderMembers.push({
               userId: user!._id,
               name: user!.name as string,
@@ -143,7 +167,7 @@ const findThunderByHashtag = async (
   userId: string,
 ): Promise<ThunderResponseDto[]> => {
   try {
-    const currentTime = new Date(); //현재 날짜 및 시간
+    const currentTime = new Date().getTime() + 3600000 * 9; //현재 날짜 및 시간
     const thunderlist = await Thunder.find({
       hashtags: hashtag,
       deadline: {$gt: currentTime},
@@ -152,14 +176,21 @@ const findThunderByHashtag = async (
     const hashtagthunder: ThunderResponseDto[] = [];
     await Promise.all(
       thunderlist.map(async (thunder: any) => {
+        const idList = []; // User._id[]
+
+        for (let member of thunder.members) {
+          const info = await PersonalChatRoom.findById(member);
+          idList.push(info.userId);
+        }
+
         const isMembers: string = await ThunderServiceUtils.findMemberById(
           userId,
-          thunder.members,
+          idList,
         );
 
         const thunderMembers: ThunderMembersDto[] = [];
         await Promise.all(
-          thunder.members.map(async (member: any) => {
+          idList.map(async (member: any) => {
             const user = await User.findById(member);
 
             thunderMembers.push({
@@ -246,9 +277,15 @@ const updateThunder = async (
   try {
     const thunder = await ThunderServiceUtils.findThunderById(thunderId);
 
+    const idList = []; // User._id[]
+    for (let member of thunder.members) {
+      const info = await PersonalChatRoom.findById(member);
+      idList.push(info.userId);
+    }
+
     const isMembers: string = await ThunderServiceUtils.findMemberById(
       userId,
-      thunder.members,
+      idList,
     );
 
     if (isMembers == 'HOST') {
@@ -279,16 +316,40 @@ const joinThunder = async (
       });
     }
 
+    const idList = [];
+    for (let member of thunder.members) {
+      const info = await PersonalChatRoom.findById(member);
+      idList.push(info.userId);
+    }
+
     const isMembers: string = await ThunderServiceUtils.findMemberById(
       userId,
-      thunder.members,
+      idList,
     );
 
     if (isMembers == 'NON_MEMBER') {
-      await Thunder.findByIdAndUpdate(thunderId, {$push: {members: userId}});
+      const myJoinInfo = new PersonalChatRoom({
+        userId: userId,
+        enterAt: Date.now() + 3600000 * 9,
+        isAlarm: true,
+        isConnect: true,
+      });
+
+      await myJoinInfo.save();
+
+      await Thunder.findByIdAndUpdate(thunderId, {
+        $push: {members: myJoinInfo._id},
+      });
+
+      const newRecord = new ThunderRecord({
+        thunderId: thunderId,
+        isEvaluate: false,
+      });
+
+      await newRecord.save();
 
       await User.findByIdAndUpdate(userId, {
-        $push: {thunderRecords: thunderId},
+        $push: {thunderRecords: newRecord._id},
       });
     } else {
       throw errorGenerator({
@@ -306,17 +367,39 @@ const outThunder = async (userId: string, thunderId: string): Promise<void> => {
   try {
     const thunder = await ThunderServiceUtils.findThunderById(thunderId);
 
+    const members = thunder.members; // members = [ObjectId] -> ref: PersonalRoomInfo
+    const idList = []; // PersonalRoomInfo에 저장된 UserId.
+    let myInfo;
+
+    for (let member of members) {
+      const info = await PersonalChatRoom.findById(member);
+      if (info.userId.toString() == userId) {
+        // 해당 Info의 userId가 현재 userId와 같으면
+        myInfo = info; //현재 유저 정보의 Info는 나중에 삭제.
+      }
+      idList.push(info.userId);
+    }
+
     const isMembers: string = await ThunderServiceUtils.findMemberById(
       userId,
-      thunder.members,
-    );
+      idList,
+    ); //idList에 있는 ID들을 가진 유저 정보를 검색.
 
     if (isMembers == 'MEMBER') {
-      await Thunder.updateOne({_id: thunderId}, {$pull: {members: userId}});
+      await Thunder.updateOne({_id: thunderId}, {$pull: {members: myInfo._id}});
+
+      await PersonalChatRoom.findByIdAndDelete(myInfo._id);
+
+      const record = await ThunderRecord.findByIdAndDelete({
+        thunderId: thunderId,
+        userId: userId,
+      });
 
       await User.findByIdAndUpdate(userId, {
-        $pull: {thunderRecords: thunderId},
+        $pull: {thunderRecords: record._id},
       });
+
+      await ThunderRecord.findByIdAndDelete(record._id);
     } else {
       throw errorGenerator({
         msg: message.FORBIDDEN,
