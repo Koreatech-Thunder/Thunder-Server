@@ -69,9 +69,12 @@ const deleteUser = async (userId: string) => {
       thunderList.push(record.thunderId);
     }
 
+    const currentTime = new Date().getDate() + 3600000 * 9;
+
     const thunderNotToDelete = await Thunder.find({
       $in: thunderList,
       'members.0': {$in: idList},
+      deadline: {$gt: currentTime},
     });
 
     if (thunderNotToDelete) {
