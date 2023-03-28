@@ -31,7 +31,7 @@ const findThunderById = async (thunderId: string): Promise<ThunderInfo> => {
 const dateFormat = async (date: Date): Promise<string> => {
   let month: string | number = date.getMonth() + 1;
   let day: string | number = date.getDate();
-  let hour: string | number = date.getHours();
+  let hour: string | number = date.getUTCHours();
   let minute: string | number = date.getMinutes();
 
   month = month >= 10 ? month : '0' + month;

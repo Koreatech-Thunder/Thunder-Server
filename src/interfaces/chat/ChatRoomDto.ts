@@ -5,6 +5,6 @@ export interface ChatRoomDto {
   title: string;
   limitMemberCnt: number;
   joinMemberCnt: number;
-  endTime: Date;
+  endTime: string;
   lastChat: ChatInfo | null;
 }

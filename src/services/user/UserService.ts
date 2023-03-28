@@ -169,24 +169,21 @@ const findUserThunderRecord = async (
     const currentTime = new Date().getTime() + 3600000 * 9; //현재 날짜 및 시간
     const user = await User.findById(userId);
 
-    const thunder = await Thunder.find({
-      deadline: {$lt: currentTime},
-      _id: {$in: user.thunderRecords},
-    });
-
     const thunderRecord: UserThunderRecordResponseDto[] = [];
 
     await Promise.all(
-      user!.thunderRecords.map(async (id: mongoose.Schema.Types.ObjectId) => {
+      user!.thunderRecords.map(async id => {
         const record = await ThunderRecord.findById(id);
         const thunder = await Thunder.findById(record.thunderId);
 
-        thunderRecord.push({
-          thunderId: thunder!._id,
-          title: thunder!.title,
-          hashtags: thunder!.hashtags,
-          deadline: await ThunderServiceUtils.dateFormat(thunder!.deadline),
-        });
+        if (thunder.deadline.getTime() < currentTime) {
+          thunderRecord.push({
+            thunderId: thunder!._id,
+            title: thunder!.title,
+            hashtags: thunder!.hashtags,
+            deadline: await ThunderServiceUtils.dateFormat(thunder!.deadline),
+          });
+        }
       }),
     );
 
