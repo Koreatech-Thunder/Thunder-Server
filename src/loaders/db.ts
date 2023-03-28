@@ -62,7 +62,7 @@ const connectDB = async () => {
             msg: message.FCM_ERROR,
             statusCode: statusCode.INTERNAL_SERVER_ERROR,
           });
-        });*/
+        });
     }
     */
   } catch (err: any) {

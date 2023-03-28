@@ -1,8 +1,10 @@
 import mongoose from 'mongoose';
 
-export interface UserThunderRecordResponseDto {
+export interface ThunderFindResponseDto {
   thunderId: mongoose.Types.ObjectId;
   title: string;
-  hashtags: string[];
   deadline: string;
+  content: string;
+  hashtags: string[];
+  limitMembersCnt: number;
 }

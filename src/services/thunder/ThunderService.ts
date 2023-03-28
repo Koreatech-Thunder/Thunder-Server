@@ -4,6 +4,7 @@ import {ThunderCreateDto} from '../../interfaces/thunder/ThunderCreateDto';
 import {ThunderResponseDto} from '../../interfaces/thunder/ThunderResponseDto';
 import {ThunderUpdateDto} from '../../interfaces/thunder/ThunderUpdateDto';
 import {ThunderMembersDto} from '../../interfaces/thunder/ThunderMembersDto';
+import {ThunderFindResponseDto} from '../../interfaces/thunder/ThunderFindResponseDto';
 import Thunder from '../../models/Thunder';
 import message from '../../modules/message';
 import statusCode from '../../modules/statusCode';
@@ -104,7 +105,6 @@ const findThunderAll = async (
 
         const thunderMembers: ThunderMembersDto[] = [];
         await Promise.all(
-
           thunder.members.map(async (member: any) => {
             const user = await PersonalChatRoom.findById(member).populate(
               'userId',
@@ -195,7 +195,6 @@ const findThunderByHashtag = async (
 
         const thunderMembers: ThunderMembersDto[] = [];
         await Promise.all(
-
           thunder.members.map(async (member: any) => {
             const user = await PersonalChatRoom.findById(member).populate(
               'userId',
@@ -258,11 +257,14 @@ const findThunderByHashtag = async (
   }
 };
 
-const findThunder = async (thunderId: string): Promise<ThunderUpdateDto> => {
+const findThunder = async (
+  thunderId: string,
+): Promise<ThunderFindResponseDto> => {
   try {
     const thunder = await ThunderServiceUtils.findThunderById(thunderId);
 
-    const data: ThunderUpdateDto = {
+    const data: ThunderFindResponseDto = {
+      thunderId: thunder.thunderId,
       title: thunder.title,
       deadline: await ThunderServiceUtils.dateFormat(thunder.deadline),
       content: thunder.content,
@@ -289,7 +291,6 @@ const updateThunder = async (
     for (let member of thunder.members) {
       const info = await PersonalChatRoom.findById(member);
       idList.push(info.userId);
-
     }
 
     const isMembers: string = await ThunderServiceUtils.findMemberById(
@@ -389,7 +390,6 @@ const outThunder = async (userId: string, thunderId: string): Promise<void> => {
       }
 
       idList.push(info.userId);
-
     }
 
     const isMembers: string = await ThunderServiceUtils.findMemberById(
