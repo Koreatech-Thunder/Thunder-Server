@@ -104,7 +104,6 @@ const findThunderAll = async (
 
         const thunderMembers: ThunderMembersDto[] = [];
         await Promise.all(
-
           thunder.members.map(async (member: any) => {
             const user = await PersonalChatRoom.findById(member).populate(
               'userId',
@@ -195,7 +194,6 @@ const findThunderByHashtag = async (
 
         const thunderMembers: ThunderMembersDto[] = [];
         await Promise.all(
-
           thunder.members.map(async (member: any) => {
             const user = await PersonalChatRoom.findById(member).populate(
               'userId',
@@ -289,7 +287,6 @@ const updateThunder = async (
     for (let member of thunder.members) {
       const info = await PersonalChatRoom.findById(member);
       idList.push(info.userId);
-
     }
 
     const isMembers: string = await ThunderServiceUtils.findMemberById(
@@ -389,7 +386,6 @@ const outThunder = async (userId: string, thunderId: string): Promise<void> => {
       }
 
       idList.push(info.userId);
-
     }
 
     const isMembers: string = await ThunderServiceUtils.findMemberById(
@@ -398,11 +394,13 @@ const outThunder = async (userId: string, thunderId: string): Promise<void> => {
     ); //idList에 있는 ID들을 가진 유저 정보를 검색.
 
     if (isMembers == 'MEMBER') {
-      await Thunder.updateOne({_id: thunderId}, {$pull: {members: myInfo._id}});
+      await Thunder.findByIdAndUpdate(thunderId, {
+        $pull: {members: myInfo._id},
+      });
 
       await PersonalChatRoom.findByIdAndDelete(myInfo._id);
 
-      const record = await ThunderRecord.findByIdAndDelete({
+      const record = await ThunderRecord.findOne({
         thunderId: thunderId,
         userId: userId,
       });
