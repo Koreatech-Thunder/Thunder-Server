@@ -406,10 +406,12 @@ const outThunder = async (userId: string, thunderId: string): Promise<void> => {
 
       const user = await User.findById(userId);
 
-      const record = await ThunderRecord.findOne({
-        thunderId: thunderId,
-        $in: user.thunderRecords,
-      });
+      const record = await ThunderRecord.findById(
+        {$in: user.thunderRecords},
+        {
+          thunderId: thunderId,
+        },
+      );
 
       await User.findByIdAndUpdate(userId, {
         $pull: {thunderRecords: record._id},
