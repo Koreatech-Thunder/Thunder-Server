@@ -30,7 +30,7 @@ const createThunder = async (
 
     const thunder = new Thunder({
       title: thunderCreateDto.title,
-      deadline: new Date(thunderCreateDto.deadline).getTime() + 3600000 * 9,
+      deadline: new Date(thunderCreateDto.deadline).getTime(), //아마존 서버 상에서는 정상 작동.
       hashtags: thunderCreateDto.hashtags,
       content: thunderCreateDto.content,
       limitMembersCnt: thunderCreateDto.limitMembersCnt,
