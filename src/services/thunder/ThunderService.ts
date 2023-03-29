@@ -404,9 +404,11 @@ const outThunder = async (userId: string, thunderId: string): Promise<void> => {
 
       await PersonalChatRoom.findByIdAndDelete(myInfo._id);
 
+      const user = await User.findById(userId);
+
       const record = await ThunderRecord.findOne({
         thunderId: thunderId,
-        userId: userId,
+        $in: user.thunderRecords,
       });
 
       await User.findByIdAndUpdate(userId, {
