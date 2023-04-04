@@ -8,12 +8,11 @@ import {UserHashtagResponseDto} from '../../interfaces/user/UserHashtagResponseD
 import {UserThunderRecordResponseDto} from '../../interfaces/user/UserThunderRecordResponseDto';
 import {UserAlarmStateResponseDto} from '../../interfaces/user/UserAlarmStateResponseDto';
 import {UserInfo} from '../../interfaces/user/UserInfo';
-import ThunderServiceUtils from '../../services/thunder/ThunderServiceUtils';
 import message from '../../modules/message';
 import Thunder from '../../models/Thunder';
 import PersonalChatRoom from '../../models/PersonalChatRoom';
-import mongoose from 'mongoose';
 import ThunderRecord from '../../models/ThunderRecord';
+import dayjs from 'dayjs';
 
 const findUserById = async (userId: string) => {
   try {
@@ -169,21 +168,27 @@ const findUserThunderRecord = async (
     const currentTime = new Date().getTime() + 3600000 * 9; //현재 날짜 및 시간
     const user = await User.findById(userId);
 
+    //시간이 지난 번개 가져오기
+    //최근에 끝난 것이 가장 위에
+    const thunder = await Thunder.find({
+      deadline: {$lt: currentTime},
+      _id: {$in: user.thunderRecords},
+    }).sort({createdAt: 'desc'});
+
     const thunderRecord: UserThunderRecordResponseDto[] = [];
 
     await Promise.all(
-      user!.thunderRecords.map(async id => {
+      user!.thunderRecords.map(async (id: any) => {
         const record = await ThunderRecord.findById(id);
         const thunder = await Thunder.findById(record.thunderId);
 
-        if (thunder.deadline.getTime() < currentTime) {
-          thunderRecord.push({
-            thunderId: thunder!._id,
-            title: thunder!.title,
-            hashtags: thunder!.hashtags,
-            deadline: await ThunderServiceUtils.dateFormat(thunder!.deadline),
-          });
-        }
+        thunderRecord.push({
+          thunderId: thunder!._id,
+          title: thunder!.title,
+          hashtags: thunder!.hashtags,
+          deadline: dayjs(thunder.deadline).format('YYYY-MM-DD HH:mm'),
+        });
+
       }),
     );
 
