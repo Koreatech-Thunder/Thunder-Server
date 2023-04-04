@@ -259,8 +259,15 @@ const findThunder = async (
   try {
     const thunder = await ThunderServiceUtils.findThunderById(thunderId);
 
+    if (!thunder) {
+      throw errorGenerator({
+        msg: message.NOT_FOUND_ROOM,
+        statusCode: statusCode.NOT_FOUND,
+      });
+    }
+
     const data: ThunderFindResponseDto = {
-      thunderId: thunder.thunderId,
+      thunderId: thunderId,
       title: thunder.title,
       deadline: dayjs(thunder.deadline).format('YYYY-MM-DD HH:mm'),
       content: thunder.content,

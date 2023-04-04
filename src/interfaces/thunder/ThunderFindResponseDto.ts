@@ -1,7 +1,5 @@
-import mongoose from 'mongoose';
-
 export interface ThunderFindResponseDto {
-  thunderId: mongoose.Types.ObjectId;
+  thunderId: string;
   title: string;
   deadline: string;
   content: string;
