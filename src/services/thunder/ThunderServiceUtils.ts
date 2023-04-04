@@ -6,11 +6,11 @@ import statusCode from '../../modules/statusCode';
 
 const findMemberById = async (userId: string, list: any): Promise<string> => {
   var i = 0;
-  if (list[0].toString() == userId) {
+  if (list[0]._id.toString() == userId) {
     return 'HOST';
   }
   for (i = 1; i < list.length; i++) {
-    if (list[i].toString() == userId) {
+    if (list[i]._id.toString() == userId) {
       return 'MEMBER';
     }
   }

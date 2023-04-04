@@ -13,7 +13,6 @@ import PersonalChatRoom from '../../models/PersonalChatRoom';
 import {ChatRoomDetailDto} from '../../interfaces/chat/ChatRoomDetailDto';
 import {ChatUserDto} from '../../interfaces/chat/ChatUserDto';
 import {ChatInfo} from '../../interfaces/chat/ChatInfo';
-import ThunderServiceUtils from '../thunder/ThunderServiceUtils';
 import dayjs from 'dayjs';
 
 const getChatRooms = async (userId: string): Promise<ChatRoomDto[]> => {
