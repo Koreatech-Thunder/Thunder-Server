@@ -188,6 +188,7 @@ const findUserThunderRecord = async (
           hashtags: thunder!.hashtags,
           deadline: dayjs(thunder.deadline).format('YYYY-MM-DD HH:mm'),
         });
+
       }),
     );
 

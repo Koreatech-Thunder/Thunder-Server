@@ -32,7 +32,7 @@ const createThunder = async (
 
     const thunder = new Thunder({
       title: thunderCreateDto.title,
-      deadline: new Date(thunderCreateDto.deadline).getTime() + 3600000 * 9,
+      deadline: new Date(thunderCreateDto.deadline).getTime(), //아마존 서버 상에서는 정상 작동.
       hashtags: thunderCreateDto.hashtags,
       content: thunderCreateDto.content,
       limitMembersCnt: thunderCreateDto.limitMembersCnt,
@@ -393,13 +393,17 @@ const outThunder = async (userId: string, thunderId: string): Promise<void> => {
     ); //idList에 있는 ID들을 가진 유저 정보를 검색.
 
     if (isMembers == 'MEMBER') {
-      await Thunder.updateOne({_id: thunderId}, {$pull: {members: myInfo._id}});
+      await Thunder.findByIdAndUpdate(thunderId, {
+        $pull: {members: myInfo._id},
+      });
 
       await PersonalChatRoom.findByIdAndDelete(myInfo._id);
 
-      const record = await ThunderRecord.findByIdAndDelete({
+      const user = await User.findById(userId);
+
+      const record = await ThunderRecord.findOne({
+        _id: {$in: user.thunderRecords},
         thunderId: thunderId,
-        userId: userId,
       });
 
       await User.findByIdAndUpdate(userId, {
