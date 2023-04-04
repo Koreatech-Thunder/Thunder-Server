@@ -94,23 +94,24 @@ const findThunderAll = async (
       thunderlist.map(async (thunder: any) => {
         const idList: mongoose.Schema.Types.ObjectId[] = []; // User._id[]
 
-        const thunderMembers: ThunderMembersDto[] = await Promise.all(
-          thunder.members.map(async (member: any) => {
-            const user = await PersonalChatRoom.findById(member).populate(
-              'userId',
-            );
+        const thunderMembers: ThunderMembersDto[] = [];
 
-            idList.push(user.userId);
-            var result = {
-              userId: (user.userId as any)._id,
-              name: (user.userId as any).name,
-              introduction: (user.userId as any).introduction,
-              hashtags: (user.userId as any).hashtags,
-              mannerTemperature: (user.userId as any).mannerTemperature,
-            };
-            return result;
-          }),
-        );
+        for (const member of thunder.members) {
+          const user = await PersonalChatRoom.findById(member).populate(
+            'userId',
+          );
+          idList.push(user.userId);
+
+          const result = {
+            userId: (user.userId as any)._id,
+            name: (user.userId as any).name,
+            introduction: (user.userId as any).introduction,
+            hashtags: (user.userId as any).hashtags,
+            mannerTemperature: (user.userId as any).mannerTemperature,
+          };
+
+          thunderMembers.push(result);
+        }
 
         const isMembers = await ThunderServiceUtils.findMemberById(
           userId,
@@ -180,23 +181,24 @@ const findThunderByHashtag = async (
       thunderlist.map(async (thunder: any) => {
         const idList: mongoose.Schema.Types.ObjectId[] = []; // User._id[]
 
-        const thunderMembers: ThunderMembersDto[] = await Promise.all(
-          thunder.members.map(async (member: any) => {
-            const user = await PersonalChatRoom.findById(member).populate(
-              'userId',
-            );
+        const thunderMembers: ThunderMembersDto[] = [];
 
-            idList.push(user.userId);
-            var result = {
-              userId: (user.userId as any)._id,
-              name: (user.userId as any).name,
-              introduction: (user.userId as any).introduction,
-              hashtags: (user.userId as any).hashtags,
-              mannerTemperature: (user.userId as any).mannerTemperature,
-            };
-            return result;
-          }),
-        );
+        for (const member of thunder.members) {
+          const user = await PersonalChatRoom.findById(member).populate(
+            'userId',
+          );
+          idList.push(user.userId);
+
+          const result = {
+            userId: (user.userId as any)._id,
+            name: (user.userId as any).name,
+            introduction: (user.userId as any).introduction,
+            hashtags: (user.userId as any).hashtags,
+            mannerTemperature: (user.userId as any).mannerTemperature,
+          };
+
+          thunderMembers.push(result);
+        }
 
         const isMembers = await ThunderServiceUtils.findMemberById(
           userId,
