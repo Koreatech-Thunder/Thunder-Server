@@ -36,34 +36,6 @@ const connectDB = async () => {
     mongoose.set('autoCreate', true);
 
     console.log('Mongoose Connected ...');
-
-    const user = await User.find({isLogOut: false});
-
-    for (let i = 0; i < user.length; i++) {
-      //서버 켜졌을 시 푸시알림 테스트용
-
-      let alarm = {
-        notification: {
-          title: pushMessageTemplate.title,
-          body: pushMessageTemplate.body,
-        },
-        token: user[i].fcmToken as string,
-      };
-
-      firebase
-        .messaging()
-        .send(alarm)
-        .then(function (res: any) {
-          console.log('성공적으로 메시지 발송 완료: ', res);
-        })
-        .catch(function (err: any) {
-          console.log('다음 메시지를 보내는 데 에러 발생: ', err);
-          throw errorGenerator({
-            msg: message.FCM_ERROR,
-            statusCode: statusCode.INTERNAL_SERVER_ERROR,
-          });
-        });
-    }
   } catch (err: any) {
     console.error(err.message);
     process.exit(1);

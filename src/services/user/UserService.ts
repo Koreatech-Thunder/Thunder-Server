@@ -77,12 +77,14 @@ const deleteUser = async (userId: string) => {
     const currentTime = new Date().getDate() + 3600000 * 9;
 
     const thunderNotToDelete = await Thunder.find({
-      $in: thunderList,
+      _id: {$in: thunderList},
       'members.0': {$in: idList},
       deadline: {$gt: currentTime},
     });
 
-    if (thunderNotToDelete) {
+    console.log(thunderNotToDelete);
+
+    if (thunderNotToDelete.length > 0) {
       throw errorGenerator({
         msg: message.USER_CANNOT_DELETE,
         statusCode: statusCode.FORBIDDEN,
