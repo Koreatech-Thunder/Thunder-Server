@@ -3,6 +3,13 @@ const app = express();
 import connectDB from './loaders/db';
 import routes from '././routes';
 require('dotenv').config();
+const jwt = require('jsonwebtoken');
+import chattingHandler from './modules/chattingHandler';
+import {ThunderInfo} from './interfaces/thunder/ThunderInfo';
+import {UserInfo} from './interfaces/user/UserInfo';
+import {PersonalChatRoomInfo} from './interfaces/chat/PersonalChatRoomInfo';
+import {ObjectId} from 'mongoose';
+import PersonalChatRoom from './models/PersonalChatRoom';
 
 connectDB();
 
@@ -29,7 +36,7 @@ app.use(function (err: ErrorType, req: Request, res: Response) {
   res.render('error');
 });
 
-app
+const server = app
   .listen(process.env.PORT, () => {
     console.log(`
     ################################################
@@ -42,3 +49,25 @@ app
     console.error(err);
     process.exit(1);
   });
+
+const socketio = require('socket.io');
+
+const io = socketio(server, {path: '/socket.io'});
+io.on('connect', (socket: any) => {
+  console.log(`Connection : SocketId = ${socket.id}`);
+
+  socket.on('subscribeChatRoom', async () => {
+    const userId = jwt.verify(
+      socket.handshake.headers.authorization,
+      process.env.SECRET_KEY,
+    );
+    const thunders: ThunderInfo[] = await chattingHandler.getThunders(userId);
+
+    thunders.forEach(function (thunder: ThunderInfo) {
+      const tempMember = [];
+      thunder.members.forEach(function (member: ObjectId) {
+        if(PersonalChatRoom.findOne({_id: member}).populate("userId"))
+      });
+    });
+  });
+});
