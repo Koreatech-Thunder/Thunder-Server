@@ -1,10 +1,10 @@
 import errorGenerator from '../../errors/errorGenerator';
 import {PostBaseResponseDto} from '../../interfaces/common/PostBaseResponseDto';
-import {ThunderCreateDto} from '../../interfaces/thunder/ThunderCreateDto';
-import {ThunderResponseDto} from '../../interfaces/thunder/ThunderResponseDto';
-import {ThunderUpdateDto} from '../../interfaces/thunder/ThunderUpdateDto';
-import {ThunderMembersDto} from '../../interfaces/thunder/ThunderMembersDto';
-import {ThunderFindResponseDto} from '../../interfaces/thunder/ThunderFindResponseDto';
+import {ThunderCreateDto} from '../../interfaces/thunder/request/ThunderCreateRequestDto';
+import {ThunderResponseDto} from '../../interfaces/thunder/response/ThunderFindResponseDto';
+import {ThunderUpdateDto} from '../../interfaces/thunder/request/ThunderUpdateRequestDto';
+import {ThunderMembersDto} from '../../interfaces/thunder/request/ThunderMembersRequestDto';
+import {ThunderFindResponseDto} from '../../interfaces/thunder/response/ThunderFindOneResponseDto';
 import Thunder from '../../models/Thunder';
 import message from '../../modules/message';
 import statusCode from '../../modules/statusCode';
@@ -79,9 +79,7 @@ const createThunder = async (
   }
 };
 
-const findThunderAll = async (
-  userId: string,
-): Promise<ThunderResponseDto[]> => {
+const getThunderAll = async (userId: string): Promise<ThunderResponseDto[]> => {
   try {
     const currentTime = new Date().getTime() + 3600000 * 9; //현재 날짜 및 시간
 
@@ -113,7 +111,7 @@ const findThunderAll = async (
           thunderMembers.push(result);
         }
 
-        const isMembers = await ThunderServiceUtils.findMemberById(
+        const isMembers = await ThunderServiceUtils.getMemberById(
           userId,
           idList,
         );
@@ -166,7 +164,7 @@ const findThunderAll = async (
   }
 };
 
-const findThunderByHashtag = async (
+const getThunderByHashtag = async (
   hashtag: string,
   userId: string,
 ): Promise<ThunderResponseDto[]> => {
@@ -200,7 +198,7 @@ const findThunderByHashtag = async (
           thunderMembers.push(result);
         }
 
-        const isMembers = await ThunderServiceUtils.findMemberById(
+        const isMembers = await ThunderServiceUtils.getMemberById(
           userId,
           idList,
         );
@@ -253,11 +251,11 @@ const findThunderByHashtag = async (
   }
 };
 
-const findThunder = async (
+const getThunderOne = async (
   thunderId: string,
 ): Promise<ThunderFindResponseDto> => {
   try {
-    const thunder = await ThunderServiceUtils.findThunderById(thunderId);
+    const thunder = await ThunderServiceUtils.getThunderById(thunderId);
 
     const data: ThunderFindResponseDto = {
       thunderId: thunderId,
@@ -281,7 +279,7 @@ const updateThunder = async (
   thunderUpdateDto: ThunderUpdateDto,
 ): Promise<void> => {
   try {
-    const thunder = await ThunderServiceUtils.findThunderById(thunderId);
+    const thunder = await ThunderServiceUtils.getThunderById(thunderId);
 
     const idList = []; // User._id[]
 
@@ -290,7 +288,7 @@ const updateThunder = async (
       idList.push(info.userId);
     }
 
-    const isMembers: string = await ThunderServiceUtils.findMemberById(
+    const isMembers: string = await ThunderServiceUtils.getMemberById(
       userId,
       idList,
     );
@@ -314,7 +312,7 @@ const joinThunder = async (
   thunderId: string,
 ): Promise<void> => {
   try {
-    const thunder = await ThunderServiceUtils.findThunderById(thunderId);
+    const thunder = await ThunderServiceUtils.getThunderById(thunderId);
 
     if (thunder.members.length >= thunder.limitMembersCnt) {
       throw errorGenerator({
@@ -330,7 +328,7 @@ const joinThunder = async (
       idList.push(info.userId);
     }
 
-    const isMembers: string = await ThunderServiceUtils.findMemberById(
+    const isMembers: string = await ThunderServiceUtils.getMemberById(
       userId,
       idList,
     );
@@ -373,7 +371,7 @@ const joinThunder = async (
 
 const outThunder = async (userId: string, thunderId: string): Promise<void> => {
   try {
-    const thunder = await ThunderServiceUtils.findThunderById(thunderId);
+    const thunder = await ThunderServiceUtils.getThunderById(thunderId);
 
     const members = thunder.members; // members = [ObjectId] -> ref: PersonalRoomInfo
     const idList = []; // PersonalRoomInfo에 저장된 UserId.
@@ -389,7 +387,7 @@ const outThunder = async (userId: string, thunderId: string): Promise<void> => {
       idList.push(info.userId);
     }
 
-    const isMembers: string = await ThunderServiceUtils.findMemberById(
+    const isMembers: string = await ThunderServiceUtils.getMemberById(
       userId,
       idList,
     ); //idList에 있는 ID들을 가진 유저 정보를 검색.
@@ -427,9 +425,9 @@ const outThunder = async (userId: string, thunderId: string): Promise<void> => {
 
 export default {
   createThunder,
-  findThunderAll,
-  findThunderByHashtag,
-  findThunder,
+  getThunderAll,
+  getThunderByHashtag,
+  getThunderOne,
   updateThunder,
   joinThunder,
   outThunder,
