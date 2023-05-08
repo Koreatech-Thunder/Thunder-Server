@@ -7,6 +7,6 @@ export interface UserInfo {
   isLogOut?: Boolean;
   kakaoId?: String;
   fcmToken?: String;
-  thunderRecords?: [mongoose.Schema.Types.ObjectId];
+  thunderRecords?: mongoose.Schema.Types.ObjectId[];
   isAlarms?: [Boolean];
 }

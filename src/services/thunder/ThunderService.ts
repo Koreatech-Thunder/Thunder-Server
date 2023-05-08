@@ -4,6 +4,7 @@ import {ThunderCreateDto} from '../../interfaces/thunder/ThunderCreateDto';
 import {ThunderResponseDto} from '../../interfaces/thunder/ThunderResponseDto';
 import {ThunderUpdateDto} from '../../interfaces/thunder/ThunderUpdateDto';
 import {ThunderMembersDto} from '../../interfaces/thunder/ThunderMembersDto';
+import {ThunderFindResponseDto} from '../../interfaces/thunder/ThunderFindResponseDto';
 import Thunder from '../../models/Thunder';
 import message from '../../modules/message';
 import statusCode from '../../modules/statusCode';
@@ -12,6 +13,8 @@ import User from '../../models/User';
 import pushHandler from '../../modules/pushHandler';
 import PersonalChatRoom from '../../models/PersonalChatRoom';
 import ThunderRecord from '../../models/ThunderRecord';
+import dayjs from 'dayjs';
+import mongoose from 'mongoose';
 
 const createThunder = async (
   thunderCreateDto: ThunderCreateDto,
@@ -29,7 +32,7 @@ const createThunder = async (
 
     const thunder = new Thunder({
       title: thunderCreateDto.title,
-      deadline: new Date(thunderCreateDto.deadline).getTime() + 3600000 * 9,
+      deadline: new Date(thunderCreateDto.deadline).getTime(), //아마존 서버 상에서는 정상 작동.
       hashtags: thunderCreateDto.hashtags,
       content: thunderCreateDto.content,
       limitMembersCnt: thunderCreateDto.limitMembersCnt,
@@ -82,19 +85,32 @@ const findThunderAll = async (
   try {
     const currentTime = new Date().getTime() + 3600000 * 9; //현재 날짜 및 시간
 
+    //시간이 지나지 않은 번개방을 가져오기
     const thunderlist = await Thunder.find({
       deadline: {$gt: currentTime},
     }).sort({createdAt: 'desc'});
 
-    const allThunder: ThunderResponseDto[] = [];
-
-    await Promise.all(
+    const allThunder: ThunderResponseDto[] = await Promise.all(
       thunderlist.map(async (thunder: any) => {
-        const idList = []; // User._id[]
+        const idList: mongoose.Schema.Types.ObjectId[] = []; // User._id[]
 
-        for (let member of thunder.members) {
-          const info = await PersonalChatRoom.findById(member); //PersonalRoomInfo
-          idList.push(info.userId);
+        const thunderMembers: ThunderMembersDto[] = [];
+
+        for (const member of thunder.members) {
+          const user = await PersonalChatRoom.findById(member).populate(
+            'userId',
+          );
+          idList.push(user.userId);
+
+          const result = {
+            userId: (user.userId as any)._id,
+            name: (user.userId as any).name,
+            introduction: (user.userId as any).introduction,
+            hashtags: (user.userId as any).hashtags,
+            mannerTemperature: (user.userId as any).mannerTemperature,
+          };
+
+          thunderMembers.push(result);
         }
 
         const isMembers = await ThunderServiceUtils.findMemberById(
@@ -102,61 +118,44 @@ const findThunderAll = async (
           idList,
         );
 
-        const thunderMembers: ThunderMembersDto[] = [];
-        await Promise.all(
-
-          thunder.members.map(async (member: any) => {
-            const user = await PersonalChatRoom.findById(member).populate(
-              'userId',
-            );
-
-            thunderMembers.push({
-              userId: (user.userId as any)._id,
-              name: (user.userId as any).name,
-              introduction: (user.userId as any).introduction,
-              hashtags: (user.userId as any).hashtags,
-              mannerTemperature: (user.userId as any).mannerTemperature,
-            });
-          }),
-        );
-
         if (isMembers == 'HOST') {
-          allThunder.push({
+          var result = {
             thunderId: thunder._id,
             title: thunder.title,
-            deadline: await ThunderServiceUtils.dateFormat(thunder.deadline),
+            deadline: dayjs(thunder.deadline).format('YYYY-MM-DD HH:mm'),
             content: thunder.content,
             hashtags: thunder.hashtags,
             chats: thunder.chats,
             members: thunderMembers,
             limitMembersCnt: thunder.limitMembersCnt,
             thunderState: 'HOST',
-          });
+          };
         } else if (isMembers == 'NON_MEMBER') {
-          allThunder.push({
+          var result = {
             thunderId: thunder._id,
             title: thunder.title,
-            deadline: await ThunderServiceUtils.dateFormat(thunder.deadline),
+            deadline: dayjs(thunder.deadline).format('YYYY-MM-DD HH:mm'),
             content: thunder.content,
             hashtags: thunder.hashtags,
             chats: thunder.chats,
             members: thunderMembers,
             limitMembersCnt: thunder.limitMembersCnt,
             thunderState: 'NON_MEMBER',
-          });
+          };
         } else {
-          allThunder.push({
+          var result = {
             thunderId: thunder._id,
             title: thunder.title,
-            deadline: await ThunderServiceUtils.dateFormat(thunder.deadline),
+            deadline: dayjs(thunder.deadline).format('YYYY-MM-DD HH:mm'),
             content: thunder.content,
             hashtags: thunder.hashtags,
             chats: thunder.chats,
             members: thunderMembers,
             limitMembersCnt: thunder.limitMembersCnt,
             thunderState: 'MEMBER',
-          });
+          };
         }
+        return result;
       }),
     );
 
@@ -178,76 +177,72 @@ const findThunderByHashtag = async (
       deadline: {$gt: currentTime},
     }).sort({createdAt: 'desc'});
 
-    const hashtagthunder: ThunderResponseDto[] = [];
-    await Promise.all(
+    const hashtagthunder: ThunderResponseDto[] = await Promise.all(
       thunderlist.map(async (thunder: any) => {
-        const idList = []; // User._id[]
+        const idList: mongoose.Schema.Types.ObjectId[] = []; // User._id[]
 
-        for (let member of thunder.members) {
-          const info = await PersonalChatRoom.findById(member);
-          idList.push(info.userId);
+        const thunderMembers: ThunderMembersDto[] = [];
+
+        for (const member of thunder.members) {
+          const user = await PersonalChatRoom.findById(member).populate(
+            'userId',
+          );
+          idList.push(user.userId);
+
+          const result = {
+            userId: (user.userId as any)._id,
+            name: (user.userId as any).name,
+            introduction: (user.userId as any).introduction,
+            hashtags: (user.userId as any).hashtags,
+            mannerTemperature: (user.userId as any).mannerTemperature,
+          };
+
+          thunderMembers.push(result);
         }
 
-        const isMembers: string = await ThunderServiceUtils.findMemberById(
+        const isMembers = await ThunderServiceUtils.findMemberById(
           userId,
           idList,
         );
 
-        const thunderMembers: ThunderMembersDto[] = [];
-        await Promise.all(
-
-          thunder.members.map(async (member: any) => {
-            const user = await PersonalChatRoom.findById(member).populate(
-              'userId',
-            );
-
-            thunderMembers.push({
-              userId: (user.userId as any)._id,
-              name: (user.userId as any).name,
-              introduction: (user.userId as any).introduction,
-              hashtags: (user.userId as any).hashtags,
-              mannerTemperature: (user.userId as any).mannerTemperature,
-            });
-          }),
-        );
-
         if (isMembers == 'HOST') {
-          hashtagthunder.push({
+          var result = {
             thunderId: thunder._id,
             title: thunder.title,
-            deadline: await ThunderServiceUtils.dateFormat(thunder.deadline),
+            deadline: dayjs(thunder.deadline).format('YYYY-MM-DD HH:mm'),
             content: thunder.content,
             hashtags: thunder.hashtags,
             chats: thunder.chats,
             members: thunderMembers,
             limitMembersCnt: thunder.limitMembersCnt,
             thunderState: 'HOST',
-          });
+          };
         } else if (isMembers == 'NON_MEMBER') {
-          hashtagthunder.push({
+          var result = {
             thunderId: thunder._id,
             title: thunder.title,
-            deadline: await ThunderServiceUtils.dateFormat(thunder.deadline),
+            deadline: dayjs(thunder.deadline).format('YYYY-MM-DD HH:mm'),
             content: thunder.content,
             hashtags: thunder.hashtags,
             chats: thunder.chats,
             members: thunderMembers,
             limitMembersCnt: thunder.limitMembersCnt,
             thunderState: 'NON_MEMBER',
-          });
+          };
         } else {
-          hashtagthunder.push({
+          var result = {
             thunderId: thunder._id,
             title: thunder.title,
-            deadline: await ThunderServiceUtils.dateFormat(thunder.deadline),
+            deadline: dayjs(thunder.deadline).format('YYYY-MM-DD HH:mm'),
             content: thunder.content,
             hashtags: thunder.hashtags,
             chats: thunder.chats,
             members: thunderMembers,
             limitMembersCnt: thunder.limitMembersCnt,
             thunderState: 'MEMBER',
-          });
+          };
         }
+        return result;
       }),
     );
 
@@ -258,13 +253,16 @@ const findThunderByHashtag = async (
   }
 };
 
-const findThunder = async (thunderId: string): Promise<ThunderUpdateDto> => {
+const findThunder = async (
+  thunderId: string,
+): Promise<ThunderFindResponseDto> => {
   try {
     const thunder = await ThunderServiceUtils.findThunderById(thunderId);
 
-    const data: ThunderUpdateDto = {
+    const data: ThunderFindResponseDto = {
+      thunderId: thunderId,
       title: thunder.title,
-      deadline: await ThunderServiceUtils.dateFormat(thunder.deadline),
+      deadline: dayjs(thunder.deadline).format('YYYY-MM-DD HH:mm'),
       content: thunder.content,
       hashtags: thunder.hashtags,
       limitMembersCnt: thunder.limitMembersCnt,
@@ -286,10 +284,10 @@ const updateThunder = async (
     const thunder = await ThunderServiceUtils.findThunderById(thunderId);
 
     const idList = []; // User._id[]
+
     for (let member of thunder.members) {
       const info = await PersonalChatRoom.findById(member);
       idList.push(info.userId);
-
     }
 
     const isMembers: string = await ThunderServiceUtils.findMemberById(
@@ -389,7 +387,6 @@ const outThunder = async (userId: string, thunderId: string): Promise<void> => {
       }
 
       idList.push(info.userId);
-
     }
 
     const isMembers: string = await ThunderServiceUtils.findMemberById(
@@ -398,13 +395,17 @@ const outThunder = async (userId: string, thunderId: string): Promise<void> => {
     ); //idList에 있는 ID들을 가진 유저 정보를 검색.
 
     if (isMembers == 'MEMBER') {
-      await Thunder.updateOne({_id: thunderId}, {$pull: {members: myInfo._id}});
+      await Thunder.findByIdAndUpdate(thunderId, {
+        $pull: {members: myInfo._id},
+      });
 
       await PersonalChatRoom.findByIdAndDelete(myInfo._id);
 
-      const record = await ThunderRecord.findByIdAndDelete({
+      const user = await User.findById(userId);
+
+      const record = await ThunderRecord.findOne({
+        _id: {$in: user.thunderRecords},
         thunderId: thunderId,
-        userId: userId,
       });
 
       await User.findByIdAndUpdate(userId, {

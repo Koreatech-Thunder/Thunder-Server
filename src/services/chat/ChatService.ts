@@ -13,6 +13,7 @@ import PersonalChatRoom from '../../models/PersonalChatRoom';
 import {ChatRoomDetailDto} from '../../interfaces/chat/ChatRoomDetailDto';
 import {ChatUserDto} from '../../interfaces/chat/ChatUserDto';
 import {ChatInfo} from '../../interfaces/chat/ChatInfo';
+import dayjs from 'dayjs';
 
 const getChatRooms = async (userId: string): Promise<ChatRoomDto[]> => {
   try {
@@ -45,7 +46,9 @@ const getChatRooms = async (userId: string): Promise<ChatRoomDto[]> => {
             statusCode: statusCode.NOT_FOUND,
           });
         }
-        const endTime = new Date(thunder.deadline.getDate() + 1); // 번개 종료 타임 설정.
+        const endTime = dayjs(thunder.deadline.getTime() + 3600000 * 24).format(
+          'YYYY-MM-DD HH:mm',
+        ); // 번개 종료 타임 설정.
         const lastChat: ChatInfo | null = await Chat.findById(
           // 마지막 채팅 설정.
           thunder.chats[thunder.chats.length - 1],

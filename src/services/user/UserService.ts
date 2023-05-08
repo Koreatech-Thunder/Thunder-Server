@@ -8,12 +8,12 @@ import {UserHashtagResponseDto} from '../../interfaces/user/UserHashtagResponseD
 import {UserThunderRecordResponseDto} from '../../interfaces/user/UserThunderRecordResponseDto';
 import {UserAlarmStateResponseDto} from '../../interfaces/user/UserAlarmStateResponseDto';
 import {UserInfo} from '../../interfaces/user/UserInfo';
-import ThunderServiceUtils from '../../services/thunder/ThunderServiceUtils';
 import message from '../../modules/message';
 import Thunder from '../../models/Thunder';
 import PersonalChatRoom from '../../models/PersonalChatRoom';
-import mongoose from 'mongoose';
 import ThunderRecord from '../../models/ThunderRecord';
+import dayjs from 'dayjs';
+import {Schema} from 'mongoose';
 
 const findUserById = async (userId: string) => {
   try {
@@ -50,8 +50,8 @@ const deleteUser = async (userId: string) => {
       });
     }
 
-    const idList = [];
-    const thunderList = [];
+    const idList: any[] = [];
+    const thunderList: Schema.Types.ObjectId[] = [];
 
     const personalRoomInfo = await PersonalChatRoom.find(
       {
@@ -60,47 +60,57 @@ const deleteUser = async (userId: string) => {
       '_id',
     ); // 해당 userId를 포함한 PersonalRoomInfo 전부 검색.
 
-    for (let info of personalRoomInfo) {
+    personalRoomInfo.forEach(info => {
       idList.push(info._id);
-    }
+    });
 
-    for (let recordId of user.thunderRecords) {
-      const record = await ThunderRecord.findById(recordId);
+    const thunderRecords = await ThunderRecord.find({
+      _id: {$in: user.thunderRecords},
+    });
+
+    const thunderRecordIds = thunderRecords.map(record => record._id);
+
+    thunderRecords.forEach(record => {
       thunderList.push(record.thunderId);
-    }
+    });
 
     const currentTime = new Date().getDate() + 3600000 * 9;
 
     const thunderNotToDelete = await Thunder.find({
-      $in: thunderList,
+      _id: {$in: thunderList},
       'members.0': {$in: idList},
       deadline: {$gt: currentTime},
     });
 
-    if (thunderNotToDelete) {
+    console.log(thunderNotToDelete);
+
+    if (thunderNotToDelete.length > 0) {
       throw errorGenerator({
         msg: message.USER_CANNOT_DELETE,
         statusCode: statusCode.FORBIDDEN,
       });
     } else {
+      const promises = [];
+
       for (let thunderId of thunderList) {
-        // 번개에서 사용자 id 빼기.
-        await Thunder.findByIdAndUpdate(thunderId, {
-          $pull: {members: {$in: idList}},
-        });
+        promises.push(
+          Thunder.findByIdAndUpdate(thunderId, {
+            $pull: {members: {$in: idList}},
+          }),
+        );
       }
 
-      for (let record of user.thunderRecords) {
-        //사용자 명의로 된 thunderRecord 삭제.
-        await ThunderRecord.findByIdAndDelete(record);
+      for (let record of thunderRecordIds) {
+        promises.push(ThunderRecord.findByIdAndDelete(record));
       }
 
       for (let info of idList) {
-        //사용자 명의로 된 PersonalRoomInfo 삭제.
-        await PersonalChatRoom.findByIdAndDelete(info);
+        promises.push(PersonalChatRoom.findByIdAndDelete(info));
       }
 
-      await User.findByIdAndDelete(userId); //최종적으로 사용자 정보 삭제.
+      promises.push(User.findByIdAndDelete(userId));
+
+      await Promise.all(promises);
     }
   } catch (error) {
     console.log(error);
@@ -166,18 +176,20 @@ const findUserThunderRecord = async (
   userId: string,
 ): Promise<UserThunderRecordResponseDto[]> => {
   try {
-    const currentTime = new Date(); //현재 날짜 및 시간
+    const currentTime = new Date().getTime() + 3600000 * 9; //현재 날짜 및 시간
     const user = await User.findById(userId);
 
+    //시간이 지난 번개 가져오기
+    //최근에 끝난 것이 가장 위에
     const thunder = await Thunder.find({
       deadline: {$lt: currentTime},
       _id: {$in: user.thunderRecords},
-    });
+    }).sort({createdAt: 'desc'});
 
     const thunderRecord: UserThunderRecordResponseDto[] = [];
 
     await Promise.all(
-      user!.thunderRecords.map(async (id: mongoose.Schema.Types.ObjectId) => {
+      user!.thunderRecords.map(async (id: any) => {
         const record = await ThunderRecord.findById(id);
         const thunder = await Thunder.findById(record.thunderId);
 
@@ -185,7 +197,7 @@ const findUserThunderRecord = async (
           thunderId: thunder!._id,
           title: thunder!.title,
           hashtags: thunder!.hashtags,
-          deadline: await ThunderServiceUtils.dateFormat(thunder!.deadline),
+          deadline: dayjs(thunder.deadline).format('YYYY-MM-DD HH:mm'),
         });
       }),
     );

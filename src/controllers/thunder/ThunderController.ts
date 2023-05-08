@@ -7,6 +7,7 @@ import statusCode from '../../modules/statusCode';
 import ThunderService from '../../services/thunder/ThunderService';
 import message from '../../modules/message';
 import {ThunderUpdateDto} from '../../interfaces/thunder/ThunderUpdateDto';
+import {ThunderFindResponseDto} from '../../interfaces/thunder/ThunderFindResponseDto';
 
 /**
  *
@@ -107,7 +108,9 @@ const findThunder = async (
   const {thunderId} = req.params;
 
   try {
-    const data: ThunderUpdateDto = await ThunderService.findThunder(thunderId);
+    const data: ThunderFindResponseDto = await ThunderService.findThunder(
+      thunderId,
+    );
 
     res.status(statusCode.OK).send(data);
   } catch (error: any) {
