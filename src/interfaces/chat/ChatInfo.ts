@@ -1,8 +1,8 @@
-import mongoose from 'mongoose';
+import {ObjectId} from 'mongoose';
 
 export interface ChatInfo {
-  id: mongoose.Schema.Types.ObjectId;
+  id: ObjectId;
   message: String;
-  sender: mongoose.Schema.Types.ObjectId;
-  createdAt: Date;
+  sender: String;
+  createdAt: Number;
 }
