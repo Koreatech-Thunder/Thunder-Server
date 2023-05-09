@@ -55,12 +55,12 @@ const reportChat = async (
   }
 
   const ChatReportsRequestDto: ChatReportsRequestDto = req.body; //key:value
-  const {userId} = req.params;
+  const {thunderId} = req.params;
 
   try {
     const data: PostBaseResponseDto = await ReportService.reportChat(
       ChatReportsRequestDto,
-      userId,
+      thunderId,
     );
 
     res.status(statusCode.CREATED).send(data);

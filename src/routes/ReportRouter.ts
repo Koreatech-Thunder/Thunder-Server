@@ -6,6 +6,6 @@ import auth from '../middlewares/auth';
 const router: Router = Router();
 
 router.post('/thunder/:thunderId', auth.auth, ReportController.reportThunder);
-router.post('/chat/:thunderId', auth.auth, ReportController.reportChat);
+router.post('/chat/:thunderId', ReportController.reportChat);
 
 export default router;
