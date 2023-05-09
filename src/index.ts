@@ -57,6 +57,8 @@ io.on('connect', (socket: any) => {
   console.log(`Connection : Socket Id = ${socket.id}`);
   const accessToken = socket.handshake.headers.authorization;
 
+  console.log(`연결 성공 - 소켓ID: ${socket.id}`);
+
   socket.on('subscribeChatRoom', () => {
     // 채팅방 목록 진입
     const userId: string = jwt.decode(accessToken) as string;
@@ -251,6 +253,15 @@ io.on('connect', (socket: any) => {
           });
       });
     });
+  });
+
+  socket.on('disconnect', (reason: any) => {
+    console.log(reason);
+    console.log(`연결 종료 - 소켓ID: ${socket.id}`);
+  });
+
+  socket.on('error', (error: any) => {
+    console.log(`에러 발생: ${error}`);
   });
 });
 
