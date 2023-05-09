@@ -10,4 +10,5 @@ export interface UserInfo {
   thunderRecords?: mongoose.Schema.Types.ObjectId[];
   isAlarms?: [Boolean];
   isReport?: Boolean;
+  reportCount?: number;
 }
