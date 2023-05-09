@@ -10,4 +10,5 @@ export interface UserCreateDto {
   fcmToken: String;
   thunderRecords: mongoose.Schema.Types.ObjectId[];
   isAlarms: [Boolean];
+  isReport: Boolean;
 }
