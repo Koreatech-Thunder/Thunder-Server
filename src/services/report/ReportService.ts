@@ -6,7 +6,7 @@ import ThunderServiceUtils from '../thunder/ThunderServiceUtils';
 import ChatReports from '../../models/ChatReports';
 
 const reportThunder = async (
-  ThunderReportsRequestDto: ThunderReportsRequestDto,
+  thunderReportsRequestDto: ThunderReportsRequestDto,
   thunderId: string,
 ): Promise<void> => {
   try {
@@ -15,7 +15,7 @@ const reportThunder = async (
     const thunderReports = new ThunderReports({
       userId: thunder.members[0],
       thunderId: thunderId,
-      reportIndex: ThunderReportsRequestDto.reportIndex,
+      reportIndex: thunderReportsRequestDto.reportIndex,
       createdAt: Date.now() + 3600000 * 9,
     });
 
@@ -27,14 +27,14 @@ const reportThunder = async (
 };
 
 const reportChat = async (
-  ChatReportsRequestDto: ChatReportsRequestDto,
+  chatReportsRequestDto: ChatReportsRequestDto,
   thunderId: string,
 ): Promise<void> => {
   try {
     const chatReports = new ChatReports({
-      userId: ChatReportsRequestDto.userId,
+      userId: chatReportsRequestDto.userId,
       thunderId: thunderId,
-      reportIndex: ChatReportsRequestDto.reportIndex,
+      reportIndex: chatReportsRequestDto.reportIndex,
       createdAt: Date.now() + 3600000 * 9,
     });
 
