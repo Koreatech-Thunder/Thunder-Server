@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-export interface UserCreateDto {
+export interface UserCreateRequestDto {
   name?: String;
   introduction?: String;
   mannerTemperature: Number;

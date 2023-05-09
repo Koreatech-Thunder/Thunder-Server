@@ -1,12 +1,12 @@
 import User from '../../models/User';
-import {UserResponseDto} from '../../interfaces/user/UserResponseDto';
+import {UserIDResponseDto} from '../../interfaces/user/response/UserIDResponseDto';
 import errorGenerator from '../../errors/errorGenerator';
 import statusCode from '../../modules/statusCode';
-import {UserInfoDto} from '../../interfaces/user/UserInfoDto';
-import {UserUpdateDto} from '../../interfaces/user/UserUpdateDto';
-import {UserHashtagResponseDto} from '../../interfaces/user/UserHashtagResponseDto';
-import {UserThunderRecordResponseDto} from '../../interfaces/user/UserThunderRecordResponseDto';
-import {UserAlarmStateResponseDto} from '../../interfaces/user/UserAlarmStateResponseDto';
+import {UserInfoResponseDto} from '../../interfaces/user/response/UserInfoResponseDto';
+import {UserUpdateRequestDto} from '../../interfaces/user/request/UserUpdateRequestDto';
+import {UserHashtagResponseDto} from '../../interfaces/user/response/UserHashtagResponseDto';
+import {UserThunderRecordResponseDto} from '../../interfaces/user/response/UserThunderRecordResponseDto';
+import {UserAlarmStateResponseDto} from '../../interfaces/user/response/UserAlarmStateResponseDto';
 import {UserInfo} from '../../interfaces/user/UserInfo';
 import message from '../../modules/message';
 import Thunder from '../../models/Thunder';
@@ -15,9 +15,9 @@ import ThunderRecord from '../../models/ThunderRecord';
 import dayjs from 'dayjs';
 import {Schema} from 'mongoose';
 
-const findUserById = async (userId: string) => {
+const getUserById = async (userId: string) => {
   try {
-    const user: UserResponseDto | null = await User.findById(userId);
+    const user: UserIDResponseDto | null = await User.findById(userId);
 
     return user;
   } catch (error) {
@@ -26,9 +26,9 @@ const findUserById = async (userId: string) => {
   }
 };
 
-const findUserByKakao = async (kakaoId: any) => {
+const getUserByKakao = async (kakaoId: any) => {
   try {
-    const user: UserResponseDto | null = await User.findOne({
+    const user: UserIDResponseDto | null = await User.findOne({
       kakaoId: kakaoId,
     });
 
@@ -129,7 +129,7 @@ const getUserForProfileUpdate = async (userId: string) => {
       });
     }
 
-    const result: UserInfoDto = {
+    const result: UserInfoResponseDto = {
       name: data.name as string,
       introduction: data.introduction as string,
       hashtags: data.hashtags as [string],
@@ -144,18 +144,18 @@ const getUserForProfileUpdate = async (userId: string) => {
 };
 
 const updateUser = async (
-  userUpdateDto: UserUpdateDto,
+  UserUpdateRequestDto: UserUpdateRequestDto,
   userId: string,
 ): Promise<void> => {
   try {
-    await User.findByIdAndUpdate(userId, userUpdateDto);
+    await User.findByIdAndUpdate(userId, UserUpdateRequestDto);
   } catch (error) {
     console.log(error);
     throw error;
   }
 };
 
-const findUserHashtag = async (
+const getUserHashtag = async (
   userId: string,
 ): Promise<UserHashtagResponseDto> => {
   try {
@@ -172,7 +172,7 @@ const findUserHashtag = async (
   }
 };
 
-const findUserThunderRecord = async (
+const getThunderRecord = async (
   userId: string,
 ): Promise<UserThunderRecordResponseDto[]> => {
   try {
@@ -209,7 +209,7 @@ const findUserThunderRecord = async (
   }
 };
 
-const findUserAlarmState = async (
+const getUserAlarmState = async (
   userId: string,
 ): Promise<UserAlarmStateResponseDto> => {
   try {
@@ -227,12 +227,12 @@ const findUserAlarmState = async (
 };
 
 export default {
-  findUserById,
-  findUserByKakao,
+  getUserById,
+  getUserByKakao,
   deleteUser,
   getUserForProfileUpdate,
   updateUser,
-  findUserHashtag,
-  findUserThunderRecord,
-  findUserAlarmState,
+  getUserHashtag,
+  getThunderRecord,
+  getUserAlarmState,
 };

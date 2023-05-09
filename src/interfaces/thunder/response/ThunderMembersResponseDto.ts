@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-export interface ThunderMembersDto {
+export interface ThunderMembersResponseDto {
   userId: mongoose.Types.ObjectId;
   name: String;
   introduction: String;

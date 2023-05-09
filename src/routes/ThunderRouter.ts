@@ -10,11 +10,11 @@ router.get(
   '/hashtags',
   auth.auth,
   [query('hashtag').isString().trim()],
-  ThunderController.findThunderByHashtag,
+  ThunderController.getThunderByHashtag,
 );
 router.post('/', auth.auth, ThunderController.createThunder);
-router.get('/', auth.auth, ThunderController.findThunderAll);
-router.get('/:thunderId', auth.auth, ThunderController.findThunder);
+router.get('/', auth.auth, ThunderController.getThunderAll);
+router.get('/:thunderId', auth.auth, ThunderController.getThunderOne);
 router.put('/:thunderId', auth.auth, ThunderController.updateThunder);
 router.put('/join/:thunderId', auth.auth, ThunderController.joinThunder);
 router.put('/out/:thunderId', auth.auth, ThunderController.outThunder);

@@ -29,7 +29,7 @@ const login = async (kakaoToken: string, fcmToken: string) => {
     const {data} = result;
     const kakaoId = data.id;
 
-    const existUser = await UserService.findUserByKakao(kakaoId); //유저 여부는 User 스키마의 kakaoId 필드로 구분.
+    const existUser = await UserService.getUserByKakao(kakaoId); //유저 여부는 User 스키마의 kakaoId 필드로 구분.
 
     if (existUser) {
       if (existUser.name == '') {
@@ -90,7 +90,7 @@ const existLogin = async (kakaoToken: string, fcmToken: string) => {
     const {data} = result;
     const kakaoId = data.id;
 
-    const existUser = await UserService.findUserByKakao(kakaoId);
+    const existUser = await UserService.getUserByKakao(kakaoId);
 
     if (existUser) {
       await UserService.updateUser(
