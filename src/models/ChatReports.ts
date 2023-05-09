@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import {ChatReportsInfo} from '../interfaces/report/ChatReportsInfo';
 
-const ChatReportsSchema = new mongoose.Schema({
+const ChatReportSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
@@ -25,5 +25,5 @@ const ChatReportsSchema = new mongoose.Schema({
 
 export default mongoose.model<ChatReportsInfo & mongoose.Document>(
   'ChatReports',
-  ChatReportsSchema,
+  ChatReportSchema,
 );
