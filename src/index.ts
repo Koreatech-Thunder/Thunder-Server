@@ -82,10 +82,8 @@ io.on('connect', (socket: any) => {
                     foundChatRoom._id,
                     true,
                   );
-                  tempMember.push(foundChatRoom._id);
-                } else {
-                  tempMember.push(foundChatRoom._id);
                 }
+                tempMember.push(foundChatRoom._id);
               }
             });
         });
@@ -120,10 +118,9 @@ io.on('connect', (socket: any) => {
                     foundChatRoom._id,
                     false,
                   );
-                  tempMember.push(foundChatRoom._id);
-                } else {
-                  tempMember.push(foundChatRoom._id);
                 }
+
+                tempMember.push(foundChatRoom._id);
               }
             });
         });
