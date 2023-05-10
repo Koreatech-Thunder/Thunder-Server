@@ -1,4 +1,4 @@
-export interface ThunderUpdateDto {
+export interface ThunderUpdateRequestDto {
   title?: string;
   deadline?: string;
   content?: string;

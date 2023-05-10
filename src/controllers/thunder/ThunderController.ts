@@ -1,12 +1,13 @@
 import {Request, Response} from 'express';
 import {Result, ValidationError, validationResult} from 'express-validator';
-import {ThunderCreateDto} from '../../interfaces/thunder/request/ThunderCreateRequestDto';
-import {ThunderResponseDto} from '../../interfaces/thunder/response/ThunderFindResponseDto';
+import {ThunderCreateRequestDto} from '../../interfaces/thunder/request/ThunderCreateRequestDto';
+import {ThunderFindResponseDto} from '../../interfaces/thunder/response/ThunderFindResponseDto';
 import {PostBaseResponseDto} from '../../interfaces/common/PostBaseResponseDto';
 import statusCode from '../../modules/statusCode';
 import ThunderService from '../../services/thunder/ThunderService';
-import {ThunderUpdateDto} from '../../interfaces/thunder/request/ThunderUpdateRequestDto';
-import {ThunderFindResponseDto} from '../../interfaces/thunder/response/ThunderFindOneResponseDto';
+import {ThunderUpdateRequestDto} from '../../interfaces/thunder/request/ThunderUpdateRequestDto';
+import {ThunderFindOneResponseDto} from '../../interfaces/thunder/response/ThunderFindOneResponseDto';
+
 
 /**
  *
@@ -23,12 +24,12 @@ const createThunder = async (
     return res.status(statusCode.BAD_REQUEST).send(statusCode.BAD_REQUEST);
   }
 
-  const thunderCreateDto: ThunderCreateDto = req.body; //key:value
+  const ThunderCreateRequestDto: ThunderCreateRequestDto = req.body; //key:value
   const userId: string = req.body['userId'];
 
   try {
     const data: PostBaseResponseDto = await ThunderService.createThunder(
-      thunderCreateDto,
+      ThunderCreateRequestDto,
       userId,
     );
 
@@ -50,7 +51,8 @@ const createThunder = async (
 const getThunderAll = async (req: Request, res: Response): Promise<void> => {
   try {
     const userId: string = req.body['userId'];
-    const data: ThunderResponseDto[] = await ThunderService.getThunderAll(
+    const data: ThunderFindResponseDto[] = await ThunderService.getThunderAll(
+
       userId,
     );
 
@@ -82,10 +84,9 @@ const getThunderByHashtag = async (
   const {hashtag} = req.query;
 
   try {
-    const data: ThunderResponseDto[] = await ThunderService.getThunderByHashtag(
-      hashtag as string,
-      userId,
-    );
+    const data: ThunderFindResponseDto[] =
+      await ThunderService.getThunderByHashtag(hashtag as string, userId);
+
 
     res.status(statusCode.OK).send(data);
   } catch (error: any) {
@@ -109,7 +110,7 @@ const getThunderOne = async (
   const {thunderId} = req.params;
 
   try {
-    const data: ThunderFindResponseDto = await ThunderService.getThunderOne(
+    const data: ThunderFindOneResponseDto = await ThunderService.getThunderOne(
       thunderId,
     );
 
@@ -141,12 +142,16 @@ const updateThunder = async (
     return res.status(statusCode.BAD_REQUEST).send(statusCode.BAD_REQUEST);
   }
 
-  const thunderUpdateDto: ThunderUpdateDto = req.body;
+  const ThunderUpdateRequestDto: ThunderUpdateRequestDto = req.body;
   const userId: string = req.body['userId'];
   const {thunderId} = req.params;
 
   try {
-    await ThunderService.updateThunder(userId, thunderId, thunderUpdateDto);
+    await ThunderService.updateThunder(
+      userId,
+      thunderId,
+      ThunderUpdateRequestDto,
+    );
 
     res.status(statusCode.OK).send(statusCode.OK);
   } catch (error: any) {

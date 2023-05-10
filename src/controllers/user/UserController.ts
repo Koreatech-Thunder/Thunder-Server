@@ -1,12 +1,12 @@
 import statusCode from '../../modules/statusCode';
 import util from '../../modules/util';
 import {Result, ValidationError, validationResult} from 'express-validator';
-import {UserResponseDto} from '../../interfaces/user/response/UserIDResponseDto';
+import {UserIDResponseDto} from '../../interfaces/user/response/UserIDResponseDto';
 import {UserService} from '../../services';
 import {Request, Response} from 'express';
-import {UserInfoDto} from '../../interfaces/user/response/UserInfoResponseDto';
+import {UserInfoResponseDto} from '../../interfaces/user/response/UserInfoResponseDto';
 import message from '../../modules/message';
-import {UserCreateDto} from '../../interfaces/user/request/UserCreateRequestDto';
+import {UserCreateRequestDto} from '../../interfaces/user/request/UserCreateRequestDto';
 import {UserHashtagResponseDto} from '../../interfaces/user/response/UserHashtagResponseDto';
 import {UserThunderRecordResponseDto} from '../../interfaces/user/response/UserThunderRecordResponseDto';
 import {UserAlarmStateResponseDto} from '../../interfaces/user/response/UserAlarmStateResponseDto';
@@ -26,11 +26,11 @@ const updateUser = async (
     return res.status(statusCode.BAD_REQUEST).send(message.BAD_REQUEST);
   }
 
-  const userCreateDto: UserCreateDto = req.body;
+  const UserCreateRequestDto: UserCreateRequestDto = req.body;
   const userId: string = req.body['userId'];
 
   try {
-    await UserService.updateUser(userCreateDto, userId);
+    await UserService.updateUser(UserCreateRequestDto, userId);
 
     res.status(statusCode.CREATED).send(statusCode.CREATED);
   } catch (error: any) {
@@ -116,7 +116,9 @@ const getUserById = async (req: Request, res: Response): Promise<void> => {
   const userId = req.body['userId'];
 
   try {
-    const data: UserResponseDto | null = await UserService.getUserById(userId);
+    const data: UserIDResponseDto | null = await UserService.getUserById(
+      userId,
+    );
 
     res.status(statusCode.OK).send(util.success(data));
   } catch (error) {
@@ -131,7 +133,7 @@ const getUserByKakao = async (req: Request, res: Response): Promise<void> => {
   const {kakaoId} = req.params;
 
   try {
-    const data: UserResponseDto | null = await UserService.getUserByKakao(
+    const data: UserIDResponseDto | null = await UserService.getUserByKakao(
       kakaoId,
     );
     res.status(statusCode.OK).send(util.success(data));
@@ -167,7 +169,10 @@ const deleteUser = async (req: Request, res: Response): Promise<void> => {
 const getUserProfile = async (req: Request, res: Response): Promise<void> => {
   const userId = req.body['userId'];
   try {
-    const data: UserInfoDto | null = await UserService.getUserProfile(userId);
+    const data: UserInfoResponseDto | null = await UserService.getUserProfile(
+      userId,
+    );
+
 
     res.status(statusCode.OK).send(data);
   } catch (error: any) {

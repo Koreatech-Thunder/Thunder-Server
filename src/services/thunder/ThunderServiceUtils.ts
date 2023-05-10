@@ -17,7 +17,7 @@ const getMemberById = async (userId: string, list: any): Promise<string> => {
   return 'NON_MEMBER';
 };
 
-const getThunderById = async (thunderId: string): Promise<ThunderInfo> => {
+const getThunderOneById = async (thunderId: string): Promise<ThunderInfo> => {
   const thunder = await Thunder.findById(thunderId);
   if (!thunder) {
     throw errorGenerator({
@@ -29,6 +29,6 @@ const getThunderById = async (thunderId: string): Promise<ThunderInfo> => {
 };
 
 export default {
-  getMemberById,
-  getThunderById,
+  findMemberById,
+  getThunderOneById,
 };

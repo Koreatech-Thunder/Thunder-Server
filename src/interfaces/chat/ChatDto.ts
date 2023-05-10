@@ -6,6 +6,6 @@ export interface ChatDto {
   thunderId: String;
   message: String;
   user: ChatUserDto;
-  createdAt: Date;
+  createdAt: Number;
   state: String; // OTHER, ME
 }
