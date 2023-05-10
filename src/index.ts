@@ -24,6 +24,9 @@ const socketio = require('socket.io');
 connectDB();
 
 app.set('view engine', 'ejs');
+app.get('/', (req, res) => {
+  res.sendFile('index.html', {root: __dirname});
+});
 
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
