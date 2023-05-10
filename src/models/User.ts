@@ -45,6 +45,14 @@ const UserSchema = new mongoose.Schema({
     default: [true, true, true],
     required: true,
   },
+  isReport: {
+    type: Boolean,
+    default: false,
+  },
+  reportCount: {
+    type: Number,
+    default: 0,
+  },
 });
 
 export default mongoose.model<UserInfo & mongoose.Document>('User', UserSchema);

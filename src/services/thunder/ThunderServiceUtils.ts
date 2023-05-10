@@ -4,7 +4,7 @@ import Thunder from '../../models/Thunder';
 import message from '../../modules/message';
 import statusCode from '../../modules/statusCode';
 
-const findMemberById = async (userId: string, list: any): Promise<string> => {
+const getMemberById = async (userId: string, list: any): Promise<string> => {
   var i = 0;
   if (list[0]._id.toString() == userId) {
     return 'HOST';

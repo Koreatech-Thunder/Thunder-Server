@@ -10,4 +10,6 @@ export interface UserCreateRequestDto {
   fcmToken: String;
   thunderRecords: mongoose.Schema.Types.ObjectId[];
   isAlarms: [Boolean];
+  isReport: Boolean;
+  reportCount: number;
 }

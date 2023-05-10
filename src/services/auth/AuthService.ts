@@ -8,7 +8,6 @@ import statusCode from '../../modules/statusCode';
 import tokenStatus from '../../modules/tokenStatus';
 import {AuthResponseDto} from '../../interfaces/auth/AuthResponseDto';
 import message from '../../modules/message';
-import Thunder from '../../models/Thunder';
 
 const login = async (kakaoToken: string, fcmToken: string) => {
   try {

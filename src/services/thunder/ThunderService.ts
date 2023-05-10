@@ -113,7 +113,7 @@ const getThunderAll = async (
           thunderMembers.push(result);
         }
 
-        const isMembers = await ThunderServiceUtils.findMemberById(
+        const isMembers = await ThunderServiceUtils.getMemberById(
           userId,
           idList,
         );
@@ -200,7 +200,7 @@ const getThunderByHashtag = async (
           thunderMembers.push(result);
         }
 
-        const isMembers = await ThunderServiceUtils.findMemberById(
+        const isMembers = await ThunderServiceUtils.getMemberById(
           userId,
           idList,
         );
@@ -283,6 +283,7 @@ const updateThunder = async (
   try {
     const thunder = await ThunderServiceUtils.getThunderOneById(thunderId);
 
+
     const idList = []; // User._id[]
 
     for (let member of thunder.members) {
@@ -290,7 +291,7 @@ const updateThunder = async (
       idList.push(info.userId);
     }
 
-    const isMembers: string = await ThunderServiceUtils.findMemberById(
+    const isMembers: string = await ThunderServiceUtils.getMemberById(
       userId,
       idList,
     );
@@ -316,6 +317,7 @@ const joinThunder = async (
   try {
     const thunder = await ThunderServiceUtils.getThunderOneById(thunderId);
 
+
     if (thunder.members.length >= thunder.limitMembersCnt) {
       throw errorGenerator({
         msg: message.OVER_LIMITMEMBERSCNT,
@@ -330,7 +332,7 @@ const joinThunder = async (
       idList.push(info.userId);
     }
 
-    const isMembers: string = await ThunderServiceUtils.findMemberById(
+    const isMembers: string = await ThunderServiceUtils.getMemberById(
       userId,
       idList,
     );
@@ -375,6 +377,7 @@ const outThunder = async (userId: string, thunderId: string): Promise<void> => {
   try {
     const thunder = await ThunderServiceUtils.getThunderOneById(thunderId);
 
+
     const members = thunder.members; // members = [ObjectId] -> ref: PersonalRoomInfo
     const idList = []; // PersonalRoomInfo에 저장된 UserId.
     let myInfo;
@@ -389,7 +392,7 @@ const outThunder = async (userId: string, thunderId: string): Promise<void> => {
       idList.push(info.userId);
     }
 
-    const isMembers: string = await ThunderServiceUtils.findMemberById(
+    const isMembers: string = await ThunderServiceUtils.getMemberById(
       userId,
       idList,
     ); //idList에 있는 ID들을 가진 유저 정보를 검색.

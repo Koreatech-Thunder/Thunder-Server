@@ -8,6 +8,7 @@ import ThunderService from '../../services/thunder/ThunderService';
 import {ThunderUpdateRequestDto} from '../../interfaces/thunder/request/ThunderUpdateRequestDto';
 import {ThunderFindOneResponseDto} from '../../interfaces/thunder/response/ThunderFindOneResponseDto';
 
+
 /**
  *
  * @route POST / thunder
@@ -51,6 +52,7 @@ const getThunderAll = async (req: Request, res: Response): Promise<void> => {
   try {
     const userId: string = req.body['userId'];
     const data: ThunderFindResponseDto[] = await ThunderService.getThunderAll(
+
       userId,
     );
 
@@ -84,6 +86,7 @@ const getThunderByHashtag = async (
   try {
     const data: ThunderFindResponseDto[] =
       await ThunderService.getThunderByHashtag(hashtag as string, userId);
+
 
     res.status(statusCode.OK).send(data);
   } catch (error: any) {

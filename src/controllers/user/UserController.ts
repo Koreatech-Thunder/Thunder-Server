@@ -173,6 +173,7 @@ const getUserProfile = async (req: Request, res: Response): Promise<void> => {
       userId,
     );
 
+
     res.status(statusCode.OK).send(data);
   } catch (error: any) {
     console.log(error);
