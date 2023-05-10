@@ -20,10 +20,15 @@ import pushHandler from './modules/pushHandler';
 require('dotenv').config();
 const server = http.createServer(app);
 const socketio = require('socket.io');
+import path from 'path';
 
 connectDB();
 
-app.set('view engine', '');
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.get('/', function (req, res) {
+  res.sendFile(path.join(__dirname + '/public/pages/index.html'));
+});
 
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
