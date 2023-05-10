@@ -10,7 +10,7 @@ const reportThunder = async (
   thunderId: string,
 ): Promise<void> => {
   try {
-    const thunder = await ThunderServiceUtils.getThunderById(thunderId);
+    const thunder = await ThunderServiceUtils.getThunderOneById(thunderId);
 
     const thunderReports = new ThunderReports({
       userId: thunder.members[0],

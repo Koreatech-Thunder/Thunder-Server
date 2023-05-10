@@ -29,6 +29,6 @@ const getThunderOneById = async (thunderId: string): Promise<ThunderInfo> => {
 };
 
 export default {
-  findMemberById,
+  getMemberById,
   getThunderOneById,
 };
