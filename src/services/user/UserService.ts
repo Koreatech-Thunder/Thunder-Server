@@ -118,7 +118,7 @@ const deleteUser = async (userId: string) => {
   }
 };
 
-const getUserForProfileUpdate = async (userId: string) => {
+const getUserProfile = async (userId: string) => {
   try {
     const data: UserInfo | null = await User.findById(userId);
 
@@ -230,7 +230,7 @@ export default {
   getUserById,
   getUserByKakao,
   deleteUser,
-  getUserForProfileUpdate,
+  getUserProfile,
   updateUser,
   getUserHashtag,
   getThunderRecord,

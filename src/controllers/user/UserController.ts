@@ -166,14 +166,12 @@ const deleteUser = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-const getUserForProfileUpdate = async (
-  req: Request,
-  res: Response,
-): Promise<void> => {
+const getUserProfile = async (req: Request, res: Response): Promise<void> => {
   const userId = req.body['userId'];
   try {
-    const data: UserInfoResponseDto | null =
-      await UserService.getUserForProfileUpdate(userId);
+    const data: UserInfoResponseDto | null = await UserService.getUserProfile(
+      userId,
+    );
 
     res.status(statusCode.OK).send(data);
   } catch (error: any) {
@@ -193,7 +191,7 @@ export default {
   getUserById,
   getUserByKakao,
   deleteUser,
-  getUserForProfileUpdate,
+  getUserProfile,
   getUserHashtag,
   getThunderRecord,
   getUserAlarmState,

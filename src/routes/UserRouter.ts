@@ -5,7 +5,7 @@ import auth from '../middlewares/auth';
 const router: Router = Router();
 
 router.get('/record/', auth.auth, UserController.getThunderRecord);
-router.get('/profile', auth.auth, UserController.getUserForProfileUpdate);
+router.get('/profile', auth.auth, UserController.getUserProfile);
 router.get('/hashtags', auth.auth, UserController.getUserHashtag);
 router.get('/alarm', auth.auth, UserController.getUserAlarmState);
 router.put('/', auth.auth, UserController.updateUser);
