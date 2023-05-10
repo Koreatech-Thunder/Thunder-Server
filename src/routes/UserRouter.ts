@@ -4,12 +4,12 @@ import auth from '../middlewares/auth';
 
 const router: Router = Router();
 
-router.get('/record/', auth.auth, UserController.findUserThunderRecord);
-router.get('/profile', auth.auth, UserController.getUserForProfileUpdate);
-router.get('/hashtags', auth.auth, UserController.findUserHashtag);
-router.get('/alarm', auth.auth, UserController.findUserAlarmState);
+router.get('/record/', auth.auth, UserController.getThunderRecord);
+router.get('/profile', auth.auth, UserController.getUserProfile);
+router.get('/hashtags', auth.auth, UserController.getUserHashtag);
+router.get('/alarm', auth.auth, UserController.getUserAlarmState);
 router.put('/', auth.auth, UserController.updateUser);
-router.get('/', auth.auth, UserController.findUserById);
+router.get('/', auth.auth, UserController.getUserById);
 router.delete('/', auth.auth, UserController.deleteUser);
 
 export default router;

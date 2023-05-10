@@ -5,8 +5,6 @@ import * as firebase from 'firebase-admin';
 import errorGenerator from '../errors/errorGenerator';
 import statusCode from '../modules/statusCode';
 import message from '../modules/message';
-import {pushMessageTemplate} from '../modules/pushMessageTemplate';
-import User from '../models/User';
 
 const connectDB = async () => {
   try {

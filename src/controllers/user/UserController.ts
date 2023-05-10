@@ -1,15 +1,15 @@
 import statusCode from '../../modules/statusCode';
 import util from '../../modules/util';
 import {Result, ValidationError, validationResult} from 'express-validator';
-import {UserResponseDto} from '../../interfaces/user/UserResponseDto';
+import {UserResponseDto} from '../../interfaces/user/response/UserIDResponseDto';
 import {UserService} from '../../services';
 import {Request, Response} from 'express';
-import {UserInfoDto} from '../../interfaces/user/UserInfoDto';
+import {UserInfoDto} from '../../interfaces/user/response/UserInfoResponseDto';
 import message from '../../modules/message';
-import {UserCreateDto} from '../../interfaces/user/UserCreateDto';
-import {UserHashtagResponseDto} from '../../interfaces/user/UserHashtagResponseDto';
-import {UserThunderRecordResponseDto} from '../../interfaces/user/UserThunderRecordResponseDto';
-import {UserAlarmStateResponseDto} from '../../interfaces/user/UserAlarmStateResponseDto';
+import {UserCreateDto} from '../../interfaces/user/request/UserCreateRequestDto';
+import {UserHashtagResponseDto} from '../../interfaces/user/response/UserHashtagResponseDto';
+import {UserThunderRecordResponseDto} from '../../interfaces/user/response/UserThunderRecordResponseDto';
+import {UserAlarmStateResponseDto} from '../../interfaces/user/response/UserAlarmStateResponseDto';
 
 /**
  *
@@ -47,11 +47,11 @@ const updateUser = async (
  * @desc Read User hashtags
  * @access Public
  */
-const findUserHashtag = async (req: Request, res: Response): Promise<void> => {
+const getUserHashtag = async (req: Request, res: Response): Promise<void> => {
   const userId: string = req.body['userId'];
 
   try {
-    const data: UserHashtagResponseDto = await UserService.findUserHashtag(
+    const data: UserHashtagResponseDto = await UserService.getUserHashtag(
       userId,
     );
 
@@ -70,15 +70,12 @@ const findUserHashtag = async (req: Request, res: Response): Promise<void> => {
  * @desc Read User ThunderRecord
  * @access Public
  */
-const findUserThunderRecord = async (
-  req: Request,
-  res: Response,
-): Promise<void> => {
+const getThunderRecord = async (req: Request, res: Response): Promise<void> => {
   const userId: string = req.body['userId'];
 
   try {
     const data: UserThunderRecordResponseDto[] =
-      await UserService.findUserThunderRecord(userId);
+      await UserService.getThunderRecord(userId);
 
     res.status(statusCode.OK).send(data);
   } catch (error: any) {
@@ -95,15 +92,16 @@ const findUserThunderRecord = async (
  * @desc Read User AlarmState
  * @access Public
  */
-const findUserAlarmState = async (
+const getUserAlarmState = async (
   req: Request,
   res: Response,
 ): Promise<void> => {
   const userId: string = req.body['userId'];
 
   try {
-    const data: UserAlarmStateResponseDto =
-      await UserService.findUserAlarmState(userId);
+    const data: UserAlarmStateResponseDto = await UserService.getUserAlarmState(
+      userId,
+    );
 
     res.status(statusCode.OK).send(data);
   } catch (error: any) {
@@ -114,11 +112,11 @@ const findUserAlarmState = async (
   }
 };
 
-const findUserById = async (req: Request, res: Response): Promise<void> => {
+const getUserById = async (req: Request, res: Response): Promise<void> => {
   const userId = req.body['userId'];
 
   try {
-    const data: UserResponseDto | null = await UserService.findUserById(userId);
+    const data: UserResponseDto | null = await UserService.getUserById(userId);
 
     res.status(statusCode.OK).send(util.success(data));
   } catch (error) {
@@ -129,11 +127,11 @@ const findUserById = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-const findUserByKakao = async (req: Request, res: Response): Promise<void> => {
+const getUserByKakao = async (req: Request, res: Response): Promise<void> => {
   const {kakaoId} = req.params;
 
   try {
-    const data: UserResponseDto | null = await UserService.findUserByKakao(
+    const data: UserResponseDto | null = await UserService.getUserByKakao(
       kakaoId,
     );
     res.status(statusCode.OK).send(util.success(data));
@@ -166,15 +164,10 @@ const deleteUser = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-const getUserForProfileUpdate = async (
-  req: Request,
-  res: Response,
-): Promise<void> => {
+const getUserProfile = async (req: Request, res: Response): Promise<void> => {
   const userId = req.body['userId'];
   try {
-    const data: UserInfoDto | null = await UserService.getUserForProfileUpdate(
-      userId,
-    );
+    const data: UserInfoDto | null = await UserService.getUserProfile(userId);
 
     res.status(statusCode.OK).send(data);
   } catch (error: any) {
@@ -191,11 +184,11 @@ const getUserForProfileUpdate = async (
 
 export default {
   updateUser,
-  findUserById,
-  findUserByKakao,
+  getUserById,
+  getUserByKakao,
   deleteUser,
-  getUserForProfileUpdate,
-  findUserHashtag,
-  findUserThunderRecord,
-  findUserAlarmState,
+  getUserProfile,
+  getUserHashtag,
+  getThunderRecord,
+  getUserAlarmState,
 };
