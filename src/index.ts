@@ -57,16 +57,13 @@ const io = socketio(server, {
 });
 
 io.on('connect', (socket: any) => {
-  console.log(`Connection : Socket Id = ${socket.id}`);
   const accessToken = socket.handshake.headers.authorization;
-
   console.log(`연결 성공 - 소켓ID: ${socket.id}`);
 
   socket.on('subscribeChatRoom', () => {
     // 채팅방 목록 진입
     const decoded = jwt.decode(accessToken);
     const userId = (decoded as any).user.id;
-    console.log('socket decoded: ', (decoded as any).user.id);
     const thunders: Promise<ThunderInfo[]> =
       chattingHandler.getThunders(userId);
 
@@ -93,8 +90,9 @@ io.on('connect', (socket: any) => {
                 tempMember.push(foundChatRoom._id);
               }
             });
+
+          chattingHandler.updateThunderMembers(thunder.thunderId, tempMember);
         });
-        chattingHandler.updateThunderMembers(thunder.thunderId, tempMember);
 
         socket.join(thunder.thunderId);
       });
@@ -130,8 +128,9 @@ io.on('connect', (socket: any) => {
                 tempMember.push(foundChatRoom._id);
               }
             });
+
+          chattingHandler.updateThunderMembers(thunder.thunderId, tempMember);
         });
-        chattingHandler.updateThunderMembers(thunder.thunderId, tempMember);
 
         socket.leave(thunder.thunderId);
       });
