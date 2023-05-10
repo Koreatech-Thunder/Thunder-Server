@@ -64,7 +64,8 @@ io.on('connect', (socket: any) => {
 
   socket.on('subscribeChatRoom', () => {
     // 채팅방 목록 진입
-    const userId: string = jwt.decode(accessToken) as string;
+    const userId = jwt.decode(accessToken);
+    console.log('socket decoded: ', userId);
     const thunders: Promise<ThunderInfo[]> =
       chattingHandler.getThunders(userId);
 
