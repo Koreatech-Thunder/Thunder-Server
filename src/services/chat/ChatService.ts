@@ -168,6 +168,7 @@ const getChatRoomDetail = async (
       limitMemberCnt: thunder.limitMembersCnt,
       joinMemberCnt: thunder.members.length,
       chats: chatDtos,
+      thunderId: thunderId,
       isAlarm: isAlarm as boolean,
     }; // 최종적으로 반환할 채팅방 한 개의 정보.
 
