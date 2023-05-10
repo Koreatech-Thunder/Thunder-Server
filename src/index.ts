@@ -51,7 +51,6 @@ app.use(function (err: ErrorType, req: Request, res: Response) {
 });
 
 const io = socketio(server, {
-  path: '/socket.io',
   cors: {
     origin: '*',
   },
@@ -269,7 +268,7 @@ io.on('connect', (socket: any) => {
   });
 });
 
-app
+server
   .listen(process.env.PORT, () => {
     console.log(`
     ################################################
@@ -278,7 +277,7 @@ app
   `);
   })
 
-  .on('error', err => {
+  .on('error', (err: any) => {
     console.error(err);
     process.exit(1);
   });
