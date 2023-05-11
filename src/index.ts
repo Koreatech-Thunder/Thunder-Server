@@ -71,6 +71,7 @@ io.on('connect', (socket: any) => {
       thunderInfos.forEach((thunder: ThunderInfo) => {
         const tempMember: ObjectId[] = [];
         thunder.members.forEach(function (chatroomId: ObjectId) {
+          console.log('t:', thunder);
           PersonalChatRoom.findOne({_id: chatroomId})
             .populate('userId')
             .exec(async (err, foundChatRoom) => {
@@ -80,20 +81,21 @@ io.on('connect', (socket: any) => {
                   statusCode: statusCode.NOT_FOUND,
                 });
               } else {
-                const foundUserId = foundChatRoom.userId.toString();
+                const foundUserId = foundChatRoom.userId;
                 if (userId === foundUserId) {
                   await chattingHandler.setConnectState(
                     foundChatRoom._id,
                     true,
                   );
                 }
+
                 tempMember.push(foundChatRoom._id);
               }
             });
 
           chattingHandler.updateThunderMembers(thunder.thunderId, tempMember);
         });
-
+        console.log('finalt:', thunder);
         socket.join(thunder.thunderId);
       });
     });
@@ -101,7 +103,8 @@ io.on('connect', (socket: any) => {
 
   socket.on('unsubscribeChatRoom', () => {
     // 채팅방 목록 이탈
-    const userId: string = jwt.decode(accessToken) as string;
+    const decoded = jwt.decode(accessToken);
+    const userId = (decoded as any).user.id;
     const thunders: Promise<ThunderInfo[]> =
       chattingHandler.getThunders(userId);
     thunders.then((thunderInfos: ThunderInfo[]) => {
@@ -117,7 +120,7 @@ io.on('connect', (socket: any) => {
                   statusCode: statusCode.NOT_FOUND,
                 });
               } else {
-                const foundUserId = foundChatRoom.userId.toString();
+                const foundUserId = foundChatRoom.userId;
                 if (userId === foundUserId) {
                   await chattingHandler.setConnectState(
                     foundChatRoom._id,
@@ -138,7 +141,8 @@ io.on('connect', (socket: any) => {
   });
 
   socket.on('subscribeChat', (thunderId: string) => {
-    const userId: string = jwt.decode(accessToken) as string;
+    const decoded = jwt.decode(accessToken);
+    const userId = (decoded as any).user.id;
     const thunder: Promise<ThunderInfo> = chattingHandler.getThunder(userId);
     thunder.then((thunderInfo: ThunderInfo) => {
       const tempMember: ObjectId[] = [];
@@ -155,10 +159,9 @@ io.on('connect', (socket: any) => {
               const foundUserId = foundChatRoom.userId.toString();
               if (userId === foundUserId) {
                 await chattingHandler.setConnectState(foundChatRoom._id, true);
-                tempMember.push(foundChatRoom._id);
-              } else {
-                tempMember.push(foundChatRoom._id);
               }
+
+              tempMember.push(foundChatRoom._id);
             }
           });
       });
@@ -170,7 +173,8 @@ io.on('connect', (socket: any) => {
   });
 
   socket.on('unsubscribeChat', (thunderId: string) => {
-    const userId: string = jwt.decode(accessToken) as string;
+    const decoded = jwt.decode(accessToken);
+    const userId = (decoded as any).user.id;
     const thunder: Promise<ThunderInfo> = chattingHandler.getThunder(userId);
     thunder.then((thunderInfo: ThunderInfo) => {
       const tempMember: ObjectId[] = [];
@@ -186,11 +190,9 @@ io.on('connect', (socket: any) => {
             } else {
               const foundUserId = foundChatRoom.userId.toString();
               if (userId === foundUserId) {
-                await chattingHandler.setConnectState(foundChatRoom._id, true);
-                tempMember.push(foundChatRoom._id);
-              } else {
-                tempMember.push(foundChatRoom._id);
+                await chattingHandler.setConnectState(foundChatRoom._id, false);
               }
+              tempMember.push(foundChatRoom._id);
             }
           });
       });
@@ -202,7 +204,8 @@ io.on('connect', (socket: any) => {
   });
 
   socket.on('sendMessage', (msg: {thunderId: string; message: string}) => {
-    const userId: string = jwt.decode(accessToken) as string;
+    const decoded = jwt.decode(accessToken);
+    const userId = (decoded as any).user.id;
 
     const chatEntity = new Chat({
       message: msg.message,
