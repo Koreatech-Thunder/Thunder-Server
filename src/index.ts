@@ -71,7 +71,7 @@ io.on('connect', (socket: any) => {
       thunderInfos.forEach((thunder: ThunderInfo) => {
         const tempMember: ObjectId[] = [];
         thunder.members.forEach(function (chatroomId: ObjectId) {
-          console.log('t:', thunder);
+          console.log('t:', thunder.title);
           PersonalChatRoom.findOne({_id: chatroomId})
             .populate('userId')
             .exec(async (err, foundChatRoom) => {
@@ -92,10 +92,10 @@ io.on('connect', (socket: any) => {
                 tempMember.push(foundChatRoom._id);
               }
             });
-
+          console.log('updatet:', thunder.title);
           chattingHandler.updateThunderMembers(thunder.thunderId, tempMember);
         });
-        console.log('finalt:', thunder);
+        console.log('finalt:', thunder.title);
         socket.join(thunder.thunderId);
       });
     });

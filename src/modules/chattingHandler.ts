@@ -14,8 +14,6 @@ import PersonalChatRoom from '../models/PersonalChatRoom';
 const getThunders = async (userId: any): Promise<ThunderInfo[]> => {
   try {
     const user = await User.findById(userId);
-    console.log('userId:', userId);
-    console.log('user: ', user);
 
     if (!user) {
       // 유저 정보가 존재하지 않으면 에러.
