@@ -92,11 +92,11 @@ io.on('connect', (socket: any) => {
                 tempMember.push(foundChatRoom._id);
               }
             });
-          console.log('updatet:', thunder.title);
-          chattingHandler.updateThunderMembers(thunder.thunderId, tempMember);
         });
+
+        chattingHandler.updateThunderMembers(thunder._id, tempMember);
         console.log('finalt:', thunder.title);
-        socket.join(thunder.thunderId);
+        socket.join(thunder._id);
       });
     });
   });
@@ -131,11 +131,10 @@ io.on('connect', (socket: any) => {
                 tempMember.push(foundChatRoom._id);
               }
             });
-
-          chattingHandler.updateThunderMembers(thunder.thunderId, tempMember);
         });
+        chattingHandler.updateThunderMembers(thunder._id, tempMember);
 
-        socket.leave(thunder.thunderId);
+        socket.leave(thunder._id);
       });
     });
   });
