@@ -68,7 +68,7 @@ io.on('connect', (socket: any) => {
       chattingHandler.getThunders(userId);
 
     thunders.then((thunderInfos: ThunderInfo[]) => {
-      thunderInfos.forEach((thunder: ThunderInfo) => {
+      thunderInfos.forEach((thunder: any) => {
         const tempMember: ObjectId[] = [];
         thunder.members.forEach(function (chatroomId: ObjectId) {
           console.log('t:', thunder.title);
@@ -94,9 +94,9 @@ io.on('connect', (socket: any) => {
             });
         });
 
-        chattingHandler.updateThunderMembers(thunder._id, tempMember);
+        chattingHandler.updateThunderMembers(thunder.thunderId, tempMember);
         console.log('finalt:', thunder.title);
-        socket.join(thunder._id);
+        socket.join(thunder.thunderId);
       });
     });
   });
@@ -132,9 +132,9 @@ io.on('connect', (socket: any) => {
               }
             });
         });
-        chattingHandler.updateThunderMembers(thunder._id, tempMember);
+        chattingHandler.updateThunderMembers(thunder.thunderId, tempMember);
 
-        socket.leave(thunder._id);
+        socket.leave(thunder.thunderId);
       });
     });
   });
