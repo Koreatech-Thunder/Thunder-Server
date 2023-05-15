@@ -91,7 +91,7 @@ io.on('connect', (socket: any) => {
           }
         }
         console.log('finaltemp: ', tempMember);
-        // chattingHandler.updateThunderMembers(thunder.thunderId, tempMember);
+        chattingHandler.updateThunderMembers(thunder._id, tempMember);
         console.log(thunder._id);
         socket.join(thunder._id);
       }
@@ -116,7 +116,7 @@ io.on('connect', (socket: any) => {
               .exec();
             const foundUserId = foundChatRoom.userId;
             if (userId === foundUserId) {
-              await chattingHandler.setConnectState(foundChatRoom._id, true);
+              await chattingHandler.setConnectState(foundChatRoom._id, false);
             }
             tempMember.push(foundChatRoom._id);
             console.log('temp: ', tempMember);
@@ -128,7 +128,7 @@ io.on('connect', (socket: any) => {
           }
         }
         console.log('finaltemp: ', tempMember);
-        // chattingHandler.updateThunderMembers(thunder.thunderId, tempMember);
+        chattingHandler.updateThunderMembers(thunder._id, tempMember);
         console.log(thunder._id);
         socket.leave(thunder._id);
       }
