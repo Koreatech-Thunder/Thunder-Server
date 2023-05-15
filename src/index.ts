@@ -66,38 +66,35 @@ io.on('connect', (socket: any) => {
     const userId = (decoded as any).user.id;
     const thunders: Promise<ThunderInfo[]> =
       chattingHandler.getThunders(userId);
+    const tempMember: ObjectId[] = [];
 
-    thunders.then((thunderInfos: ThunderInfo[]) => {
-      thunderInfos.forEach((thunder: any) => {
-        const tempMember: ObjectId[] = [];
-        thunder.members.forEach(function (chatroomId: ObjectId) {
-          console.log('t:', thunder.title);
-          PersonalChatRoom.findOne({_id: chatroomId})
-            .populate('userId')
-            .exec(async (err, foundChatRoom) => {
-              if (err) {
-                throw errorGenerator({
-                  msg: message.NOT_FOUND_MEMBER,
-                  statusCode: statusCode.NOT_FOUND,
-                });
-              } else {
-                const foundUserId = foundChatRoom.userId;
-                if (userId === foundUserId) {
-                  await chattingHandler.setConnectState(
-                    foundChatRoom._id,
-                    true,
-                  );
-                }
-
-                tempMember.push(foundChatRoom._id);
-              }
+    thunders.then(async (thunderInfos: any) => {
+      for (const thunder of thunderInfos) {
+        for (const chatroomId of thunder.members) {
+          try {
+            const foundChatRoom = await PersonalChatRoom.findOne({
+              _id: chatroomId,
+            })
+              .populate('userId')
+              .exec();
+            const foundUserId = foundChatRoom.userId;
+            if (userId === foundUserId) {
+              await chattingHandler.setConnectState(foundChatRoom._id, true);
+            }
+            tempMember.push(foundChatRoom._id);
+            console.log('temp: ', tempMember);
+          } catch (err) {
+            throw errorGenerator({
+              msg: message.NOT_FOUND_MEMBER,
+              statusCode: statusCode.NOT_FOUND,
             });
-        });
-
-        chattingHandler.updateThunderMembers(thunder.thunderId, tempMember);
-        console.log('finalt:', thunder.title);
-        socket.join(thunder.thunderId);
-      });
+          }
+        }
+        console.log('finaltemp: ', tempMember);
+        // chattingHandler.updateThunderMembers(thunder.thunderId, tempMember);
+        console.log(thunder._id);
+        socket.join(thunder._id);
+      }
     });
   });
 
@@ -108,7 +105,7 @@ io.on('connect', (socket: any) => {
     const thunders: Promise<ThunderInfo[]> =
       chattingHandler.getThunders(userId);
     thunders.then((thunderInfos: ThunderInfo[]) => {
-      thunderInfos.forEach((thunder: ThunderInfo) => {
+      thunderInfos.forEach((thunder: any) => {
         const tempMember: ObjectId[] = [];
         thunder.members.forEach(function (chatroomId: ObjectId) {
           PersonalChatRoom.findOne({_id: chatroomId})
@@ -132,9 +129,9 @@ io.on('connect', (socket: any) => {
               }
             });
         });
-        chattingHandler.updateThunderMembers(thunder.thunderId, tempMember);
+        chattingHandler.updateThunderMembers(thunder._id, tempMember);
 
-        socket.leave(thunder.thunderId);
+        socket.leave(thunder._id);
       });
     });
   });
@@ -142,6 +139,7 @@ io.on('connect', (socket: any) => {
   socket.on('subscribeChat', (thunderId: string) => {
     const decoded = jwt.decode(accessToken);
     const userId = (decoded as any).user.id;
+
     const thunder: Promise<ThunderInfo> = chattingHandler.getThunder(userId);
     thunder.then((thunderInfo: ThunderInfo) => {
       const tempMember: ObjectId[] = [];
