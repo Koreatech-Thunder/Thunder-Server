@@ -60,79 +60,60 @@ io.on('connect', (socket: any) => {
   const accessToken = socket.handshake.headers.authorization;
   console.log(`연결 성공 - 소켓ID: ${socket.id}`);
 
-  socket.on('subscribeChatRoom', () => {
-    // 채팅방 목록 진입
+  socket.on('subscribeChat', async (thunderId: string) => {
     const decoded = jwt.decode(accessToken);
     const userId = (decoded as any).user.id;
-    const thunders: Promise<ThunderInfo[]> =
-      chattingHandler.getThunders(userId);
+    const thunderInfo = await chattingHandler.getThunder(userId);
 
-    thunders.then(async (thunderInfos: any) => {
-      for (const thunder of thunderInfos) {
-        const tempMember: ObjectId[] = [];
-        for (const chatroomId of thunder.members) {
-          try {
-            const foundChatRoom = await PersonalChatRoom.findOne({
-              _id: chatroomId,
-            })
-              .populate('userId')
-              .exec();
-            const foundUserId = foundChatRoom.userId;
-            if (userId === foundUserId) {
-              await chattingHandler.setConnectState(foundChatRoom._id, true);
-            }
-            tempMember.push(foundChatRoom._id);
-            console.log('temp: ', tempMember);
-          } catch (err) {
-            throw errorGenerator({
-              msg: message.NOT_FOUND_MEMBER,
-              statusCode: statusCode.NOT_FOUND,
-            });
-          }
+    const tempMember: ObjectId[] = [];
+    for (const chatroomId of thunderInfo.members) {
+      try {
+        const foundChatRoom = await PersonalChatRoom.findOne({
+          _id: chatroomId,
+        }).populate('userId');
+        const foundUserId = foundChatRoom.userId.toString();
+        if (userId === foundUserId) {
+          await chattingHandler.setConnectState(foundChatRoom._id, true);
         }
-        console.log('finaltemp: ', tempMember);
-        chattingHandler.updateThunderMembers(thunder._id, tempMember);
-        console.log(thunder._id);
-        socket.join(thunder._id);
+        tempMember.push(foundChatRoom._id);
+      } catch (err) {
+        throw errorGenerator({
+          msg: message.NOT_FOUND_MEMBER,
+          statusCode: statusCode.NOT_FOUND,
+        });
       }
-    });
+    }
+
+    await chattingHandler.updateThunderMembers(thunderId, tempMember);
+    socket.join(thunderId);
   });
 
-  socket.on('unsubscribeChatRoom', () => {
-    // 채팅방 목록 이탈
+  socket.on('unsubscribeChat', async (thunderId: string) => {
     const decoded = jwt.decode(accessToken);
     const userId = (decoded as any).user.id;
-    const thunders: Promise<ThunderInfo[]> =
-      chattingHandler.getThunders(userId);
-    thunders.then(async (thunderInfos: any) => {
-      for (const thunder of thunderInfos) {
-        const tempMember: ObjectId[] = [];
-        for (const chatroomId of thunder.members) {
-          try {
-            const foundChatRoom = await PersonalChatRoom.findOne({
-              _id: chatroomId,
-            })
-              .populate('userId')
-              .exec();
-            const foundUserId = foundChatRoom.userId;
-            if (userId === foundUserId) {
-              await chattingHandler.setConnectState(foundChatRoom._id, false);
-            }
-            tempMember.push(foundChatRoom._id);
-            console.log('temp: ', tempMember);
-          } catch (err) {
-            throw errorGenerator({
-              msg: message.NOT_FOUND_MEMBER,
-              statusCode: statusCode.NOT_FOUND,
-            });
-          }
+    const thunderInfo = await chattingHandler.getThunder(userId);
+
+    const tempMember: ObjectId[] = [];
+    for (const chatroomId of thunderInfo.members) {
+      try {
+        const foundChatRoom = await PersonalChatRoom.findOne({
+          _id: chatroomId,
+        }).populate('userId');
+        const foundUserId = foundChatRoom.userId.toString();
+        if (userId === foundUserId) {
+          await chattingHandler.setConnectState(foundChatRoom._id, false);
         }
-        console.log('finaltemp: ', tempMember);
-        chattingHandler.updateThunderMembers(thunder._id, tempMember);
-        console.log(thunder._id);
-        socket.leave(thunder._id);
+        tempMember.push(foundChatRoom._id);
+      } catch (err) {
+        throw errorGenerator({
+          msg: message.NOT_FOUND_MEMBER,
+          statusCode: statusCode.NOT_FOUND,
+        });
       }
-    });
+    }
+
+    await chattingHandler.updateThunderMembers(thunderId, tempMember);
+    socket.leave(thunderId);
   });
 
   socket.on('subscribeChat', (thunderId: string) => {
