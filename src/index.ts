@@ -82,7 +82,6 @@ io.on('connect', (socket: any) => {
               await chattingHandler.setConnectState(foundChatRoom._id, true);
             }
             tempMember.push(foundChatRoom._id);
-            console.log('temp: ', tempMember);
           } catch (err) {
             throw errorGenerator({
               msg: message.NOT_FOUND_MEMBER,
@@ -90,9 +89,7 @@ io.on('connect', (socket: any) => {
             });
           }
         }
-        console.log('finaltemp: ', tempMember);
         chattingHandler.updateThunderMembers(thunder._id, tempMember);
-        console.log(thunder._id);
         socket.join(thunder._id);
       }
     });
@@ -119,7 +116,6 @@ io.on('connect', (socket: any) => {
               await chattingHandler.setConnectState(foundChatRoom._id, false);
             }
             tempMember.push(foundChatRoom._id);
-            console.log('temp: ', tempMember);
           } catch (err) {
             throw errorGenerator({
               msg: message.NOT_FOUND_MEMBER,
@@ -127,9 +123,7 @@ io.on('connect', (socket: any) => {
             });
           }
         }
-        console.log('finaltemp: ', tempMember);
         chattingHandler.updateThunderMembers(thunder._id, tempMember);
-        console.log(thunder._id);
         socket.leave(thunder._id);
       }
     });

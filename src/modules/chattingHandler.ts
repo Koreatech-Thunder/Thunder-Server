@@ -25,8 +25,6 @@ const getThunders = async (userId: any): Promise<ThunderInfo[]> => {
 
     const records = user.thunderRecords;
 
-    console.log('getting....');
-
     if (!records) {
       // 유저의 번개 기록이 아무것도 없으면 빈 리스트 반환.
       console.log('No user records');
@@ -50,8 +48,6 @@ const getThunders = async (userId: any): Promise<ThunderInfo[]> => {
       // 아무것도 없으면 빈 리스트 반환.
       return [];
     }
-
-    console.log(result);
 
     return result;
   } catch (error) {
