@@ -55,9 +55,8 @@ const getChatRooms = async (userId: string): Promise<ChatRoomDto[]> => {
         );
 
         let lastChatToSend: ChatDto = null;
-
+        let state: String;
         if (lastChat) {
-          let state: String;
           if (lastChat.sender === user.id) {
             state == 'ME';
           } else state == 'OTHER';
