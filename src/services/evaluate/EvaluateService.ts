@@ -1,11 +1,10 @@
-import {PostBaseResponseDto} from '../../interfaces/common/PostBaseResponseDto';
-import {EvaluateRequestDtos} from '../../interfaces/evaluate/request/EvaluateRequestDto';
+import {EvaluateRequestDto} from '../../interfaces/evaluate/request/EvaluateRequestDto';
 import ThunderEvaluate from '../../models/ThunderEvaluates';
 import Evaluate from '../../models/Evaluate';
 import User from '../../models/User';
 
 const evaluateThunder = async (
-  evaluateRequestDtos: EvaluateRequestDtos,
+  EvaluateRequestDto: EvaluateRequestDto,
   thunderId: string,
 ): Promise<void> => {
   try {
@@ -13,22 +12,22 @@ const evaluateThunder = async (
 
     if (thunderEvaluate) {
       //평가하고 있는 번개 방이 있다면
-      for (const evaluateRequestDto of evaluateRequestDtos) {
+      for (const evaluateRequest of EvaluateRequestDto.evaluate) {
         const evaluate = await Evaluate.find({
-          userId: evaluateRequestDto.userId,
+          userId: evaluateRequest.userId,
           thunderId: thunderId,
         });
 
         if (evaluate) {
-          await Evaluate.findByIdAndUpdate(evaluateRequestDto.userId, {
-            $push: {scores: evaluateRequestDto.scores}, //존재하는 객체의 scores에 push
+          await Evaluate.findByIdAndUpdate(evaluateRequest.userId, {
+            $push: {scores: evaluateRequest.score}, //존재하는 객체의 scores에 push
           });
         } else {
           const evaluate = new Evaluate({
             //존재하지 않는 Evaluate 객체이면
-            userId: evaluateRequestDto.userId, //new Evaluate
+            userId: evaluateRequest.userId, //new Evaluate
             thunderId: thunderId,
-            scores: [evaluateRequestDto.scores],
+            scores: [evaluateRequest.score],
           });
 
           await evaluate.save();
@@ -45,12 +44,12 @@ const evaluateThunder = async (
 
       await thunderEvaluate.save();
 
-      for (const evaluateRequestDto of evaluateRequestDtos) {
+      for (const evaluateRequest of EvaluateRequestDto.evaluate) {
         const evaluate = new Evaluate({
           //Evaluate 객체 생성
-          userId: evaluateRequestDto.userId,
+          userId: evaluateRequest.userId,
           thunderId: thunderId,
-          scores: [evaluateRequestDto.scores],
+          scores: [evaluateRequest.score],
         });
 
         await evaluate.save();
