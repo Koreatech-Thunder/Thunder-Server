@@ -219,16 +219,20 @@ io.on('connect', (socket: any) => {
     const decoded = jwt.decode(accessToken);
     const userId = (decoded as any).user.id;
 
+    const parsed = JSON.parse(msg.toString());
+
     const chatEntity = new Chat({
-      message: msg.message,
+      message: parsed.message,
       sender: userId,
       createdAt: Date.now() + 3600000 * 9,
     });
 
-    console.log('msgc : ', msg.thunderId);
+    chatEntity.save();
+
+    console.log('msgc : ', parsed.thunderId);
     console.log(chatEntity);
 
-    chattingHandler.updateChats(msg.thunderId, chatEntity);
+    chattingHandler.updateChats(parsed.thunderId, chatEntity);
 
     const user: Promise<UserInfo> = chattingHandler.getUser(userId);
     user.then((userInfo: UserInfo) => {
@@ -238,18 +242,18 @@ io.on('connect', (socket: any) => {
       };
       const chatDto: ChatDto = {
         id: chatEntity.id,
-        thunderId: msg.thunderId,
+        thunderId: parsed.thunderId,
         user: userDto,
-        message: msg.message,
+        message: parsed.message,
         createdAt: chatEntity.createdAt,
         state: 'OTHER',
       };
 
-      socket.broadcast.to(msg.thunderId).emit('newChat', chatDto);
+      socket.broadcast.to(parsed.thunderId).emit('newChat', chatDto);
     });
 
     const thunder: Promise<ThunderInfo> = chattingHandler.getThunder(
-      msg.thunderId,
+      parsed.thunderId,
     );
     thunder.then((thunderInfo: ThunderInfo) => {
       thunderInfo.members.forEach(function (chatroomId: ObjectId) {
