@@ -120,28 +120,24 @@ const calculateScore = async (thunderId: string): Promise<void> => {
         }, 0) / scoreList.length;
 
       switch (true) {
-        case totalScore < 1.0:
-          totalScore = -0.5;
-          break;
-
         case totalScore < 2.0:
-          totalScore = -0.4;
+          totalScore = -1;
           break;
 
         case totalScore < 3.0:
-          totalScore = 0.2;
+          totalScore = 0;
           break;
 
         case totalScore < 4.0:
-          totalScore = 0.4;
+          totalScore = 1;
           break;
 
         case totalScore <= 5.0:
-          totalScore = 0.5;
+          totalScore = 2;
           break;
 
         default:
-          totalScore = 0.0;
+          totalScore = 0;
           break;
       }
 
