@@ -157,10 +157,8 @@ io.on('connect', (socket: any) => {
         }
 
         tempMember.push(foundChatRoom._id);
-        console.log('temp: ', tempMember);
       }
 
-      console.log('finaltemp: ', tempMember);
       chattingHandler.updateThunderMembers(thunderId, tempMember);
 
       socket.join(thunderId);
@@ -172,7 +170,7 @@ io.on('connect', (socket: any) => {
     }
   });
 
-  socket.on('subscribeChat', async (thunderId: any) => {
+  socket.on('unsubscribeChat', async (thunderId: any) => {
     const decoded = jwt.decode(accessToken);
     const userId = (decoded as any).user.id;
 
@@ -200,10 +198,8 @@ io.on('connect', (socket: any) => {
         }
 
         tempMember.push(foundChatRoom._id);
-        console.log('temp: ', tempMember);
       }
 
-      console.log('finaltemp: ', tempMember);
       chattingHandler.updateThunderMembers(thunderId, tempMember);
 
       socket.leave(thunderId);
