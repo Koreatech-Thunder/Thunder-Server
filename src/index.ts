@@ -129,11 +129,11 @@ io.on('connect', (socket: any) => {
     });
   });
 
-  socket.on('subscribeChat', (thunderId: string) => {
+  socket.on('subscribeChat', (thunderId: any) => {
     const decoded = jwt.decode(accessToken);
     const userId = (decoded as any).user.id;
 
-    const thunder: Promise<ThunderInfo> = chattingHandler.getThunder(userId);
+    const thunder: Promise<ThunderInfo> = chattingHandler.getThunder(thunderId);
     thunder.then((thunderInfo: ThunderInfo) => {
       const tempMember: ObjectId[] = [];
       thunderInfo.members.forEach(function (chatroomId: ObjectId) {
@@ -146,7 +146,7 @@ io.on('connect', (socket: any) => {
                 statusCode: statusCode.NOT_FOUND,
               });
             } else {
-              const foundUserId = foundChatRoom.userId.toString();
+              const foundUserId = foundChatRoom.userId;
               if (userId === foundUserId) {
                 await chattingHandler.setConnectState(foundChatRoom._id, true);
               }
@@ -162,10 +162,10 @@ io.on('connect', (socket: any) => {
     });
   });
 
-  socket.on('unsubscribeChat', (thunderId: string) => {
+  socket.on('unsubscribeChat', (thunderId: any) => {
     const decoded = jwt.decode(accessToken);
     const userId = (decoded as any).user.id;
-    const thunder: Promise<ThunderInfo> = chattingHandler.getThunder(userId);
+    const thunder: Promise<ThunderInfo> = chattingHandler.getThunder(thunderId);
     thunder.then((thunderInfo: ThunderInfo) => {
       const tempMember: ObjectId[] = [];
       thunderInfo.members.forEach(function (chatroomId: ObjectId) {
@@ -178,7 +178,7 @@ io.on('connect', (socket: any) => {
                 statusCode: statusCode.NOT_FOUND,
               });
             } else {
-              const foundUserId = foundChatRoom.userId.toString();
+              const foundUserId = foundChatRoom.userId;
               if (userId === foundUserId) {
                 await chattingHandler.setConnectState(foundChatRoom._id, false);
               }
@@ -202,6 +202,9 @@ io.on('connect', (socket: any) => {
       sender: userId,
       createdAt: Date.now() + 3600000 * 9,
     });
+
+    console.log('msgc : ', msg.thunderId);
+    console.log(chatEntity);
 
     chattingHandler.updateChats(msg.thunderId, chatEntity);
 
