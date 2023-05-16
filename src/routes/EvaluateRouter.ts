@@ -6,6 +6,6 @@ import auth from '../middlewares/auth';
 const router: Router = Router();
 
 router.put('/:thunderId', auth.auth, EvaluateController.evaluateThunder);
-router.get('/:thunderId', auth.auth, EvaluateController.getUserEvaluateInfo);
+router.get('/:userId/:thunderId', EvaluateController.getUserEvaluateInfo);
 
 export default router;

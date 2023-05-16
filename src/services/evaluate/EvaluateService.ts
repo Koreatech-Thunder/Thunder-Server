@@ -5,6 +5,7 @@ import Evaluate from '../../models/Evaluate';
 import User from '../../models/User';
 import ThunderServiceUtils from '../thunder/ThunderServiceUtils';
 import {UserEvaluateResponseDto} from '../../interfaces/evaluate/response/UserEvaluateResponseDto';
+import mongoose from 'mongoose';
 
 const evaluateThunder = async (
   evaluateRequestDtos: EvaluateRequestDtos,
@@ -163,7 +164,7 @@ const calculateScore = async (thunderId: string): Promise<void> => {
 const getUserEvaluateInfo = async (
   userId: string,
   thunderId: string,
-): Promise<UserEvaluateResponseDto[]> => {
+): Promise<UserEvaluateResponseDto> => {
   try {
     const thunder = await ThunderServiceUtils.getThunderById(thunderId);
     const evaluateInfoIdList = [];
@@ -174,20 +175,26 @@ const getUserEvaluateInfo = async (
       }
     }
 
-    const userEvaluateInfo: UserEvaluateResponseDto[] = await Promise.all(
+    const allEvaluateInfo: any = await Promise.all(
       evaluateInfoIdList.map(async (evaluateInfoId: any) => {
         const user = await User.findById(evaluateInfoId);
 
-        const data = {
-          title: thunder.title,
+        const userInfo = {
           userId: evaluateInfoId,
           name: user.name,
         };
-        console.log(data);
-        return data;
+        return userInfo;
       }),
     );
-    return userEvaluateInfo;
+
+    console.log(allEvaluateInfo);
+
+    const data: UserEvaluateResponseDto = {
+      title: thunder.title,
+      userInfo: allEvaluateInfo,
+    };
+
+    return data;
   } catch (error) {
     console.log(error);
     throw error;

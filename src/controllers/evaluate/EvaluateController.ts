@@ -46,10 +46,11 @@ const getUserEvaluateInfo = async (
   res: Response,
 ): Promise<void | Response> => {
   try {
-    const userId: string = req.body['userId'];
+    //const userId: string = req.body['userId'];
+    const {userId} = req.params;
     const {thunderId} = req.params;
 
-    const data: UserEvaluateResponseDto[] =
+    const data: UserEvaluateResponseDto =
       await EvaluateService.getUserEvaluateInfo(userId, thunderId);
 
     res.status(statusCode.CREATED).send(data);
