@@ -241,8 +241,7 @@ io.on('connect', (socket: any) => {
         name: userInfo.name,
       };
       const chatDto: ChatDto = {
-        id: chatEntity.id,
-        thunderId: parsed.thunderId,
+        chatId: chatEntity.id,
         user: userDto,
         message: parsed.message,
         createdAt: chatEntity.createdAt,

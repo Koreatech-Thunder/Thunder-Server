@@ -132,11 +132,10 @@ const getChatRoomDetail = async (
       }
 
       const chatDto: ChatDto = {
-        id: chat,
+        chatId: chat,
         message: result.message,
         user: userDto,
         createdAt: result.createdAt,
-        thunderId: thunderId,
         state: state,
       }; // 채팅방에서 보여질 채팅 하나의 정보.
 
