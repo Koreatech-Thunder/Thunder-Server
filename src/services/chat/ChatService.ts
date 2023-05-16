@@ -57,10 +57,15 @@ const getChatRooms = async (userId: string): Promise<ChatRoomDto[]> => {
         let lastChatToSend: ChatDto = null;
         let state: String;
         if (lastChat) {
-          if (lastChat.sender === user.id) {
-            state == 'ME';
-          } else state == 'OTHER';
           const sender = await User.findById(lastChat.sender);
+
+          if (sender.id == user.id) {
+            console.log(sender.id, user.id);
+            state == 'ME';
+          } else {
+            console.log(sender.id, user.id);
+            state == 'OTHER';
+          }
 
           lastChatToSend = {
             chatId: lastChat.id,
