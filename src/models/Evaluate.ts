@@ -6,6 +6,10 @@ const EvaluateSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
   },
+  thunderId: {
+    type: mongoose.Types.ObjectId,
+    ref: 'Thunder',
+  },
   scores: [
     {
       type: Number,

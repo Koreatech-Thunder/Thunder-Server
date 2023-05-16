@@ -3,10 +3,11 @@ import {Result, ValidationError, validationResult} from 'express-validator';
 import {PostBaseResponseDto} from '../../interfaces/common/PostBaseResponseDto';
 import statusCode from '../../modules/statusCode';
 import {EvaluateRequestDtos} from '../../interfaces/evaluate/request/EvaluateRequestDto';
+import EvaluateService from '../../services/evaluate/EvaluateService';
 
 /**
  *
- * @route POST / evaluate
+ * @route PUT / evaluate
  * @desc evaluate Thunder
  * @access Public
  */
@@ -23,12 +24,9 @@ const evaluateThunder = async (
   const {thunderId} = req.params;
 
   try {
-    const data: PostBaseResponseDto = await ReportService.evaluateThunder(
-      EvaluateRequestDtos,
-      thunderId,
-    );
+    await EvaluateService.evaluateThunder(EvaluateRequestDtos, thunderId);
 
-    res.status(statusCode.CREATED).send(data);
+    res.status(statusCode.CREATED).send();
   } catch (error: any) {
     console.log(error);
     res
