@@ -112,9 +112,7 @@ const updateChats = async (
   chat: ChatInfo,
 ): Promise<void> => {
   try {
-    console.log('updid: ', thunderId);
     const thunder = await Thunder.findById(thunderId);
-    console.log('thunder: ', thunder);
 
     if (!thunder) {
       throw errorGenerator({

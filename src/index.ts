@@ -229,7 +229,6 @@ io.on('connect', (socket: any) => {
 
     chatEntity.save();
 
-    console.log('msgc : ', parsed.thunderId);
     console.log(chatEntity);
 
     chattingHandler.updateChats(parsed.thunderId, chatEntity);
@@ -248,8 +247,16 @@ io.on('connect', (socket: any) => {
         state: 'OTHER',
       };
 
+      const myChatDto: ChatDto = {
+        chatId: chatEntity.id,
+        user: userDto,
+        message: parsed.message,
+        createdAt: chatEntity.createdAt,
+        state: 'ME',
+      };
+
       socket.broadcast.to(parsed.thunderId).emit('newChat', chatDto);
-      io.sockets.socket(socket.id).send(parsed.message);
+      io.to(userId).emit('newChat', myChatDto);
     });
 
     const thunder: Promise<ThunderInfo> = chattingHandler.getThunder(
