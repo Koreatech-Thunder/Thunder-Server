@@ -129,70 +129,90 @@ io.on('connect', (socket: any) => {
     });
   });
 
-  socket.on('subscribeChat', (thunderId: any) => {
+  socket.on('subscribeChat', async (thunderId: any) => {
     const decoded = jwt.decode(accessToken);
     const userId = (decoded as any).user.id;
 
     const thunder: Promise<ThunderInfo> = chattingHandler.getThunder(thunderId);
-    thunder.then((thunderInfo: ThunderInfo) => {
-      const tempMember: ObjectId[] = [];
-      thunderInfo.members.forEach(function (chatroomId: ObjectId) {
-        PersonalChatRoom.findOne({_id: chatroomId})
-          .populate('userId')
-          .exec(async (err, foundChatRoom) => {
-            if (err) {
-              throw errorGenerator({
-                msg: message.NOT_FOUND_MEMBER,
-                statusCode: statusCode.NOT_FOUND,
-              });
-            } else {
-              const foundUserId = foundChatRoom.userId;
-              if (userId === foundUserId) {
-                await chattingHandler.setConnectState(foundChatRoom._id, true);
-              }
 
-              tempMember.push(foundChatRoom._id);
-              console.log('temp: ', tempMember);
-            }
+    try {
+      const thunderInfo: ThunderInfo = await thunder;
+      const tempMember: ObjectId[] = [];
+
+      for (const chatroomId of thunderInfo.members) {
+        const foundChatRoom = await PersonalChatRoom.findOne({_id: chatroomId})
+          .populate('userId')
+          .exec();
+
+        if (!foundChatRoom) {
+          throw errorGenerator({
+            msg: message.NOT_FOUND_MEMBER,
+            statusCode: statusCode.NOT_FOUND,
           });
-      });
+        }
+
+        const foundUserId = foundChatRoom.userId;
+        if (userId === foundUserId) {
+          await chattingHandler.setConnectState(foundChatRoom._id, true);
+        }
+
+        tempMember.push(foundChatRoom._id);
+        console.log('temp: ', tempMember);
+      }
 
       console.log('finaltemp: ', tempMember);
       chattingHandler.updateThunderMembers(thunderId, tempMember);
 
       socket.join(thunderId);
-    });
+    } catch (err) {
+      throw errorGenerator({
+        msg: message.NOT_FOUND,
+        statusCode: statusCode.NOT_FOUND,
+      });
+    }
   });
 
-  socket.on('unsubscribeChat', (thunderId: any) => {
+  socket.on('subscribeChat', async (thunderId: any) => {
     const decoded = jwt.decode(accessToken);
     const userId = (decoded as any).user.id;
-    const thunder: Promise<ThunderInfo> = chattingHandler.getThunder(thunderId);
-    thunder.then((thunderInfo: ThunderInfo) => {
-      const tempMember: ObjectId[] = [];
-      thunderInfo.members.forEach(function (chatroomId: ObjectId) {
-        PersonalChatRoom.findOne({_id: chatroomId})
-          .populate('userId')
-          .exec(async (err, foundChatRoom) => {
-            if (err) {
-              throw errorGenerator({
-                msg: message.NOT_FOUND_MEMBER,
-                statusCode: statusCode.NOT_FOUND,
-              });
-            } else {
-              const foundUserId = foundChatRoom.userId;
-              if (userId === foundUserId) {
-                await chattingHandler.setConnectState(foundChatRoom._id, false);
-              }
-              tempMember.push(foundChatRoom._id);
-            }
-          });
-      });
 
+    const thunder: Promise<ThunderInfo> = chattingHandler.getThunder(thunderId);
+
+    try {
+      const thunderInfo: ThunderInfo = await thunder;
+      const tempMember: ObjectId[] = [];
+
+      for (const chatroomId of thunderInfo.members) {
+        const foundChatRoom = await PersonalChatRoom.findOne({_id: chatroomId})
+          .populate('userId')
+          .exec();
+
+        if (!foundChatRoom) {
+          throw errorGenerator({
+            msg: message.NOT_FOUND_MEMBER,
+            statusCode: statusCode.NOT_FOUND,
+          });
+        }
+
+        const foundUserId = foundChatRoom.userId;
+        if (userId === foundUserId) {
+          await chattingHandler.setConnectState(foundChatRoom._id, true);
+        }
+
+        tempMember.push(foundChatRoom._id);
+        console.log('temp: ', tempMember);
+      }
+
+      console.log('finaltemp: ', tempMember);
       chattingHandler.updateThunderMembers(thunderId, tempMember);
 
       socket.leave(thunderId);
-    });
+    } catch (err) {
+      throw errorGenerator({
+        msg: message.NOT_FOUND,
+        statusCode: statusCode.NOT_FOUND,
+      });
+    }
   });
 
   socket.on('sendMessage', (msg: {thunderId: string; message: string}) => {
