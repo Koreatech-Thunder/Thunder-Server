@@ -248,7 +248,8 @@ io.on('connect', (socket: any) => {
         state: 'OTHER',
       };
 
-      io.sockets.emit('newChat', chatDto);
+      socket.broadcast.to(parsed.thunderId).emit('newChat', chatDto);
+      io.sockets.socket(socket.id).send(parsed.message);
     });
 
     const thunder: Promise<ThunderInfo> = chattingHandler.getThunder(
