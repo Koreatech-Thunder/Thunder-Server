@@ -152,10 +152,12 @@ io.on('connect', (socket: any) => {
               }
 
               tempMember.push(foundChatRoom._id);
+              console.log('temp: ', tempMember);
             }
           });
       });
 
+      console.log('finaltemp: ', tempMember);
       chattingHandler.updateThunderMembers(thunderId, tempMember);
 
       socket.join(thunderId);
