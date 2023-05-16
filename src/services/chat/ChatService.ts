@@ -85,7 +85,7 @@ const getChatRooms = async (userId: string): Promise<ChatRoomDto[]> => {
           endTime: endTime,
           lastChat: lastChatToSend,
         };
-
+        console.log(result);
         resultList.push(result);
       }
     }
