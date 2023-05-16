@@ -54,23 +54,27 @@ const getChatRooms = async (userId: string): Promise<ChatRoomDto[]> => {
           thunder.chats[thunder.chats.length - 1],
         );
 
-        let state: String;
-        if (lastChat.sender === user.id) {
-          state == 'ME';
-        } else state == 'OTHER';
-        const sender = await User.findById(lastChat.sender);
+        const lastChatToSend: any = null;
 
-        const lastChatToSend: ChatDto = {
-          chatId: lastChat.id,
-          message: lastChat.message,
-          user: {
-            // 채팅에서 보여질 유저 정보.
-            userId: sender.id,
-            name: sender.name as string,
-          },
-          createdAt: lastChat.createdAt,
-          state: state,
-        };
+        if (lastChat) {
+          let state: String;
+          if (lastChat.sender === user.id) {
+            state == 'ME';
+          } else state == 'OTHER';
+          const sender = await User.findById(lastChat.sender);
+
+          const lastChatToSend: ChatDto = {
+            chatId: lastChat.id,
+            message: lastChat.message,
+            user: {
+              // 채팅에서 보여질 유저 정보.
+              userId: sender.id,
+              name: sender.name as string,
+            },
+            createdAt: lastChat.createdAt,
+            state: state,
+          };
+        }
 
         const result: ChatRoomDto = {
           // 채팅방 목록에 보여질 채팅방 1개의 정보.

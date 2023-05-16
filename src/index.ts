@@ -237,7 +237,7 @@ io.on('connect', (socket: any) => {
     const user: Promise<UserInfo> = chattingHandler.getUser(userId);
     user.then((userInfo: UserInfo) => {
       const userDto: ChatUserDto = {
-        id: userId,
+        userId: userId,
         name: userInfo.name,
       };
       const chatDto: ChatDto = {
