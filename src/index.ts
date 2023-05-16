@@ -62,6 +62,7 @@ io.on('connect', (socket: any) => {
 
   socket.on('subscribeChatRoom', () => {
     // 채팅방 목록 진입
+    console.log(`채팅방 목록 진입 성공 - 소켓ID: ${socket.id}`);
     const decoded = jwt.decode(accessToken);
     const userId = (decoded as any).user.id;
     const thunders: Promise<ThunderInfo[]> =
@@ -97,6 +98,7 @@ io.on('connect', (socket: any) => {
 
   socket.on('unsubscribeChatRoom', () => {
     // 채팅방 목록 이탈
+    console.log(`채팅방 목록 이탈 성공 - 소켓ID: ${socket.id}`);
     const decoded = jwt.decode(accessToken);
     const userId = (decoded as any).user.id;
     const thunders: Promise<ThunderInfo[]> =
@@ -130,6 +132,7 @@ io.on('connect', (socket: any) => {
   });
 
   socket.on('subscribeChat', async (thunderId: any) => {
+    console.log(`채팅방 진입 성공 - 소켓ID: ${socket.id}`);
     const decoded = jwt.decode(accessToken);
     const userId = (decoded as any).user.id;
 
@@ -171,6 +174,7 @@ io.on('connect', (socket: any) => {
   });
 
   socket.on('unsubscribeChat', async (thunderId: any) => {
+    console.log(`채팅방 이탈 성공 - 소켓ID: ${socket.id}`);
     const decoded = jwt.decode(accessToken);
     const userId = (decoded as any).user.id;
 
