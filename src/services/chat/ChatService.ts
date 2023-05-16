@@ -54,7 +54,7 @@ const getChatRooms = async (userId: string): Promise<ChatRoomDto[]> => {
           thunder.chats[thunder.chats.length - 1],
         );
 
-        const lastChatToSend: any = null;
+        let lastChatToSend: ChatDto = null;
 
         if (lastChat) {
           let state: String;
@@ -63,7 +63,7 @@ const getChatRooms = async (userId: string): Promise<ChatRoomDto[]> => {
           } else state == 'OTHER';
           const sender = await User.findById(lastChat.sender);
 
-          const lastChatToSend: ChatDto = {
+          lastChatToSend = {
             chatId: lastChat.id,
             message: lastChat.message,
             user: {
