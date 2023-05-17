@@ -81,7 +81,7 @@ io.on('connect', (socket: any) => {
             const foundUserId = foundChatRoom.userId;
             console.log('subchatroom: ', foundUserId, userId);
             if (userId === foundUserId.toString()) {
-              console.log('connect state changed!');
+              console.log('scChat - connect state changed!');
               console.log('s1: ', foundChatRoom);
               await chattingHandler.setConnectState(foundChatRoom._id, true);
               console.log('s2: ', foundChatRoom);
@@ -118,7 +118,7 @@ io.on('connect', (socket: any) => {
 
             const foundUserId = foundChatRoom.userId;
             if (userId === foundUserId.toString()) {
-              console.log('connect state changed!');
+              console.log('unscChatRoom - connect state changed!');
               console.log('lastState: ', foundChatRoom.isConnect);
               await chattingHandler.setConnectState(foundChatRoom._id, false);
               console.log('state: ', foundChatRoom.isConnect);
@@ -161,7 +161,7 @@ io.on('connect', (socket: any) => {
         const foundUserId = foundChatRoom.userId;
 
         if (userId === foundUserId.toString()) {
-          console.log('connect state changed!');
+          console.log('scChat - connect state changed!');
           console.log('lastState: ', foundChatRoom.isConnect);
           await chattingHandler.setConnectState(foundChatRoom._id, true);
           console.log('state: ', foundChatRoom.isConnect);
@@ -204,7 +204,7 @@ io.on('connect', (socket: any) => {
 
         const foundUserId = foundChatRoom.userId;
         if (userId === foundUserId.toString()) {
-          console.log('connect state changed!');
+          console.log('unscChat - connect state changed!');
           console.log('lastState: ', foundChatRoom.isConnect);
           await chattingHandler.setConnectState(foundChatRoom._id, false);
           console.log('state: ', foundChatRoom.isConnect);
