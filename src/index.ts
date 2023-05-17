@@ -98,7 +98,6 @@ io.on('connect', (socket: any) => {
           }
         }
         await chattingHandler.updateThunderMembers(thunder._id, tempMember);
-        console.log(thunder._id.toString());
         await socket.join(thunder._id.toString());
       }
     });
@@ -260,7 +259,7 @@ io.on('connect', (socket: any) => {
       };
       const chatDto: ChatDto = {
         id: chatEntity.id,
-        thunderId: msg.thunderId,
+        thunderId: parsed.thunderId,
         user: userDto,
         message: parsed.message,
         createdAt: dayjs(chatEntity.createdAt).format('MM/DD HH:mm'),
@@ -269,7 +268,7 @@ io.on('connect', (socket: any) => {
 
       const myChatDto: ChatDto = {
         id: chatEntity.id,
-        thunderId: msg.thunderId,
+        thunderId: parsed.thunderId,
         user: userDto,
         message: parsed.message,
         createdAt: dayjs(chatEntity.createdAt).format('MM/DD HH:mm'),
@@ -297,6 +296,7 @@ io.on('connect', (socket: any) => {
             } else {
               const isConnect = foundChatRoom.isConnect;
               const isAlarm = foundChatRoom.isAlarm;
+              console.log('userId: ', userId);
               if (!isConnect && isAlarm && chattingHandler.isAlarm(userId)) {
                 await pushHandler.pushAlarmToUser(
                   userId,
