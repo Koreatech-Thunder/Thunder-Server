@@ -60,12 +60,9 @@ const setConnectState = async (
   memberId: string,
   isConnect: Boolean,
 ): Promise<void> => {
-  const member = await PersonalChatRoom.findById(memberId);
-
-  console.log('Before method : ', member);
-
-  member.isConnect = isConnect; //매개변수로 들어온 Info에서 isConnect 필드만 매개변수 isConnect 값으로 변경 후 반환.
-  await member.save();
+  const member = await PersonalChatRoom.findByIdAndUpdate(memberId, {
+    isConnect: isConnect,
+  });
 
   console.log('Inside method : ', member);
 };
