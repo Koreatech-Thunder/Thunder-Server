@@ -81,7 +81,10 @@ io.on('connect', (socket: any) => {
               .exec();
             const foundUserId = foundChatRoom.userId;
             if (userId === foundUserId) {
+              console.log('connect state changed!');
+              console.log('lastState: ', foundChatRoom.isConnect);
               await chattingHandler.setConnectState(foundChatRoom._id, true);
+              console.log('state: ', foundChatRoom.isConnect);
             }
             tempMember.push(foundChatRoom._id);
           } catch (err) {
@@ -116,7 +119,10 @@ io.on('connect', (socket: any) => {
               .exec();
             const foundUserId = foundChatRoom.userId;
             if (userId === foundUserId) {
+              console.log('connect state changed!');
+              console.log('lastState: ', foundChatRoom.isConnect);
               await chattingHandler.setConnectState(foundChatRoom._id, false);
+              console.log('state: ', foundChatRoom.isConnect);
             }
             tempMember.push(foundChatRoom._id);
           } catch (err) {
@@ -157,7 +163,10 @@ io.on('connect', (socket: any) => {
 
         const foundUserId = foundChatRoom.userId;
         if (userId === foundUserId) {
+          console.log('connect state changed!');
+          console.log('lastState: ', foundChatRoom.isConnect);
           await chattingHandler.setConnectState(foundChatRoom._id, true);
+          console.log('state: ', foundChatRoom.isConnect);
         }
 
         tempMember.push(foundChatRoom._id);
@@ -199,7 +208,10 @@ io.on('connect', (socket: any) => {
 
         const foundUserId = foundChatRoom.userId;
         if (userId === foundUserId) {
+          console.log('connect state changed!');
+          console.log('lastState: ', foundChatRoom.isConnect);
           await chattingHandler.setConnectState(foundChatRoom._id, false);
+          console.log('state: ', foundChatRoom.isConnect);
         }
 
         tempMember.push(foundChatRoom._id);
