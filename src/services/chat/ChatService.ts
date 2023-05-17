@@ -76,7 +76,7 @@ const getChatRooms = async (userId: string): Promise<ChatRoomDto[]> => {
               userId: sender.id,
               name: sender.name as string,
             },
-            createdAt: lastChat.createdAt,
+            createdAt: dayjs(lastChat.createdAt).format('YYYY-MM-DD HH:mm'),
             state: state,
           };
         }
@@ -160,7 +160,7 @@ const getChatRoomDetail = async (
         chatId: chat,
         message: result.message,
         user: userDto,
-        createdAt: result.createdAt,
+        createdAt: dayjs(result.createdAt).format('YYYY-MM-DD HH:mm'),
         state: state,
       }; // 채팅방에서 보여질 채팅 하나의 정보.
 

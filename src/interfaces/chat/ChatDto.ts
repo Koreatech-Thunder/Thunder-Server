@@ -5,6 +5,6 @@ export interface ChatDto {
   chatId: mongoose.Schema.Types.ObjectId;
   message: String;
   user: ChatUserDto;
-  createdAt: Number;
+  createdAt: string;
   state: String; // OTHER, ME
 }

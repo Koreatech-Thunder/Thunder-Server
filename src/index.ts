@@ -21,6 +21,7 @@ require('dotenv').config();
 const server = http.createServer(app);
 const socketio = require('socket.io');
 import path from 'path';
+import dayjs from 'dayjs';
 
 connectDB();
 
@@ -243,7 +244,7 @@ io.on('connect', (socket: any) => {
         chatId: chatEntity.id,
         user: userDto,
         message: parsed.message,
-        createdAt: chatEntity.createdAt,
+        createdAt: dayjs(chatEntity.createdAt).format('YYYY-MM-DD HH:mm'),
         state: 'OTHER',
       };
 
@@ -251,7 +252,7 @@ io.on('connect', (socket: any) => {
         chatId: chatEntity.id,
         user: userDto,
         message: parsed.message,
-        createdAt: chatEntity.createdAt,
+        createdAt: dayjs(chatEntity.createdAt).format('YYYY-MM-DD HH:mm'),
         state: 'ME',
       };
 
