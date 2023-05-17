@@ -55,6 +55,7 @@ const io = socketio(server, {
   cors: {
     origin: '*',
   },
+  reconnect: true,
 });
 
 io.on('connect', (socket: any) => {
@@ -301,6 +302,9 @@ io.on('connect', (socket: any) => {
   socket.on('disconnect', (reason: any) => {
     console.log(reason);
     console.log(`연결 종료 - 소켓ID: ${socket.id}`);
+ socket.rooms.forEach((room: any) => {
+    socket.leave(room);
+  });
   });
 
   socket.on('error', (error: any) => {
