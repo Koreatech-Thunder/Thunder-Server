@@ -134,13 +134,13 @@ io.on('connect', (socket: any) => {
 
   socket.on('subscribeChat', async (thunderId: any) => {
     console.log(`채팅방 진입 성공 - 소켓ID: ${socket.id}`);
-    /*const decoded = jwt.decode(accessToken);
+    const decoded = jwt.decode(accessToken);
     const userId = (decoded as any).user.id;
 
     const thunder: Promise<ThunderInfo> = chattingHandler.getThunder(thunderId);
-*/
+
     try {
-      /*const thunderInfo: ThunderInfo = await thunder;
+      const thunderInfo: ThunderInfo = await thunder;
       const tempMember: ObjectId[] = [];
 
       for (const chatroomId of thunderInfo.members) {
@@ -164,7 +164,7 @@ io.on('connect', (socket: any) => {
       }
 
       chattingHandler.updateThunderMembers(thunderId, tempMember);
-*/
+
       socket.join(thunderId);
     } catch (err) {
       throw errorGenerator({
@@ -176,13 +176,13 @@ io.on('connect', (socket: any) => {
 
   socket.on('unsubscribeChat', async (thunderId: any) => {
     console.log(`채팅방 이탈 성공 - 소켓ID: ${socket.id}`);
-    /*const decoded = jwt.decode(accessToken);
+    const decoded = jwt.decode(accessToken);
     const userId = (decoded as any).user.id;
 
     const thunder: Promise<ThunderInfo> = chattingHandler.getThunder(thunderId);
-*/
+
     try {
-      /*const thunderInfo: ThunderInfo = await thunder;
+      const thunderInfo: ThunderInfo = await thunder;
       const tempMember: ObjectId[] = [];
 
       for (const chatroomId of thunderInfo.members) {
@@ -199,14 +199,14 @@ io.on('connect', (socket: any) => {
 
         const foundUserId = foundChatRoom.userId;
         if (userId === foundUserId) {
-          await chattingHandler.setConnectState(foundChatRoom._id, true);
+          await chattingHandler.setConnectState(foundChatRoom._id, false);
         }
 
         tempMember.push(foundChatRoom._id);
       }
 
       chattingHandler.updateThunderMembers(thunderId, tempMember);
-*/
+
       socket.leave(thunderId);
     } catch (err) {
       throw errorGenerator({
