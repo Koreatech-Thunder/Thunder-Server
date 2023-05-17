@@ -70,6 +70,7 @@ const getChatRooms = async (userId: string): Promise<ChatRoomDto[]> => {
 
           lastChatToSend = {
             chatId: lastChat.id,
+            thunderId: thunder.id,
             message: lastChat.message,
             user: {
               // 채팅에서 보여질 유저 정보.
@@ -158,6 +159,7 @@ const getChatRoomDetail = async (
 
       const chatDto: ChatDto = {
         chatId: chat,
+        thunderId: thunderId,
         message: result.message,
         user: userDto,
         createdAt: dayjs(result.createdAt).format('MM/DD HH:mm'),

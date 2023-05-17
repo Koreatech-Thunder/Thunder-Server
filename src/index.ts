@@ -242,6 +242,7 @@ io.on('connect', (socket: any) => {
       };
       const chatDto: ChatDto = {
         chatId: chatEntity.id,
+        thunderId: msg.thunderId,
         user: userDto,
         message: parsed.message,
         createdAt: dayjs(chatEntity.createdAt).format('MM/DD HH:mm'),
@@ -250,6 +251,7 @@ io.on('connect', (socket: any) => {
 
       const myChatDto: ChatDto = {
         chatId: chatEntity.id,
+        thunderId: msg.thunderId,
         user: userDto,
         message: parsed.message,
         createdAt: dayjs(chatEntity.createdAt).format('MM/DD HH:mm'),
