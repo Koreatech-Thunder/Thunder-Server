@@ -93,8 +93,8 @@ io.on('connect', (socket: any) => {
             });
           }
         }
-        chattingHandler.updateThunderMembers(thunder._id, tempMember);
-        socket.join(thunder._id);
+        await chattingHandler.updateThunderMembers(thunder._id, tempMember);
+        await socket.join(thunder._id);
       }
     });
   });
@@ -120,7 +120,7 @@ io.on('connect', (socket: any) => {
               console.log('unscChatRoom - connect state changed!');
               console.log('lastState: ', foundChatRoom);
               await chattingHandler.setConnectState(foundChatRoom._id, false);
-              console.log('state: ', foundChatRoom;
+              console.log('state: ', foundChatRoom);
             }
             tempMember.push(foundChatRoom._id);
           } catch (err) {
@@ -130,8 +130,8 @@ io.on('connect', (socket: any) => {
             });
           }
         }
-        chattingHandler.updateThunderMembers(thunder._id, tempMember);
-        socket.leave(thunder._id);
+        await chattingHandler.updateThunderMembers(thunder._id, tempMember);
+        await socket.leave(thunder._id);
       }
     });
   });
@@ -169,9 +169,9 @@ io.on('connect', (socket: any) => {
         tempMember.push(foundChatRoom._id);
       }
 
-      chattingHandler.updateThunderMembers(thunderId, tempMember);
+      await chattingHandler.updateThunderMembers(thunderId, tempMember);
 
-      socket.join(thunderId);
+      await socket.join(thunderId);
     } catch (err) {
       throw errorGenerator({
         msg: message.NOT_FOUND,
@@ -212,9 +212,9 @@ io.on('connect', (socket: any) => {
         tempMember.push(foundChatRoom._id);
       }
 
-      chattingHandler.updateThunderMembers(thunderId, tempMember);
+      await chattingHandler.updateThunderMembers(thunderId, tempMember);
 
-      socket.leave(thunderId);
+      await socket.leave(thunderId);
     } catch (err) {
       throw errorGenerator({
         msg: message.NOT_FOUND,
@@ -286,7 +286,7 @@ io.on('connect', (socket: any) => {
               const isConnect = foundChatRoom.isConnect;
               const isAlarm = foundChatRoom.isAlarm;
               if (!isConnect && isAlarm && chattingHandler.isAlarm(userId)) {
-                pushHandler.pushAlarmToUser(
+                await pushHandler.pushAlarmToUser(
                   userId,
                   thunderInfo.title + ': 새 메시지',
                   '새 채팅이 올라왔습니다.',
