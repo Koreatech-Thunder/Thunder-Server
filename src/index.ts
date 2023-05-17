@@ -76,10 +76,10 @@ io.on('connect', (socket: any) => {
           try {
             const foundChatRoom = await PersonalChatRoom.findOne({
               _id: chatroomId,
-            })
-              .populate('userId')
-              .exec();
+            });
+
             const foundUserId = foundChatRoom.userId;
+            console.log('subchatroom: ', foundUserId, userId);
             if (userId === foundUserId) {
               console.log('connect state changed!');
               console.log('lastState: ', foundChatRoom.isConnect);
@@ -114,9 +114,8 @@ io.on('connect', (socket: any) => {
           try {
             const foundChatRoom = await PersonalChatRoom.findOne({
               _id: chatroomId,
-            })
-              .populate('userId')
-              .exec();
+            });
+
             const foundUserId = foundChatRoom.userId;
             if (userId === foundUserId) {
               console.log('connect state changed!');
@@ -162,6 +161,7 @@ io.on('connect', (socket: any) => {
         }
 
         const foundUserId = foundChatRoom.userId;
+
         if (userId === foundUserId) {
           console.log('connect state changed!');
           console.log('lastState: ', foundChatRoom.isConnect);
