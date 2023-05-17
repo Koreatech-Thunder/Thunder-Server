@@ -98,7 +98,8 @@ io.on('connect', (socket: any) => {
           }
         }
         await chattingHandler.updateThunderMembers(thunder._id, tempMember);
-        await socket.join(thunder._id);
+        console.log(thunder._id.toString());
+	await socket.join(thunder._id.toString());
       }
     });
   });
@@ -137,7 +138,7 @@ io.on('connect', (socket: any) => {
           }
         }
         await chattingHandler.updateThunderMembers(thunder._id, tempMember);
-        await socket.leave(thunder._id);
+        await socket.leave(thunder._id.toString());
       }
     });
   });
@@ -178,7 +179,7 @@ io.on('connect', (socket: any) => {
       }
 
       await chattingHandler.updateThunderMembers(thunderId, tempMember);
-
+console.log('sstid: ', thunderId);
       await socket.join(thunderId);
     } catch (err) {
       throw errorGenerator({
@@ -287,7 +288,8 @@ io.on('connect', (socket: any) => {
         PersonalChatRoom.findOne({_id: chatroomId})
           .populate('userId')
           .exec(async (err, foundChatRoom) => {
-            if (err) {
+            console.log('found: ', foundChatRoom);
+		  if (err) {
               throw errorGenerator({
                 msg: message.NOT_FOUND_MEMBER,
                 statusCode: statusCode.NOT_FOUND,
