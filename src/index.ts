@@ -244,7 +244,7 @@ io.on('connect', (socket: any) => {
         chatId: chatEntity.id,
         user: userDto,
         message: parsed.message,
-        createdAt: dayjs(chatEntity.createdAt).format('YYYY-MM-DD HH:mm'),
+        createdAt: dayjs(chatEntity.createdAt).format('MM/DD HH:mm'),
         state: 'OTHER',
       };
 
@@ -252,12 +252,12 @@ io.on('connect', (socket: any) => {
         chatId: chatEntity.id,
         user: userDto,
         message: parsed.message,
-        createdAt: dayjs(chatEntity.createdAt).format('YYYY-MM-DD HH:mm'),
+        createdAt: dayjs(chatEntity.createdAt).format('MM/DD HH:mm'),
         state: 'ME',
       };
 
       socket.broadcast.to(parsed.thunderId).emit('newChat', chatDto);
-      io.to(userId).emit('newChat', myChatDto);
+      io.to(socket.id).emit('newChat', myChatDto);
     });
 
     const thunder: Promise<ThunderInfo> = chattingHandler.getThunder(
