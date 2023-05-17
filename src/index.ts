@@ -80,7 +80,7 @@ io.on('connect', (socket: any) => {
 
             const foundUserId = foundChatRoom.userId;
             console.log('subchatroom: ', foundUserId, userId);
-            if (userId === foundUserId) {
+            if (userId === foundUserId.toString()) {
               console.log('connect state changed!');
               console.log('lastState: ', foundChatRoom.isConnect);
               await chattingHandler.setConnectState(foundChatRoom._id, true);
@@ -117,7 +117,7 @@ io.on('connect', (socket: any) => {
             });
 
             const foundUserId = foundChatRoom.userId;
-            if (userId === foundUserId) {
+            if (userId === foundUserId.toString()) {
               console.log('connect state changed!');
               console.log('lastState: ', foundChatRoom.isConnect);
               await chattingHandler.setConnectState(foundChatRoom._id, false);
@@ -149,9 +149,7 @@ io.on('connect', (socket: any) => {
       const tempMember: ObjectId[] = [];
 
       for (const chatroomId of thunderInfo.members) {
-        const foundChatRoom = await PersonalChatRoom.findOne({_id: chatroomId})
-          .populate('userId')
-          .exec();
+        const foundChatRoom = await PersonalChatRoom.findOne({_id: chatroomId});
 
         if (!foundChatRoom) {
           throw errorGenerator({
@@ -162,7 +160,7 @@ io.on('connect', (socket: any) => {
 
         const foundUserId = foundChatRoom.userId;
 
-        if (userId === foundUserId) {
+        if (userId === foundUserId.toString()) {
           console.log('connect state changed!');
           console.log('lastState: ', foundChatRoom.isConnect);
           await chattingHandler.setConnectState(foundChatRoom._id, true);
@@ -195,9 +193,7 @@ io.on('connect', (socket: any) => {
       const tempMember: ObjectId[] = [];
 
       for (const chatroomId of thunderInfo.members) {
-        const foundChatRoom = await PersonalChatRoom.findOne({_id: chatroomId})
-          .populate('userId')
-          .exec();
+        const foundChatRoom = await PersonalChatRoom.findOne({_id: chatroomId});
 
         if (!foundChatRoom) {
           throw errorGenerator({
@@ -207,7 +203,7 @@ io.on('connect', (socket: any) => {
         }
 
         const foundUserId = foundChatRoom.userId;
-        if (userId === foundUserId) {
+        if (userId === foundUserId.toString()) {
           console.log('connect state changed!');
           console.log('lastState: ', foundChatRoom.isConnect);
           await chattingHandler.setConnectState(foundChatRoom._id, false);
