@@ -82,9 +82,9 @@ io.on('connect', (socket: any) => {
             console.log('subchatroom: ', foundUserId, userId);
             if (userId === foundUserId.toString()) {
               console.log('connect state changed!');
-              console.log('lastState: ', foundChatRoom.isConnect);
+              console.log('s1: ', foundChatRoom);
               await chattingHandler.setConnectState(foundChatRoom._id, true);
-              console.log('state: ', foundChatRoom.isConnect);
+              console.log('s2: ', foundChatRoom);
             }
             tempMember.push(foundChatRoom._id);
           } catch (err) {

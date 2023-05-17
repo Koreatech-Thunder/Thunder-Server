@@ -59,13 +59,15 @@ const getThunders = async (userId: any): Promise<ThunderInfo[]> => {
 const setConnectState = async (
   memberId: string,
   isConnect: Boolean,
-): Promise<PersonalChatRoomInfo> => {
+): Promise<void> => {
   const member = await PersonalChatRoom.findById(memberId);
 
-  member.isConnect = isConnect; //매개변수로 들어온 Info에서 isConnect 필드만 매개변수 isConnect 값으로 변경 후 반환.
-  member.save();
+  console.log('Before method : ', member);
 
-  return member;
+  member.isConnect = isConnect; //매개변수로 들어온 Info에서 isConnect 필드만 매개변수 isConnect 값으로 변경 후 반환.
+  await member.save();
+
+  console.log('Inside method : ', member);
 };
 
 const getUser = async (userId: string): Promise<UserInfo> => {
