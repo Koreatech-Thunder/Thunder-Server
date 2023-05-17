@@ -99,7 +99,7 @@ io.on('connect', (socket: any) => {
         }
         await chattingHandler.updateThunderMembers(thunder._id, tempMember);
         console.log(thunder._id.toString());
-	await socket.join(thunder._id.toString());
+        await socket.join(thunder._id.toString());
       }
     });
   });
@@ -179,7 +179,7 @@ io.on('connect', (socket: any) => {
       }
 
       await chattingHandler.updateThunderMembers(thunderId, tempMember);
-console.log('sstid: ', thunderId);
+      console.log('sstid: ', thunderId);
       await socket.join(thunderId);
     } catch (err) {
       throw errorGenerator({
@@ -259,7 +259,7 @@ console.log('sstid: ', thunderId);
         name: userInfo.name,
       };
       const chatDto: ChatDto = {
-        chatId: chatEntity.id,
+        id: chatEntity.id,
         thunderId: msg.thunderId,
         user: userDto,
         message: parsed.message,
@@ -268,7 +268,7 @@ console.log('sstid: ', thunderId);
       };
 
       const myChatDto: ChatDto = {
-        chatId: chatEntity.id,
+        id: chatEntity.id,
         thunderId: msg.thunderId,
         user: userDto,
         message: parsed.message,
@@ -289,7 +289,7 @@ console.log('sstid: ', thunderId);
           .populate('userId')
           .exec(async (err, foundChatRoom) => {
             console.log('found: ', foundChatRoom);
-		  if (err) {
+            if (err) {
               throw errorGenerator({
                 msg: message.NOT_FOUND_MEMBER,
                 statusCode: statusCode.NOT_FOUND,

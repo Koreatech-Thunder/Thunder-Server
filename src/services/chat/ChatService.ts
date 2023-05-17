@@ -69,7 +69,7 @@ const getChatRooms = async (userId: string): Promise<ChatRoomDto[]> => {
           }
 
           lastChatToSend = {
-            chatId: lastChat.id,
+            id: lastChat.id,
             thunderId: thunder.id,
             message: lastChat.message,
             user: {
@@ -158,7 +158,7 @@ const getChatRoomDetail = async (
       }
 
       const chatDto: ChatDto = {
-        chatId: chat,
+        id: chat,
         thunderId: thunderId,
         message: result.message,
         user: userDto,
