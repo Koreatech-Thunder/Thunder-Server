@@ -5,7 +5,7 @@ import {ThunderResponseDto} from '../../interfaces/thunder/response/ThunderFindR
 import {ThunderUpdateDto} from '../../interfaces/thunder/request/ThunderUpdateRequestDto';
 import {ThunderMembersDto} from '../../interfaces/thunder/request/ThunderMembersRequestDto';
 import {ThunderFindResponseDto} from '../../interfaces/thunder/response/ThunderFindOneResponseDto';
-import EvaluateService from '../evaluate/EvaluateService';
+import EvaluateCalculate from '../evaluate/EvaluateCalculate';
 import Thunder from '../../models/Thunder';
 import message from '../../modules/message';
 import statusCode from '../../modules/statusCode';
@@ -72,16 +72,19 @@ const createThunder = async (
         );
       }
     }
+
     const evaluateDeadline = thunder.deadline.setDate(
       thunder.deadline.getDate() + 1,
     );
 
-    let timerId = setTimeout(
-      EvaluateService.calculateScore,
-      evaluateDeadline,
-      thunder._id,
-    );
-    clearTimeout(timerId);
+    async function newStyleDelay() {
+      await setTimeout(
+        EvaluateCalculate.calculateScore,
+        evaluateDeadline,
+        thunder._id,
+      );
+    }
+    newStyleDelay();
 
     return data;
   } catch (error) {
