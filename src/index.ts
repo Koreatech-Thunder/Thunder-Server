@@ -83,7 +83,10 @@ io.on('connect', (socket: any) => {
             if (userId === foundUserId.toString()) {
               console.log('scChatRoom - connect state changed!');
               console.log('s1: ', foundChatRoom);
-              await chattingHandler.setConnectState(foundChatRoom._id, true);
+              await PersonalChatRoom.findByIdAndUpdate(foundChatRoom._id, {
+                isConnect: true,
+              });
+
               console.log('s2: ', foundChatRoom);
             }
             tempMember.push(foundChatRoom._id);
@@ -120,7 +123,9 @@ io.on('connect', (socket: any) => {
             if (userId === foundUserId.toString()) {
               console.log('unscChatRoom - connect state changed!');
               console.log('lastState: ', foundChatRoom);
-              await chattingHandler.setConnectState(foundChatRoom._id, false);
+              await PersonalChatRoom.findByIdAndUpdate(foundChatRoom._id, {
+                isConnect: false,
+              });
               console.log('state: ', foundChatRoom);
             }
             tempMember.push(foundChatRoom._id);
@@ -163,7 +168,9 @@ io.on('connect', (socket: any) => {
         if (userId === foundUserId.toString()) {
           console.log('scChat - connect state changed!');
           console.log('lastState: ', foundChatRoom);
-          await chattingHandler.setConnectState(foundChatRoom._id, true);
+          await PersonalChatRoom.findByIdAndUpdate(foundChatRoom._id, {
+            isConnect: true,
+          });
           console.log('state: ', foundChatRoom);
         }
 
@@ -206,7 +213,9 @@ io.on('connect', (socket: any) => {
         if (userId === foundUserId.toString()) {
           console.log('unscChat - connect state changed!');
           console.log('lastState: ', foundChatRoom);
-          await chattingHandler.setConnectState(foundChatRoom._id, false);
+          await PersonalChatRoom.findByIdAndUpdate(foundChatRoom._id, {
+            isConnect: false,
+          });
           console.log('state: ', foundChatRoom);
         }
 
@@ -302,9 +311,9 @@ io.on('connect', (socket: any) => {
   socket.on('disconnect', (reason: any) => {
     console.log(reason);
     console.log(`연결 종료 - 소켓ID: ${socket.id}`);
- socket.rooms.forEach((room: any) => {
-    socket.leave(room);
-  });
+    socket.rooms.forEach((room: any) => {
+      socket.leave(room);
+    });
   });
 
   socket.on('error', (error: any) => {
