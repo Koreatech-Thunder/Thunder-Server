@@ -178,7 +178,6 @@ io.on('connect', (socket: any) => {
       }
 
       await chattingHandler.updateThunderMembers(thunderId, tempMember);
-      console.log('sstid: ', thunderId);
       await socket.join(thunderId);
     } catch (err) {
       throw errorGenerator({
@@ -247,8 +246,6 @@ io.on('connect', (socket: any) => {
 
     chatEntity.save();
 
-    console.log(chatEntity);
-
     chattingHandler.updateChats(parsed.thunderId, chatEntity);
 
     const user: Promise<UserInfo> = chattingHandler.getUser(userId);
@@ -300,7 +297,7 @@ io.on('connect', (socket: any) => {
               if (!isConnect && isAlarm && chattingHandler.isAlarm(userId)) {
                 await pushHandler.pushAlarmToUser(
                   userId,
-                  thunderInfo.title + ': 새 메시지',
+                  thunderInfo.title + ' : 새 메시지',
                   '새 채팅이 올라왔습니다.',
                 );
               }
