@@ -19,6 +19,7 @@ const getMemberById = async (userId: string, list: any): Promise<string> => {
 
 const getThunderOneById = async (thunderId: string): Promise<ThunderInfo> => {
   const thunder = await Thunder.findById(thunderId);
+
   if (!thunder) {
     throw errorGenerator({
       msg: message.NOT_FOUND_ROOM,

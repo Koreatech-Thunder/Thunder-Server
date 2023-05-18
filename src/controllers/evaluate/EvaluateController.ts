@@ -45,11 +45,10 @@ const getUserEvaluateInfo = async (
   req: Request,
   res: Response,
 ): Promise<void | Response> => {
-  try {
-    //const userId: string = req.body['userId'];
-    const {userId} = req.params;
-    const {thunderId} = req.params;
+  const userId: string = req.body['userId'];
+  const {thunderId} = req.params;
 
+  try {
     const data: UserEvaluateResponseDto =
       await EvaluateService.getUserEvaluateInfo(userId, thunderId);
 

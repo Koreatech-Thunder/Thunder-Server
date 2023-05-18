@@ -5,6 +5,7 @@ import User from '../../models/User';
 import ThunderServiceUtils from '../thunder/ThunderServiceUtils';
 import {UserEvaluateResponseDto} from '../../interfaces/evaluate/response/UserEvaluateResponseDto';
 import mongoose from 'mongoose';
+import PersonalChatRoom from '../../models/PersonalChatRoom';
 
 const evaluateThunder = async (
   EvaluateRequestDto: EvaluateRequestDto,
@@ -77,12 +78,13 @@ const getUserEvaluateInfo = async (
   thunderId: string,
 ): Promise<UserEvaluateResponseDto> => {
   try {
-    const thunder = await ThunderServiceUtils.getThunderById(thunderId);
+    const thunder = await ThunderServiceUtils.getThunderOneById(thunderId);
     const evaluateInfoIdList = [];
 
     for (const member of thunder.members) {
-      if (!(member.toString() == userId)) {
-        evaluateInfoIdList.push(member);
+      const user = await PersonalChatRoom.findById(member);
+      if (!(user.userId.toString() == userId)) {
+        evaluateInfoIdList.push(user.userId);
       }
     }
 
@@ -98,8 +100,6 @@ const getUserEvaluateInfo = async (
       }),
     );
 
-    console.log(allEvaluateInfo);
-
     const data: UserEvaluateResponseDto = {
       title: thunder.title,
       userInfo: allEvaluateInfo,
@@ -114,6 +114,5 @@ const getUserEvaluateInfo = async (
 
 export default {
   evaluateThunder,
-  calculateScore,
   getUserEvaluateInfo,
 };
