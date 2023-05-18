@@ -1,5 +1,6 @@
 import errorGenerator from '../../errors/errorGenerator';
 import {PostBaseResponseDto} from '../../interfaces/common/PostBaseResponseDto';
+import EvaluateCalculate from '../evaluate/EvaluateCalculate';
 import {ThunderCreateRequestDto} from '../../interfaces/thunder/request/ThunderCreateRequestDto';
 import {ThunderFindResponseDto} from '../../interfaces/thunder/response/ThunderFindResponseDto';
 import {ThunderUpdateRequestDto} from '../../interfaces/thunder/request/ThunderUpdateRequestDto';
@@ -71,6 +72,19 @@ const createThunder = async (
         );
       }
     }
+
+    const evaluateDeadline = thunder.deadline.setDate(
+      thunder.deadline.getDate() + 1,
+    );
+
+    async function newStyleDelay() {
+      await setTimeout(
+        EvaluateCalculate.calculateScore,
+        evaluateDeadline,
+        thunder._id,
+      );
+    }
+    newStyleDelay();
 
     return data;
   } catch (error) {
@@ -437,3 +451,6 @@ export default {
   joinThunder,
   outThunder,
 };
+function useEffect(arg0: () => () => void, arg1: undefined[]) {
+  throw new Error('Function not implemented.');
+}
