@@ -54,6 +54,34 @@ const getChatRooms = async (userId: string): Promise<ChatRoomDto[]> => {
           thunder.chats[thunder.chats.length - 1],
         );
 
+        let lastChatToSend: ChatDto = null;
+        let state: String;
+
+        if (lastChat) {
+          const sender = await User.findById(lastChat.sender);
+
+          if (sender.id == user.id) {
+            console.log(sender.id, user.id);
+            state = 'ME';
+          } else {
+            console.log(sender.id, user.id);
+            state = 'OTHER';
+          }
+
+          lastChatToSend = {
+            id: lastChat.id,
+            thunderId: thunder.id,
+            message: lastChat.message,
+            user: {
+              // 채팅에서 보여질 유저 정보.
+              userId: sender.id,
+              name: sender.name as string,
+            },
+            createdAt: dayjs(lastChat.createdAt).format('MM/DD HH:mm'),
+            state: state,
+          };
+        }
+
         const result: ChatRoomDto = {
           // 채팅방 목록에 보여질 채팅방 1개의 정보.
           id: thunder.id,
@@ -61,9 +89,9 @@ const getChatRooms = async (userId: string): Promise<ChatRoomDto[]> => {
           limitMemberCnt: thunder.limitMembersCnt,
           joinMemberCnt: thunder.members.length,
           endTime: endTime,
-          lastChat: lastChat,
+          lastChat: lastChatToSend,
         };
-
+        console.log(result);
         resultList.push(result);
       }
     }
@@ -111,8 +139,7 @@ const getChatRoomDetail = async (
         // 해당 채팅을 보낸 ID의 유저가 존재하지 않으면 내용은 보여주되 유저 정보는 알 수 없음 처리.
         state = 'OTHER';
         userDto = {
-          id: '',
-          profile: '(알 수 없음)',
+          userId: '',
           name: '(알 수 없음)',
         };
       } else {
@@ -125,18 +152,17 @@ const getChatRoomDetail = async (
 
         userDto = {
           // 채팅에서 보여질 유저 정보.
-          id: sender.id,
-          profile: sender.introduction,
+          userId: sender.id,
           name: sender.name as string,
         };
       }
 
       const chatDto: ChatDto = {
         id: chat,
+        thunderId: thunderId,
         message: result.message,
         user: userDto,
-        createdAt: result.createdAt,
-        thunderId: thunderId,
+        createdAt: dayjs(result.createdAt).format('MM/DD HH:mm'),
         state: state,
       }; // 채팅방에서 보여질 채팅 하나의 정보.
 
@@ -168,6 +194,7 @@ const getChatRoomDetail = async (
       limitMemberCnt: thunder.limitMembersCnt,
       joinMemberCnt: thunder.members.length,
       chats: chatDtos,
+      thunderId: thunderId,
       isAlarm: isAlarm as boolean,
     }; // 최종적으로 반환할 채팅방 한 개의 정보.
 

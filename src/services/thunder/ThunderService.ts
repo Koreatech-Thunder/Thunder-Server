@@ -1,11 +1,11 @@
 import errorGenerator from '../../errors/errorGenerator';
 import {PostBaseResponseDto} from '../../interfaces/common/PostBaseResponseDto';
-import {ThunderCreateDto} from '../../interfaces/thunder/request/ThunderCreateRequestDto';
-import {ThunderResponseDto} from '../../interfaces/thunder/response/ThunderFindResponseDto';
-import {ThunderUpdateDto} from '../../interfaces/thunder/request/ThunderUpdateRequestDto';
-import {ThunderMembersDto} from '../../interfaces/thunder/request/ThunderMembersRequestDto';
-import {ThunderFindResponseDto} from '../../interfaces/thunder/response/ThunderFindOneResponseDto';
 import EvaluateCalculate from '../evaluate/EvaluateCalculate';
+import {ThunderCreateRequestDto} from '../../interfaces/thunder/request/ThunderCreateRequestDto';
+import {ThunderFindResponseDto} from '../../interfaces/thunder/response/ThunderFindResponseDto';
+import {ThunderUpdateRequestDto} from '../../interfaces/thunder/request/ThunderUpdateRequestDto';
+import {ThunderMembersResponseDto} from '../../interfaces/thunder/response/ThunderMembersResponseDto';
+import {ThunderFindOneResponseDto} from '../../interfaces/thunder/response/ThunderFindOneResponseDto';
 import Thunder from '../../models/Thunder';
 import message from '../../modules/message';
 import statusCode from '../../modules/statusCode';
@@ -18,7 +18,7 @@ import dayjs from 'dayjs';
 import mongoose from 'mongoose';
 
 const createThunder = async (
-  thunderCreateDto: ThunderCreateDto,
+  ThunderCreateRequestDto: ThunderCreateRequestDto,
   userId: string,
 ): Promise<PostBaseResponseDto> => {
   try {
@@ -32,11 +32,11 @@ const createThunder = async (
     await newThunderRoomInfo.save();
 
     const thunder = new Thunder({
-      title: thunderCreateDto.title,
-      deadline: new Date(thunderCreateDto.deadline).getTime(), //아마존 서버 상에서는 정상 작동.
-      hashtags: thunderCreateDto.hashtags,
-      content: thunderCreateDto.content,
-      limitMembersCnt: thunderCreateDto.limitMembersCnt,
+      title: ThunderCreateRequestDto.title,
+      deadline: new Date(ThunderCreateRequestDto.deadline).getTime(), //아마존 서버 상에서는 정상 작동.
+      hashtags: ThunderCreateRequestDto.hashtags,
+      content: ThunderCreateRequestDto.content,
+      limitMembersCnt: ThunderCreateRequestDto.limitMembersCnt,
       members: [newThunderRoomInfo._id],
       createdAt: Date.now() + 3600000 * 9,
       updatedAt: Date.now() + 3600000 * 9,
@@ -60,7 +60,7 @@ const createThunder = async (
     };
 
     const user = await User.find({
-      hashtags: {$in: thunderCreateDto.hashtags},
+      hashtags: {$in: ThunderCreateRequestDto.hashtags},
     });
 
     for (var i = 0; i < user.length; i++) {
@@ -93,7 +93,9 @@ const createThunder = async (
   }
 };
 
-const getThunderAll = async (userId: string): Promise<ThunderResponseDto[]> => {
+const getThunderAll = async (
+  userId: string,
+): Promise<ThunderFindResponseDto[]> => {
   try {
     const currentTime = new Date().getTime() + 3600000 * 9; //현재 날짜 및 시간
 
@@ -102,11 +104,11 @@ const getThunderAll = async (userId: string): Promise<ThunderResponseDto[]> => {
       deadline: {$gt: currentTime},
     }).sort({createdAt: 'desc'});
 
-    const allThunder: ThunderResponseDto[] = await Promise.all(
+    const allThunder: ThunderFindResponseDto[] = await Promise.all(
       thunderlist.map(async (thunder: any) => {
         const idList: mongoose.Schema.Types.ObjectId[] = []; // User._id[]
 
-        const thunderMembers: ThunderMembersDto[] = [];
+        const thunderMembers: ThunderMembersResponseDto[] = [];
 
         for (const member of thunder.members) {
           const user = await PersonalChatRoom.findById(member).populate(
@@ -181,7 +183,7 @@ const getThunderAll = async (userId: string): Promise<ThunderResponseDto[]> => {
 const getThunderByHashtag = async (
   hashtag: string,
   userId: string,
-): Promise<ThunderResponseDto[]> => {
+): Promise<ThunderFindResponseDto[]> => {
   try {
     const currentTime = new Date().getTime() + 3600000 * 9; //현재 날짜 및 시간
     const thunderlist = await Thunder.find({
@@ -189,11 +191,11 @@ const getThunderByHashtag = async (
       deadline: {$gt: currentTime},
     }).sort({createdAt: 'desc'});
 
-    const hashtagthunder: ThunderResponseDto[] = await Promise.all(
+    const hashtagthunder: ThunderFindResponseDto[] = await Promise.all(
       thunderlist.map(async (thunder: any) => {
         const idList: mongoose.Schema.Types.ObjectId[] = []; // User._id[]
 
-        const thunderMembers: ThunderMembersDto[] = [];
+        const thunderMembers: ThunderMembersResponseDto[] = [];
 
         for (const member of thunder.members) {
           const user = await PersonalChatRoom.findById(member).populate(
@@ -267,11 +269,11 @@ const getThunderByHashtag = async (
 
 const getThunderOne = async (
   thunderId: string,
-): Promise<ThunderFindResponseDto> => {
+): Promise<ThunderFindOneResponseDto> => {
   try {
-    const thunder = await ThunderServiceUtils.getThunderById(thunderId);
+    const thunder = await ThunderServiceUtils.getThunderOneById(thunderId);
 
-    const data: ThunderFindResponseDto = {
+    const data: ThunderFindOneResponseDto = {
       thunderId: thunderId,
       title: thunder.title,
       deadline: dayjs(thunder.deadline).format('YYYY-MM-DD HH:mm'),
@@ -290,10 +292,11 @@ const getThunderOne = async (
 const updateThunder = async (
   userId: string,
   thunderId: string,
-  thunderUpdateDto: ThunderUpdateDto,
+  ThunderUpdateRequestDto: ThunderUpdateRequestDto,
 ): Promise<void> => {
   try {
-    const thunder = await ThunderServiceUtils.getThunderById(thunderId);
+    const thunder = await ThunderServiceUtils.getThunderOneById(thunderId);
+
 
     const idList = []; // User._id[]
 
@@ -308,7 +311,7 @@ const updateThunder = async (
     );
 
     if (isMembers == 'HOST') {
-      await Thunder.findByIdAndUpdate(thunderId, thunderUpdateDto);
+      await Thunder.findByIdAndUpdate(thunderId, ThunderUpdateRequestDto);
     } else {
       throw errorGenerator({
         msg: message.FORBIDDEN,
@@ -326,7 +329,8 @@ const joinThunder = async (
   thunderId: string,
 ): Promise<void> => {
   try {
-    const thunder = await ThunderServiceUtils.getThunderById(thunderId);
+    const thunder = await ThunderServiceUtils.getThunderOneById(thunderId);
+
 
     if (thunder.members.length >= thunder.limitMembersCnt) {
       throw errorGenerator({
@@ -385,7 +389,8 @@ const joinThunder = async (
 
 const outThunder = async (userId: string, thunderId: string): Promise<void> => {
   try {
-    const thunder = await ThunderServiceUtils.getThunderById(thunderId);
+    const thunder = await ThunderServiceUtils.getThunderOneById(thunderId);
+
 
     const members = thunder.members; // members = [ObjectId] -> ref: PersonalRoomInfo
     const idList = []; // PersonalRoomInfo에 저장된 UserId.

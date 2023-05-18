@@ -5,5 +5,6 @@ export interface ChatRoomDetailDto {
   limitMemberCnt: number;
   joinMemberCnt: number;
   isAlarm: Boolean;
+  thunderId: string;
   chats: ChatDto[];
 }

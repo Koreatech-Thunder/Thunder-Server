@@ -47,7 +47,7 @@ const getChatRoomDetail = async (
   try {
     const data = await ChatService.getChatRoomDetail(userId, thunderId);
 
-    res.status(statusCode.OK).json({accessToken: data});
+    res.status(statusCode.OK).json(data);
   } catch (error: any) {
     if (error.statusCode == statusCode.NOT_FOUND) {
       //찾을 수 없는 정보가 있었다면 NOT FOUND 발송.

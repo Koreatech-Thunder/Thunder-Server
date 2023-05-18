@@ -1,5 +1,7 @@
+import mongoose from 'mongoose';
+
 export interface ThunderReportsInfo {
-  userId: string;
+  userId: mongoose.Types.ObjectId;
   thunderId: string;
   reportIndex: number;
   createdAt: Date;

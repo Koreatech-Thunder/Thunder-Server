@@ -1,4 +1,4 @@
-export interface ThunderCreateDto {
+export interface ThunderCreateRequestDto {
   title: string;
   deadline: string;
   content: string;

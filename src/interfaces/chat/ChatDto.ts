@@ -3,9 +3,9 @@ import {ChatUserDto} from './ChatUserDto';
 
 export interface ChatDto {
   id: mongoose.Schema.Types.ObjectId;
-  thunderId: String;
+  thunderId: string;
   message: String;
   user: ChatUserDto;
-  createdAt: Date;
+  createdAt: string;
   state: String; // OTHER, ME
 }

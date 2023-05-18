@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import {ThunderReportsInfo} from '../interfaces/report/ThunderReportsInfo';
 
-const ThunderReportsSchema = new mongoose.Schema({
+const ThunderReportSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
@@ -25,5 +25,5 @@ const ThunderReportsSchema = new mongoose.Schema({
 
 export default mongoose.model<ThunderReportsInfo & mongoose.Document>(
   'ThunderReports',
-  ThunderReportsSchema,
+  ThunderReportSchema,
 );
