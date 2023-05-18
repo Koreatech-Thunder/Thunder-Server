@@ -5,6 +5,7 @@ import User from '../../models/User';
 import ThunderServiceUtils from '../thunder/ThunderServiceUtils';
 import {UserEvaluateResponseDto} from '../../interfaces/evaluate/response/UserEvaluateResponseDto';
 import mongoose from 'mongoose';
+import PersonalChatRoom from '../../models/PersonalChatRoom';
 
 const evaluateThunder = async (
   EvaluateRequestDto: EvaluateRequestDto,
@@ -81,8 +82,9 @@ const getUserEvaluateInfo = async (
     const evaluateInfoIdList = [];
 
     for (const member of thunder.members) {
-      if (!(member.toString() == userId)) {
-        evaluateInfoIdList.push(member);
+      const user = await PersonalChatRoom.findById(member);
+      if (!(user.userId.toString() == userId)) {
+        evaluateInfoIdList.push(user.userId);
       }
     }
 
@@ -97,8 +99,6 @@ const getUserEvaluateInfo = async (
         return userInfo;
       }),
     );
-
-    console.log(allEvaluateInfo);
 
     const data: UserEvaluateResponseDto = {
       title: thunder.title,
