@@ -25,12 +25,9 @@ const reportThunder = async (
   const {thunderId} = req.params;
 
   try {
-    const data: PostBaseResponseDto = await ReportService.reportThunder(
-      ThunderReportsRequestDto,
-      thunderId,
-    );
+    await ReportService.reportThunder(ThunderReportsRequestDto, thunderId);
 
-    res.status(statusCode.CREATED).send(data);
+    res.status(statusCode.CREATED).send();
   } catch (error: any) {
     console.log(error);
     res
@@ -58,12 +55,9 @@ const reportChat = async (
   const {thunderId} = req.params;
 
   try {
-    const data: PostBaseResponseDto = await ReportService.reportChat(
-      ChatReportsRequestDto,
-      thunderId,
-    );
+    await ReportService.reportChat(ChatReportsRequestDto, thunderId);
 
-    res.status(statusCode.CREATED).send(data);
+    res.status(statusCode.CREATED).send();
   } catch (error: any) {
     console.log(error);
     res

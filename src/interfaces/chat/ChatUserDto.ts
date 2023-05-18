@@ -1,5 +1,4 @@
 export interface ChatUserDto {
-  id: String;
-  profile?: String;
+  userId: String;
   name: String;
 }

@@ -5,12 +5,13 @@ import message from './message';
 import statusCode from './statusCode';
 import {PersonalChatRoomInfo} from '../interfaces/chat/PersonalChatRoomInfo';
 import ThunderRecord from '../models/ThunderRecord';
-import {ObjectId} from 'mongoose';
 import {UserInfo} from '../interfaces/user/UserInfo';
 import {ThunderInfo} from '../interfaces/thunder/ThunderInfo';
 import {ChatInfo} from '../interfaces/chat/ChatInfo';
+import {ObjectId} from 'mongoose';
+import PersonalChatRoom from '../models/PersonalChatRoom';
 
-const getThunders = async (userId: string): Promise<ThunderInfo[] | null> => {
+const getThunders = async (userId: any): Promise<ThunderInfo[]> => {
   try {
     const user = await User.findById(userId);
 
@@ -26,6 +27,7 @@ const getThunders = async (userId: string): Promise<ThunderInfo[] | null> => {
 
     if (!records) {
       // 유저의 번개 기록이 아무것도 없으면 빈 리스트 반환.
+      console.log('No user records');
       return [];
     }
 
@@ -42,11 +44,10 @@ const getThunders = async (userId: string): Promise<ThunderInfo[] | null> => {
     });
 
     if (!result) {
+      console.log('No result');
       // 아무것도 없으면 빈 리스트 반환.
       return [];
     }
-
-    console.log(result);
 
     return result;
   } catch (error) {
@@ -56,12 +57,14 @@ const getThunders = async (userId: string): Promise<ThunderInfo[] | null> => {
 };
 
 const setConnectState = async (
-  member: PersonalChatRoomInfo,
+  memberId: string,
   isConnect: Boolean,
-): Promise<PersonalChatRoomInfo> => {
-  member['isConnect'] = isConnect; //매개변수로 들어온 Info에서 isConnect 필드만 매개변수 isConnect 값으로 변경 후 반환. DB 수정 없음.
+): Promise<void> => {
+  const member = await PersonalChatRoom.findByIdAndUpdate(memberId, {
+    isConnect: isConnect,
+  });
 
-  return member;
+  console.log('Inside method : ', member);
 };
 
 const getUser = async (userId: string): Promise<UserInfo> => {

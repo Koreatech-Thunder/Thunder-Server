@@ -1,4 +1,4 @@
-export interface ThunderFindResponseDto {
+export interface ThunderFindOneResponseDto {
   thunderId: string;
   title: string;
   deadline: string;

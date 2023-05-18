@@ -6,28 +6,20 @@ import ThunderServiceUtils from '../thunder/ThunderServiceUtils';
 import ChatReports from '../../models/ChatReports';
 
 const reportThunder = async (
-  ThunderReportsRequestDto: ThunderReportsRequestDto,
+  thunderReportsRequestDto: ThunderReportsRequestDto,
   thunderId: string,
-): Promise<PostBaseResponseDto> => {
+): Promise<void> => {
   try {
-    const thunder = await ThunderServiceUtils.getThunderById(thunderId);
-
-    ThunderReportsRequestDto.userId = thunder.members[0].toString();
+    const thunder = await ThunderServiceUtils.getThunderOneById(thunderId);
 
     const thunderReports = new ThunderReports({
-      userId: ThunderReportsRequestDto.userId,
+      userId: thunder.members[0],
       thunderId: thunderId,
-      reportIndex: ThunderReportsRequestDto.reportIndex,
+      reportIndex: thunderReportsRequestDto.reportIndex,
       createdAt: Date.now() + 3600000 * 9,
     });
 
     await thunderReports.save();
-
-    const data = {
-      _id: thunderReports._id,
-    };
-
-    return data;
   } catch (error) {
     console.log(error);
     throw error;
@@ -35,24 +27,18 @@ const reportThunder = async (
 };
 
 const reportChat = async (
-  ChatReportsRequestDto: ChatReportsRequestDto,
+  chatReportsRequestDto: ChatReportsRequestDto,
   thunderId: string,
-): Promise<PostBaseResponseDto> => {
+): Promise<void> => {
   try {
     const chatReports = new ChatReports({
-      userId: ChatReportsRequestDto.userId,
+      userId: chatReportsRequestDto.userId,
       thunderId: thunderId,
-      reportIndex: ChatReportsRequestDto.reportIndex,
+      reportIndex: chatReportsRequestDto.reportIndex,
       createdAt: Date.now() + 3600000 * 9,
     });
 
     await chatReports.save();
-
-    const data = {
-      _id: chatReports._id,
-    };
-
-    return data;
   } catch (error) {
     console.log(error);
     throw error;

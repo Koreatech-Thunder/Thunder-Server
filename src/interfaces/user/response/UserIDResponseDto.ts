@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
-import {UserCreateDto} from '../request/UserCreateRequestDto';
+import {UserCreateRequestDto} from '../request/UserCreateRequestDto';
 
-export interface UserResponseDto extends UserCreateDto {
+export interface UserIDResponseDto extends UserCreateRequestDto {
   _id: mongoose.Schema.Types.ObjectId;
 }

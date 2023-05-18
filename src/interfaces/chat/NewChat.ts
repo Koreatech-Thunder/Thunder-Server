@@ -1,4 +1,4 @@
 export interface NewChat {
-    thunderId: String;
-    message: String;
+  thunderId: String;
+  message: String;
 }

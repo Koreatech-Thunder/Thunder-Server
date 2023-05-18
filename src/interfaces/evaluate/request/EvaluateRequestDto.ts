@@ -1,6 +1,8 @@
-export interface EvaluateRequestDto {
+export interface EvaluateRequest {
   userId: string;
-  scores: number;
+  score: number;
 }
 
-export interface EvaluateRequestDtos extends Array<EvaluateRequestDto> {}
+export interface EvaluateRequestDto {
+  evaluate: EvaluateRequest[];
+}

@@ -1,9 +1,9 @@
 import User from '../../models/User';
-import {UserResponseDto} from '../../interfaces/user/response/UserIDResponseDto';
+import {UserIDResponseDto} from '../../interfaces/user/response/UserIDResponseDto';
 import errorGenerator from '../../errors/errorGenerator';
 import statusCode from '../../modules/statusCode';
-import {UserInfoDto} from '../../interfaces/user/response/UserInfoResponseDto';
-import {UserUpdateDto} from '../../interfaces/user/request/UserUpdateRequestDto';
+import {UserInfoResponseDto} from '../../interfaces/user/response/UserInfoResponseDto';
+import {UserUpdateRequestDto} from '../../interfaces/user/request/UserUpdateRequestDto';
 import {UserHashtagResponseDto} from '../../interfaces/user/response/UserHashtagResponseDto';
 import {UserThunderRecordResponseDto} from '../../interfaces/user/response/UserThunderRecordResponseDto';
 import {UserAlarmStateResponseDto} from '../../interfaces/user/response/UserAlarmStateResponseDto';
@@ -17,7 +17,7 @@ import {Schema} from 'mongoose';
 
 const getUserById = async (userId: string) => {
   try {
-    const user: UserResponseDto | null = await User.findById(userId);
+    const user: UserIDResponseDto | null = await User.findById(userId);
 
     return user;
   } catch (error) {
@@ -28,7 +28,7 @@ const getUserById = async (userId: string) => {
 
 const getUserByKakao = async (kakaoId: any) => {
   try {
-    const user: UserResponseDto | null = await User.findOne({
+    const user: UserIDResponseDto | null = await User.findOne({
       kakaoId: kakaoId,
     });
 
@@ -129,7 +129,7 @@ const getUserProfile = async (userId: string) => {
       });
     }
 
-    const result: UserInfoDto = {
+    const result: UserInfoResponseDto = {
       name: data.name as string,
       introduction: data.introduction as string,
       hashtags: data.hashtags as [string],
@@ -144,11 +144,11 @@ const getUserProfile = async (userId: string) => {
 };
 
 const updateUser = async (
-  userUpdateDto: UserUpdateDto,
+  UserUpdateRequestDto: UserUpdateRequestDto,
   userId: string,
 ): Promise<void> => {
   try {
-    await User.findByIdAndUpdate(userId, userUpdateDto);
+    await User.findByIdAndUpdate(userId, UserUpdateRequestDto);
   } catch (error) {
     console.log(error);
     throw error;

@@ -1,7 +1,7 @@
 import {Request, Response} from 'express';
 import {Result, ValidationError, validationResult} from 'express-validator';
 import statusCode from '../../modules/statusCode';
-import {EvaluateRequestDtos} from '../../interfaces/evaluate/request/EvaluateRequestDto';
+import {EvaluateRequestDto} from '../../interfaces/evaluate/request/EvaluateRequestDto';
 import EvaluateService from '../../services/evaluate/EvaluateService';
 import {UserEvaluateResponseDto} from '../../interfaces/evaluate/response/UserEvaluateResponseDto';
 
@@ -20,7 +20,7 @@ const evaluateThunder = async (
     return res.status(statusCode.BAD_REQUEST).send(statusCode.BAD_REQUEST);
   }
 
-  const EvaluateRequestDtos: EvaluateRequestDtos = req.body;
+  const EvaluateRequestDtos: EvaluateRequestDto = req.body;
   const {thunderId} = req.params;
 
   try {
