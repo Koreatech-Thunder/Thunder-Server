@@ -283,7 +283,6 @@ io.on('connect', (socket: any) => {
       thunderInfo.members.forEach(function (chatroomId: ObjectId) {
         PersonalChatRoom.findOne({_id: chatroomId}).exec(
           async (err, foundChatRoom) => {
-            console.log('found: ', foundChatRoom);
             if (err) {
               throw errorGenerator({
                 msg: message.NOT_FOUND_MEMBER,
@@ -294,11 +293,11 @@ io.on('connect', (socket: any) => {
               console.log(
                 'isConnect of ',
                 foundChatRoom.userId,
-                ':',
+                ' : ',
                 isConnect,
               );
               const isAlarm = foundChatRoom.isAlarm;
-              console.log('isAlarm of ', foundChatRoom.userId, ':', isAlarm);
+              console.log('isAlarm of ', foundChatRoom.userId, ' : ', isAlarm);
               console.log('userId: ', foundChatRoom.userId);
               if (
                 !isConnect &&
