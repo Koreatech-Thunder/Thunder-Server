@@ -77,7 +77,7 @@ const getUserEvaluateInfo = async (
   thunderId: string,
 ): Promise<UserEvaluateResponseDto> => {
   try {
-    const thunder = await ThunderServiceUtils.getThunderById(thunderId);
+    const thunder = await ThunderServiceUtils.getThunderOneById(thunderId);
     const evaluateInfoIdList = [];
 
     for (const member of thunder.members) {
@@ -114,6 +114,5 @@ const getUserEvaluateInfo = async (
 
 export default {
   evaluateThunder,
-  calculateScore,
   getUserEvaluateInfo,
 };
