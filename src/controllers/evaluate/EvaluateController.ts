@@ -46,8 +46,7 @@ const getUserEvaluateInfo = async (
   res: Response,
 ): Promise<void | Response> => {
   try {
-    //const userId: string = req.body['userId'];
-    const {userId} = req.params;
+    const userId: string = req.body['userId'];
     const {thunderId} = req.params;
 
     const data: UserEvaluateResponseDto =
