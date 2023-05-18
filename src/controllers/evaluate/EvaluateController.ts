@@ -21,10 +21,15 @@ const evaluateThunder = async (
   }
 
   const EvaluateRequestDtos: EvaluateRequestDto = req.body;
+  const userId: string = req.body['userId'];
   const {thunderId} = req.params;
 
   try {
-    await EvaluateService.evaluateThunder(EvaluateRequestDtos, thunderId);
+    await EvaluateService.evaluateThunder(
+      EvaluateRequestDtos,
+      userId,
+      thunderId,
+    );
 
     res.status(statusCode.CREATED).send();
   } catch (error: any) {
