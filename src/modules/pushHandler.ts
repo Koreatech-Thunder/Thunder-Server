@@ -3,9 +3,12 @@ import errorGenerator from '../errors/errorGenerator';
 import statusCode from './statusCode';
 import User from '../models/User';
 import message from './message';
-import {pushMessageTemplate} from './pushMessageTemplate';
 
-const pushAlarmToUser = async (userId: string, title: string, body: string): Promise<void> => {
+const pushAlarmToUser = async (
+  userId: string,
+  title: string,
+  body: string,
+): Promise<void> => {
   try {
     const user = await User.findById(userId);
     if (!user) {
@@ -26,6 +29,8 @@ const pushAlarmToUser = async (userId: string, title: string, body: string): Pro
       },
       token: user.fcmToken as string,
     };
+
+    console.log('alarm token: ', alarm.token);
 
     firebase
       .messaging()

@@ -281,9 +281,8 @@ io.on('connect', (socket: any) => {
     );
     thunder.then((thunderInfo: ThunderInfo) => {
       thunderInfo.members.forEach(function (chatroomId: ObjectId) {
-        PersonalChatRoom.findOne({_id: chatroomId})
-          .populate('userId')
-          .exec(async (err, foundChatRoom) => {
+        PersonalChatRoom.findOne({_id: chatroomId}).exec(
+          async (err, foundChatRoom) => {
             console.log('found: ', foundChatRoom);
             if (err) {
               throw errorGenerator({
@@ -292,17 +291,29 @@ io.on('connect', (socket: any) => {
               });
             } else {
               const isConnect = foundChatRoom.isConnect;
+              console.log(
+                'isConnect of ',
+                foundChatRoom.userId,
+                ':',
+                isConnect,
+              );
               const isAlarm = foundChatRoom.isAlarm;
-              console.log('userId: ', userId);
-              if (!isConnect && isAlarm && chattingHandler.isAlarm(userId)) {
+              console.log('isAlarm of ', foundChatRoom.userId, ':', isAlarm);
+              console.log('userId: ', foundChatRoom.userId);
+              if (
+                !isConnect &&
+                isAlarm &&
+                chattingHandler.isAlarm(foundChatRoom.userId.toString())
+              ) {
                 await pushHandler.pushAlarmToUser(
-                  userId,
+                  foundChatRoom.userId.toString(),
                   thunderInfo.title + ' : 새 메시지',
                   '새 채팅이 올라왔습니다.',
                 );
               }
             }
-          });
+          },
+        );
       });
     });
   });
