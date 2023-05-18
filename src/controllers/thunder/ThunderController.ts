@@ -51,8 +51,8 @@ const createThunder = async (
 const getThunderAll = async (req: Request, res: Response): Promise<void> => {
   try {
     const userId: string = req.body['userId'];
-    const data: ThunderFindResponseDto[] = await ThunderService.getThunderAll(
 
+    const data: ThunderFindResponseDto[] = await ThunderService.getThunderAll(
       userId,
     );
 

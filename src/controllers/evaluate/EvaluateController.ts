@@ -3,6 +3,7 @@ import {Result, ValidationError, validationResult} from 'express-validator';
 import statusCode from '../../modules/statusCode';
 import {EvaluateRequestDto} from '../../interfaces/evaluate/request/EvaluateRequestDto';
 import EvaluateService from '../../services/evaluate/EvaluateService';
+import {UserEvaluateResponseDto} from '../../interfaces/evaluate/response/UserEvaluateResponseDto';
 
 /**
  *
@@ -34,6 +35,34 @@ const evaluateThunder = async (
   }
 };
 
+/**
+ *
+ * @route GET / evaluate
+ * @desc get User Thunder Evaluate Info
+ * @access Public
+ */
+const getUserEvaluateInfo = async (
+  req: Request,
+  res: Response,
+): Promise<void | Response> => {
+  try {
+    //const userId: string = req.body['userId'];
+    const {userId} = req.params;
+    const {thunderId} = req.params;
+
+    const data: UserEvaluateResponseDto =
+      await EvaluateService.getUserEvaluateInfo(userId, thunderId);
+
+    res.status(statusCode.CREATED).send(data);
+  } catch (error: any) {
+    console.log(error);
+    res
+      .status(statusCode.INTERNAL_SERVER_ERROR)
+      .send(statusCode.INTERNAL_SERVER_ERROR);
+  }
+};
+
 export default {
   evaluateThunder,
+  getUserEvaluateInfo,
 };

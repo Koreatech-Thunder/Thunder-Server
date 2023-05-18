@@ -1,6 +1,10 @@
 import {EvaluateRequestDto} from '../../interfaces/evaluate/request/EvaluateRequestDto';
 import ThunderEvaluate from '../../models/ThunderEvaluates';
 import Evaluate from '../../models/Evaluate';
+import User from '../../models/User';
+import ThunderServiceUtils from '../thunder/ThunderServiceUtils';
+import {UserEvaluateResponseDto} from '../../interfaces/evaluate/response/UserEvaluateResponseDto';
+import mongoose from 'mongoose';
 
 const evaluateThunder = async (
   EvaluateRequestDto: EvaluateRequestDto,
@@ -68,6 +72,48 @@ const evaluateThunder = async (
   }
 };
 
+const getUserEvaluateInfo = async (
+  userId: string,
+  thunderId: string,
+): Promise<UserEvaluateResponseDto> => {
+  try {
+    const thunder = await ThunderServiceUtils.getThunderById(thunderId);
+    const evaluateInfoIdList = [];
+
+    for (const member of thunder.members) {
+      if (!(member.toString() == userId)) {
+        evaluateInfoIdList.push(member);
+      }
+    }
+
+    const allEvaluateInfo: any = await Promise.all(
+      evaluateInfoIdList.map(async (evaluateInfoId: any) => {
+        const user = await User.findById(evaluateInfoId);
+
+        const userInfo = {
+          userId: evaluateInfoId,
+          name: user.name,
+        };
+        return userInfo;
+      }),
+    );
+
+    console.log(allEvaluateInfo);
+
+    const data: UserEvaluateResponseDto = {
+      title: thunder.title,
+      userInfo: allEvaluateInfo,
+    };
+
+    return data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
 export default {
   evaluateThunder,
+  calculateScore,
+  getUserEvaluateInfo,
 };
