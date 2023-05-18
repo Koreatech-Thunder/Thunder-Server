@@ -82,12 +82,12 @@ io.on('connect', (socket: any) => {
             const foundUserId = foundChatRoom.userId;
             if (userId === foundUserId.toString()) {
               console.log('scChatRoom - connect state changed!');
-              console.log('s1: ', foundChatRoom);
+              //console.log('s1: ', foundChatRoom);
               await PersonalChatRoom.findByIdAndUpdate(foundChatRoom._id, {
                 isConnect: true,
               });
 
-              console.log('s2: ', foundChatRoom);
+              console.log('state: ', foundChatRoom);
             }
             tempMember.push(foundChatRoom._id);
           } catch (err) {
@@ -122,7 +122,7 @@ io.on('connect', (socket: any) => {
             const foundUserId = foundChatRoom.userId;
             if (userId === foundUserId.toString()) {
               console.log('unscChatRoom - connect state changed!');
-              console.log('lastState: ', foundChatRoom);
+              //console.log('lastState: ', foundChatRoom);
               await PersonalChatRoom.findByIdAndUpdate(foundChatRoom._id, {
                 isConnect: false,
               });
@@ -167,7 +167,7 @@ io.on('connect', (socket: any) => {
 
         if (userId === foundUserId.toString()) {
           console.log('scChat - connect state changed!');
-          console.log('lastState: ', foundChatRoom);
+          //console.log('lastState: ', foundChatRoom);
           await PersonalChatRoom.findByIdAndUpdate(foundChatRoom._id, {
             isConnect: true,
           });
@@ -211,7 +211,7 @@ io.on('connect', (socket: any) => {
         const foundUserId = foundChatRoom.userId;
         if (userId === foundUserId.toString()) {
           console.log('unscChat - connect state changed!');
-          console.log('lastState: ', foundChatRoom);
+          //console.log('lastState: ', foundChatRoom);
           await PersonalChatRoom.findByIdAndUpdate(foundChatRoom._id, {
             isConnect: false,
           });
