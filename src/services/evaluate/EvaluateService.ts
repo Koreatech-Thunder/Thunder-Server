@@ -19,7 +19,7 @@ const evaluateThunder = async (
     });
     if (thunderEvaluate) {
       //평가하고 있는 번개 방이 있다면
-      for (const evaluateRequest of EvaluateRequestDto.evaluate) {
+      for (const evaluateRequest of EvaluateRequestDto.evaluates) {
         const evaluate = await Evaluate.findOne({
           $and: [{userId: evaluateRequest.userId}, {thunderId: thunderId}],
         });
@@ -52,7 +52,7 @@ const evaluateThunder = async (
 
       await thunderEvaluate.save();
 
-      for (const evaluateRequest of EvaluateRequestDto.evaluate) {
+      for (const evaluateRequest of EvaluateRequestDto.evaluates) {
         const evaluate = new Evaluate({
           //Evaluate 객체 생성
           userId: evaluateRequest.userId,

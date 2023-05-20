@@ -4,5 +4,5 @@ export interface EvaluateRequest {
 }
 
 export interface EvaluateRequestDto {
-  evaluate: EvaluateRequest[];
+  evaluates: EvaluateRequest[];
 }
