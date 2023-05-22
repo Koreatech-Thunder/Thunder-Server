@@ -308,6 +308,7 @@ io.on('connect', (socket: any) => {
                   foundChatRoom.userId.toString(),
                   thunderInfo.title + ' : 새 메시지',
                   '새 채팅이 올라왔습니다.',
+                  thunderInfo.thunderId,
                 );
               }
             }

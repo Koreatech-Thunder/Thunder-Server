@@ -8,7 +8,10 @@ const pushAlarmToUser = async (
   userId: string,
   title: string,
   body: string,
+  thunderId?: string,
 ): Promise<void> => {
+  console.log('Alarm for thunderId: ', thunderId);
+
   try {
     const user = await User.findById(userId);
     if (!user) {
@@ -26,6 +29,9 @@ const pushAlarmToUser = async (
       notification: {
         title: title,
         body: body,
+      },
+      data: {
+        thunderId: thunderId,
       },
       token: user.fcmToken as string,
     };
