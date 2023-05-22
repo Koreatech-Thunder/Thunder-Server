@@ -69,7 +69,7 @@ const evaluateThunder = async (
     }
 
     const user = await User.findById(userId).populate('thunderRecords');
-    console.log(user);
+
     for (const thunder of user.thunderRecords) {
       if ((thunder as any).thunderId == thunderId) {
         (thunder as any).isEvaluate = true;
@@ -79,7 +79,7 @@ const evaluateThunder = async (
         });
       }
     }
-    console.log(user);
+
     return;
   } catch (error) {
     console.log(error);
