@@ -36,7 +36,7 @@ const UserSchema = new mongoose.Schema({
   thunderRecords: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'ThunderRecords',
+      ref: 'ThunderRecord',
       default: [],
     },
   ],
