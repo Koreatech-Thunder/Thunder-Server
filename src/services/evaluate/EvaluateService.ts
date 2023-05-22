@@ -6,9 +6,11 @@ import ThunderServiceUtils from '../thunder/ThunderServiceUtils';
 import {UserEvaluateResponseDto} from '../../interfaces/evaluate/response/UserEvaluateResponseDto';
 import mongoose from 'mongoose';
 import PersonalChatRoom from '../../models/PersonalChatRoom';
+import ThunderRecord from '../../models/ThunderRecord';
 
 const evaluateThunder = async (
   EvaluateRequestDto: EvaluateRequestDto,
+  userId: string,
   thunderId: string,
 ): Promise<void> => {
   try {
@@ -17,7 +19,7 @@ const evaluateThunder = async (
     });
     if (thunderEvaluate) {
       //평가하고 있는 번개 방이 있다면
-      for (const evaluateRequest of EvaluateRequestDto.evaluate) {
+      for (const evaluateRequest of EvaluateRequestDto.evaluates) {
         const evaluate = await Evaluate.findOne({
           $and: [{userId: evaluateRequest.userId}, {thunderId: thunderId}],
         });
@@ -50,7 +52,7 @@ const evaluateThunder = async (
 
       await thunderEvaluate.save();
 
-      for (const evaluateRequest of EvaluateRequestDto.evaluate) {
+      for (const evaluateRequest of EvaluateRequestDto.evaluates) {
         const evaluate = new Evaluate({
           //Evaluate 객체 생성
           userId: evaluateRequest.userId,
@@ -62,6 +64,18 @@ const evaluateThunder = async (
 
         await ThunderEvaluate.findByIdAndUpdate(thunderEvaluate, {
           $push: {evaluates: evaluate._id}, //존재하는 객체의 scores에 push
+        });
+      }
+    }
+
+    const user = await User.findById(userId).populate('thunderRecords');
+
+    for (const thunder of user.thunderRecords) {
+      if ((thunder as any).thunderId == thunderId) {
+        (thunder as any).isEvaluate = true;
+
+        await ThunderRecord.findByIdAndUpdate(thunder, {
+          isEvaluate: (thunder as any).isEvaluate,
         });
       }
     }

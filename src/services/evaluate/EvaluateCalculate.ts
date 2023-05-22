@@ -1,6 +1,7 @@
 import ThunderEvaluate from '../../models/ThunderEvaluates';
 import Evaluate from '../../models/Evaluate';
 import User from '../../models/User';
+import ThunderRecord from '../../models/ThunderRecord';
 
 const calculateScore = async (thunderId: string): Promise<void> => {
   try {
@@ -98,6 +99,20 @@ const calculateScore = async (thunderId: string): Promise<void> => {
       await User.findByIdAndUpdate((evaluate as any).userId, {
         $inc: {mannerTemperature: totalScore}, //존재하는 객체의 scores에 push
       });
+
+      const user = await User.findById((evaluate as any).userId).populate(
+        'thunderRecords',
+      );
+
+      for (const thunder of user.thunderRecords) {
+        if ((thunder as any).thunderId == thunderId) {
+          (thunder as any).isEvaluate = true;
+
+          await ThunderRecord.findByIdAndUpdate(thunder, {
+            isEvaluate: (thunder as any).isEvaluate,
+          });
+        }
+      }
     }
 
     return;
