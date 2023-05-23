@@ -31,6 +31,8 @@ const pushAlarmToUser = async (
         body: body,
       },
       data: {
+        title: title,
+        body: body,
         thunderId: thunderId,
       },
       token: user.fcmToken as string,
