@@ -22,6 +22,7 @@ const server = http.createServer(app);
 const socketio = require('socket.io');
 import path from 'path';
 import dayjs from 'dayjs';
+import User from './models/User';
 
 connectDB();
 
@@ -304,10 +305,12 @@ io.on('connect', (socket: any) => {
                 isAlarm &&
                 chattingHandler.isAlarm(foundChatRoom.userId.toString())
               ) {
+                const userInfo = await User.findById(userId);
+
                 await pushHandler.pushAlarmToUser(
                   foundChatRoom.userId.toString(),
                   thunderInfo.title + ' : 새 메시지',
-                  parsed.message,
+                  userInfo.name + ' : ' + parsed.message,
                   parsed.thunderId,
                 );
               }
