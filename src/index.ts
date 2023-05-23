@@ -307,7 +307,7 @@ io.on('connect', (socket: any) => {
                 await pushHandler.pushAlarmToUser(
                   foundChatRoom.userId.toString(),
                   thunderInfo.title + ' : 새 메시지',
-                  '새 채팅이 올라왔습니다.',
+                  parsed.message,
                   parsed.thunderId,
                 );
               }
