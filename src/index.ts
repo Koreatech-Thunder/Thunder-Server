@@ -302,12 +302,12 @@ io.on('connect', (socket: any) => {
               console.log('userId: ', foundChatRoom.userId);
               console.log(
                 '전체알람설정 : ',
-                chattingHandler.isAlarm(foundChatRoom.userId.toString()),
+                await chattingHandler.isAlarm(foundChatRoom.userId.toString()),
               );
               if (
                 !isConnect &&
                 isAlarm &&
-                chattingHandler.isAlarm(foundChatRoom.userId.toString())
+                (await chattingHandler.isAlarm(foundChatRoom.userId.toString()))
               ) {
                 const userInfo = await User.findById(userId);
 
