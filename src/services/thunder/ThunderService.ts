@@ -80,7 +80,7 @@ const createThunder = async (
 
       const reuslt = await setTimeout(
         EvaluateCalculate.calculateScore,
-        evaluateDeadline,
+        300000,
         thunder._id,
       );
 
