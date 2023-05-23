@@ -300,6 +300,10 @@ io.on('connect', (socket: any) => {
               const isAlarm = foundChatRoom.isAlarm;
               console.log('isAlarm of ', foundChatRoom.userId, ' : ', isAlarm);
               console.log('userId: ', foundChatRoom.userId);
+              console.log(
+                '전체알람설정 : ',
+                chattingHandler.isAlarm(foundChatRoom.userId.toString()),
+              );
               if (
                 !isConnect &&
                 isAlarm &&
