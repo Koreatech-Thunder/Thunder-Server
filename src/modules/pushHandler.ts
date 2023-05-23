@@ -26,10 +26,6 @@ const pushAlarmToUser = async (
     }
 
     let alarm = {
-      notification: {
-        title: title,
-        body: body,
-      },
       data: {
         title: title,
         body: body,
