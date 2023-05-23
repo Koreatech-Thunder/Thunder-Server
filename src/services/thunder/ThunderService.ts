@@ -69,6 +69,7 @@ const createThunder = async (
           user[i]._id.toString(),
           '번개방이 생성됐어요~! 확인해 볼까요?',
           '',
+          'newThunder',
         );
       }
     }
