@@ -75,7 +75,7 @@ const createThunder = async (
 
     async function newStyleDelay(thunder: any) {
       const evaluateDeadline = thunder.deadline.setDate(
-        thunder.deadline.getDate() + 1,
+        thunder.deadline.getDate() + 2,
       );
 
       const reuslt = await setTimeout(
