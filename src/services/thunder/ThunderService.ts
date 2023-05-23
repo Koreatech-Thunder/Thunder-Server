@@ -15,7 +15,7 @@ import pushHandler from '../../modules/pushHandler';
 import PersonalChatRoom from '../../models/PersonalChatRoom';
 import ThunderRecord from '../../models/ThunderRecord';
 import dayjs from 'dayjs';
-import mongoose from 'mongoose';
+import mongoose, {ObjectId} from 'mongoose';
 
 const createThunder = async (
   ThunderCreateRequestDto: ThunderCreateRequestDto,
@@ -73,18 +73,26 @@ const createThunder = async (
       }
     }
 
-    const evaluateDeadline = thunder.deadline.setDate(
-      thunder.deadline.getDate() + 1,
-    );
+    async function newStyleDelay(thunder: any) {
+      const evaluateDeadline = thunder.deadline.setDate(
+        thunder.deadline.getDate() + 2,
+      );
 
-    async function newStyleDelay() {
-      await setTimeout(
+      const reuslt = await setTimeout(
         EvaluateCalculate.calculateScore,
         evaluateDeadline,
         thunder._id,
       );
+
+      return reuslt;
     }
-    newStyleDelay();
+
+    const timeoutId = newStyleDelay(thunder);
+
+    module.exports = {
+      timeoutId,
+      newStyleDelay,
+    };
 
     return data;
   } catch (error) {
@@ -296,8 +304,6 @@ const updateThunder = async (
 ): Promise<void> => {
   try {
     const thunder = await ThunderServiceUtils.getThunderOneById(thunderId);
-
-
     const idList = []; // User._id[]
 
     for (let member of thunder.members) {
@@ -318,6 +324,13 @@ const updateThunder = async (
         statusCode: statusCode.FORBIDDEN,
       });
     }
+
+    if (ThunderUpdateRequestDto.deadline) {
+      const module = require('./ThunderService');
+      clearTimeout(module.timeoutId);
+
+      module.newStyleDelay(thunder);
+    }
   } catch (error) {
     console.log(error);
     throw error;
@@ -330,7 +343,6 @@ const joinThunder = async (
 ): Promise<void> => {
   try {
     const thunder = await ThunderServiceUtils.getThunderOneById(thunderId);
-
 
     if (thunder.members.length >= thunder.limitMembersCnt) {
       throw errorGenerator({
@@ -391,7 +403,6 @@ const outThunder = async (userId: string, thunderId: string): Promise<void> => {
   try {
     const thunder = await ThunderServiceUtils.getThunderOneById(thunderId);
 
-
     const members = thunder.members; // members = [ObjectId] -> ref: PersonalRoomInfo
     const idList = []; // PersonalRoomInfo에 저장된 UserId.
     let myInfo;
@@ -451,6 +462,3 @@ export default {
   joinThunder,
   outThunder,
 };
-function useEffect(arg0: () => () => void, arg1: undefined[]) {
-  throw new Error('Function not implemented.');
-}
