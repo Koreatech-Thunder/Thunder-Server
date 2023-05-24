@@ -64,7 +64,7 @@ const setConnectState = async (
     isConnect: isConnect,
   });
 
-  console.log('Inside method : ', member);
+ // console.log('Inside method : ', member);
 };
 
 const getUser = async (userId: string): Promise<UserInfo> => {
