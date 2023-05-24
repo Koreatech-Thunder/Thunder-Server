@@ -82,7 +82,7 @@ const deleteUser = async (userId: string) => {
       deadline: {$gt: currentTime},
     });
 
-    console.log(thunderNotToDelete);
+    //console.log(thunderNotToDelete);
 
     if (thunderNotToDelete.length > 0) {
       throw errorGenerator({

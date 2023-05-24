@@ -10,7 +10,7 @@ const pushAlarmToUser = async (
   body: string,
   thunderId?: string,
 ): Promise<void> => {
-  console.log('Alarm for thunderId: ', thunderId);
+  //console.log('Alarm for thunderId: ', thunderId);
 
   try {
     const user = await User.findById(userId);
@@ -34,7 +34,7 @@ const pushAlarmToUser = async (
       token: user.fcmToken as string,
     };
 
-    console.log('alarm token: ', alarm.token);
+    //console.log('alarm token: ', alarm.token);
 
     firebase
       .messaging()

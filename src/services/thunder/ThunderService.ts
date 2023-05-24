@@ -78,16 +78,16 @@ const createThunder = async (
       const currentTime = new Date().getTime() + 3600000 * 9; //현재 날짜 및 시간
 
       const evaluateDeadline = thunder.deadline.setDate(
-        thunder.deadline.getDate()+2,
+        thunder.deadline.getDate() + 2,
       );
 
-      console.log('timetest: ', thunder.deadline.getDate());
+      //console.log('timetest: ', thunder.deadline.getDate());
 
       const diffMSec = evaluateDeadline - currentTime;
-     console.log('diffMsc : ', diffMSec);
+      //console.log('diffMsc : ', diffMSec);
       if (diffMSec < 0) {
-        console.log('diff If entered.');
-	      return;
+        //console.log('diff If entered.');
+        return;
       }
 
       const reuslt = await setTimeout(
@@ -336,15 +336,15 @@ const updateThunder = async (
         statusCode: statusCode.FORBIDDEN,
       });
     }
- thunder = await ThunderServiceUtils.getThunderOneById(thunderId);
+    thunder = await ThunderServiceUtils.getThunderOneById(thunderId);
 
     if (ThunderUpdateRequestDto.deadline) {
       const module = require('./ThunderService');
       clearTimeout(module.timeoutId);
 
       module.newStyleDelay(thunder);
- 
- 	console.log(thunder.deadline.getDate());
+
+      //console.log(thunder.deadline.getDate());
     }
   } catch (error) {
     console.log(error);

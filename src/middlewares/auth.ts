@@ -7,7 +7,7 @@ import User from '../models/User';
 
 const auth = async (req: Request, res: Response, next: NextFunction) => {
   const accessToken = req.headers['authorization'];
-  console.log(accessToken);
+  //console.log(accessToken);
 
   if (!accessToken) {
     //액세스 토큰 없으면 에러.
@@ -16,7 +16,7 @@ const auth = async (req: Request, res: Response, next: NextFunction) => {
 
   try {
     const decodedToken = jwtHandler.verifyToken(accessToken as string);
-    console.log(decodedToken);
+    //console.log(decodedToken);
 
     if (decodedToken === tokenStatus.EXPIRED_TOKEN) {
       //액세스 토큰 만료되면 에러.
