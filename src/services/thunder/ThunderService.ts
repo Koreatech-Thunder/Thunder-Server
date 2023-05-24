@@ -74,13 +74,20 @@ const createThunder = async (
     }
 
     async function newStyleDelay(thunder: any) {
+      const currentTime = new Date().getTime() + 3600000 * 9; //현재 날짜 및 시간
+
       const evaluateDeadline = thunder.deadline.setDate(
-        thunder.deadline.getDate() + 1,
+        thunder.deadline.getDate() + 2,
       );
+
+      const diffMSec = evaluateDeadline - currentTime;
+      if (diffMSec < 0) {
+        return;
+      }
 
       const reuslt = await setTimeout(
         EvaluateCalculate.calculateScore,
-        evaluateDeadline,
+        diffMSec,
         thunder._id,
       );
 
