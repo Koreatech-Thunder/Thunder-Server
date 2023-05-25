@@ -52,7 +52,7 @@ const login = async (kakaoToken: string, fcmToken: string) => {
 
       await user.save();
 
-      console.log(user._id);
+      //console.log(user._id);
 
       const accessToken = jwtHandler.getAccessToken(user._id);
       const refreshToken = jwtHandler.getRefreshToken();
@@ -101,7 +101,7 @@ const existLogin = async (kakaoToken: string, fcmToken: string) => {
       );
 
       const userId = existUser._id;
-      console.log(userId);
+      //console.log(userId);
 
       const accessToken = jwtHandler.getAccessToken(userId);
       const refreshToken = jwtHandler.getRefreshToken();

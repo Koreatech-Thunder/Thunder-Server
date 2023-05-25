@@ -5,6 +5,7 @@ import ThunderRecord from '../../models/ThunderRecord';
 
 const calculateScore = async (thunderId: string): Promise<void> => {
   try {
+	  console.log('calculate 시작...');
     var thunderEvaluate = await ThunderEvaluate.findOne({
       thunderId: thunderId,
     })
@@ -23,7 +24,7 @@ const calculateScore = async (thunderId: string): Promise<void> => {
 
       await thunderEvaluate.save();
 
-      var thunderEvaluate = await ThunderEvaluate.findOne({
+      thunderEvaluate = await ThunderEvaluate.findOne({
         thunderId: thunderId,
       })
         .populate({
@@ -55,6 +56,17 @@ const calculateScore = async (thunderId: string): Promise<void> => {
       }
     }
 
+
+
+
+ thunderEvaluate = await ThunderEvaluate.findOne({
+        thunderId: thunderId,
+      })
+        .populate({
+          path: 'thunderId',
+          populate: {path: 'members', select: 'userId'},
+        })
+        .populate('evaluates');
     const totalMember = (thunderEvaluate.thunderId as any).members.length;
 
     for (const evaluate of thunderEvaluate.evaluates) {

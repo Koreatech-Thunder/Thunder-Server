@@ -61,10 +61,10 @@ const getChatRooms = async (userId: string): Promise<ChatRoomDto[]> => {
           const sender = await User.findById(lastChat.sender);
 
           if (sender.id == user.id) {
-            console.log(sender.id, user.id);
+            //console.log(sender.id, user.id);
             state = 'ME';
           } else {
-            console.log(sender.id, user.id);
+            //console.log(sender.id, user.id);
             state = 'OTHER';
           }
 
@@ -91,7 +91,7 @@ const getChatRooms = async (userId: string): Promise<ChatRoomDto[]> => {
           endTime: endTime,
           lastChat: lastChatToSend,
         };
-        console.log(result);
+        //console.log(result);
         resultList.push(result);
       }
     }
@@ -227,7 +227,7 @@ const putChatRoomAlarm = async (
           statusCode: statusCode.NOT_FOUND,
         });
       }
-      console.log(member);
+      // console.log(member);
 
       if (member.userId.toString() == userId) {
         // PersonalChatRoom 안의 userId가 현재 조작하는 유저의 ID와 같다면 알람 ON/OFF 여부 변경.
