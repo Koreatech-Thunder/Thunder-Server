@@ -80,7 +80,7 @@ const calculateScore = async (thunderId: string): Promise<void> => {
           break;
 
         case totalScore < 3.0:
-          totalScore = 4;
+          totalScore = 0;
           break;
 
         case totalScore < 4.0:
