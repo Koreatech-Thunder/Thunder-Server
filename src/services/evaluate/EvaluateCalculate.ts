@@ -66,6 +66,7 @@ const calculateScore = async (thunderId: string): Promise<void> => {
       .populate('evaluates');
     const totalMember = (thunderEvaluate.thunderId as any).members.length;
 
+    const userIdList = [];
     for (const evaluate of thunderEvaluate.evaluates) {
       var totalScore;
       var scoreList = [];
@@ -108,20 +109,16 @@ const calculateScore = async (thunderId: string): Promise<void> => {
       await User.findByIdAndUpdate((evaluate as any).userId, {
         $inc: {mannerTemperature: totalScore}, //존재하는 객체의 scores에 push
       });
+    }
+    //ThunderRecord에서 thunderId와 같은 객체를 모두 가져옴
+    const thunderRecord = await ThunderRecord.find({thunderId: thunderId});
+    //해당 번개방의 모든 isEvaluate는 true
+    for (const thunder of thunderRecord) {
+      thunder.isEvaluate = true;
 
-      const user = await User.findById((evaluate as any).userId).populate(
-        'thunderRecords',
-      );
-
-      for (const thunder of user.thunderRecords) {
-        if ((thunder as any).thunderId == thunderId) {
-          (thunder as any).isEvaluate = true;
-
-          await ThunderRecord.findByIdAndUpdate(thunder, {
-            isEvaluate: (thunder as any).isEvaluate,
-          });
-        }
-      }
+      await ThunderRecord.findByIdAndUpdate(thunder, {
+        isEvaluate: (thunder as any).isEvaluate,
+      });
     }
 
     return;
