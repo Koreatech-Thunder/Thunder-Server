@@ -79,10 +79,10 @@ const deleteUser = async (userId: string) => {
     const thunderNotToDelete = await Thunder.find({
       _id: {$in: thunderList},
       'members.0': {$in: idList},
-      deadline: {$gt: currentTime},
+      deadline: {$lt: currentTime},
     });
 
-    //console.log(thunderNotToDelete);
+    console.log(thunderNotToDelete);
 
     if (thunderNotToDelete.length > 0) {
       throw errorGenerator({
