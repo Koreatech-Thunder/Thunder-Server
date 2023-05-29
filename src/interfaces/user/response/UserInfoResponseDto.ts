@@ -1,6 +1,7 @@
 export interface UserInfoResponseDto {
-  name: String;
-  introduction: String;
+  name: string;
+  introduction: string;
   hashtags: string[];
   mannerTemperature: Number;
+  profile: string;
 }

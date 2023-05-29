@@ -53,6 +53,11 @@ const UserSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+
+  profile: {
+    type: String,
+    default: 'RAIN',
+  },
 });
 
 export default mongoose.model<UserInfo & mongoose.Document>('User', UserSchema);

@@ -134,6 +134,7 @@ const getUserProfile = async (userId: string) => {
       introduction: data.introduction as string,
       hashtags: data.hashtags as [string],
       mannerTemperature: data.mannerTemperature as number,
+      profile: data.profile as string,
     };
 
     return result;

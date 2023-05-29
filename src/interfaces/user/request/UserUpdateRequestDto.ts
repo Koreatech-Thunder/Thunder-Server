@@ -12,4 +12,5 @@ export interface UserUpdateRequestDto {
   isAlarms?: [Boolean];
   isReport?: Boolean;
   reportCount?: number;
+  profile?: string;
 }

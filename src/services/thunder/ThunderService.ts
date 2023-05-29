@@ -140,6 +140,7 @@ const getThunderAll = async (
             userId: (user.userId as any)._id,
             name: (user.userId as any).name,
             introduction: (user.userId as any).introduction,
+            profile: (user.userId as any).profile,
             hashtags: (user.userId as any).hashtags,
             mannerTemperature: (user.userId as any).mannerTemperature,
           };
@@ -227,6 +228,7 @@ const getThunderByHashtag = async (
             userId: (user.userId as any)._id,
             name: (user.userId as any).name,
             introduction: (user.userId as any).introduction,
+            profile: (user.userId as any).profile,
             hashtags: (user.userId as any).hashtags,
             mannerTemperature: (user.userId as any).mannerTemperature,
           };
