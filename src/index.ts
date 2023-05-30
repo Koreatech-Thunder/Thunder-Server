@@ -61,11 +61,11 @@ const io = socketio(server, {
 
 io.on('connect', (socket: any) => {
   const accessToken = socket.handshake.headers.authorization;
- // console.log(`연결 성공 - 소켓ID: ${socket.id}`);
+  // console.log(`연결 성공 - 소켓ID: ${socket.id}`);
 
   socket.on('subscribeChatRoom', () => {
     // 채팅방 목록 진입
-   // console.log(`채팅방 목록 진입 성공 - 소켓ID: ${socket.id}`);
+    // console.log(`채팅방 목록 진입 성공 - 소켓ID: ${socket.id}`);
     const decoded = jwt.decode(accessToken);
     const userId = (decoded as any).user.id;
     const thunders: Promise<ThunderInfo[]> =
@@ -82,13 +82,13 @@ io.on('connect', (socket: any) => {
 
             const foundUserId = foundChatRoom.userId;
             if (userId === foundUserId.toString()) {
-     //         console.log('scChatRoom - connect state changed!');
+              //         console.log('scChatRoom - connect state changed!');
               //console.log('s1: ', foundChatRoom);
               await PersonalChatRoom.findByIdAndUpdate(foundChatRoom._id, {
                 isConnect: true,
               });
 
-    //          console.log('state: ', foundChatRoom);
+              //          console.log('state: ', foundChatRoom);
             }
             tempMember.push(foundChatRoom._id);
           } catch (err) {
@@ -106,7 +106,7 @@ io.on('connect', (socket: any) => {
 
   socket.on('unsubscribeChatRoom', () => {
     // 채팅방 목록 이탈
-   // console.log(`채팅방 목록 이탈 성공 - 소켓ID: ${socket.id}`);
+    // console.log(`채팅방 목록 이탈 성공 - 소켓ID: ${socket.id}`);
     const decoded = jwt.decode(accessToken);
     const userId = (decoded as any).user.id;
     const thunders: Promise<ThunderInfo[]> =
@@ -122,12 +122,12 @@ io.on('connect', (socket: any) => {
 
             const foundUserId = foundChatRoom.userId;
             if (userId === foundUserId.toString()) {
-     //         console.log('unscChatRoom - connect state changed!');
+              //         console.log('unscChatRoom - connect state changed!');
               //console.log('lastState: ', foundChatRoom);
               await PersonalChatRoom.findByIdAndUpdate(foundChatRoom._id, {
                 isConnect: false,
               });
-    //          console.log('state: ', foundChatRoom);
+              //          console.log('state: ', foundChatRoom);
             }
             tempMember.push(foundChatRoom._id);
           } catch (err) {
@@ -144,7 +144,7 @@ io.on('connect', (socket: any) => {
   });
 
   socket.on('subscribeChat', async (thunderId: any) => {
-   // console.log(`채팅방 진입 성공 - 소켓ID: ${socket.id}`);
+    // console.log(`채팅방 진입 성공 - 소켓ID: ${socket.id}`);
     const decoded = jwt.decode(accessToken);
     const userId = (decoded as any).user.id;
 
@@ -167,12 +167,12 @@ io.on('connect', (socket: any) => {
         const foundUserId = foundChatRoom.userId;
 
         if (userId === foundUserId.toString()) {
-     //     console.log('scChat - connect state changed!');
+          //     console.log('scChat - connect state changed!');
           //console.log('lastState: ', foundChatRoom);
           await PersonalChatRoom.findByIdAndUpdate(foundChatRoom._id, {
             isConnect: true,
           });
-     //     console.log('state: ', foundChatRoom);
+          //     console.log('state: ', foundChatRoom);
         }
 
         tempMember.push(foundChatRoom._id);
@@ -189,7 +189,7 @@ io.on('connect', (socket: any) => {
   });
 
   socket.on('unsubscribeChat', async (thunderId: any) => {
-   // console.log(`채팅방 이탈 성공 - 소켓ID: ${socket.id}`);
+    // console.log(`채팅방 이탈 성공 - 소켓ID: ${socket.id}`);
     const decoded = jwt.decode(accessToken);
     const userId = (decoded as any).user.id;
 
@@ -211,12 +211,12 @@ io.on('connect', (socket: any) => {
 
         const foundUserId = foundChatRoom.userId;
         if (userId === foundUserId.toString()) {
-        //  console.log('unscChat - connect state changed!');
+          //  console.log('unscChat - connect state changed!');
           //console.log('lastState: ', foundChatRoom);
           await PersonalChatRoom.findByIdAndUpdate(foundChatRoom._id, {
             isConnect: false,
           });
-       //   console.log('state: ', foundChatRoom);
+          //   console.log('state: ', foundChatRoom);
         }
 
         tempMember.push(foundChatRoom._id);
@@ -254,6 +254,7 @@ io.on('connect', (socket: any) => {
       const userDto: ChatUserDto = {
         userId: userId,
         name: userInfo.name,
+        profile: userInfo.profile,
       };
       const chatDto: ChatDto = {
         id: chatEntity.id,
@@ -291,16 +292,16 @@ io.on('connect', (socket: any) => {
               });
             } else {
               const isConnect = foundChatRoom.isConnect;
-   /*           console.log(
+              /*           console.log(
                 'isConnect of ',
                 foundChatRoom.userId,
                 ' : ',
                 isConnect,
               );*/
               const isAlarm = foundChatRoom.isAlarm;
- //             console.log('isAlarm of ', foundChatRoom.userId, ' : ', isAlarm);
- //             console.log('userId: ', foundChatRoom.userId);
-             /* console.log(
+              //             console.log('isAlarm of ', foundChatRoom.userId, ' : ', isAlarm);
+              //             console.log('userId: ', foundChatRoom.userId);
+              /* console.log(
                 '전체알람설정 : ',
                 await chattingHandler.isAlarm(foundChatRoom.userId.toString()),
               );*/
@@ -326,8 +327,8 @@ io.on('connect', (socket: any) => {
   });
 
   socket.on('disconnect', (reason: any) => {
-//    console.log(reason);
-  //  console.log(`연결 종료 - 소켓ID: ${socket.id}`);
+    console.log(reason);
+    console.log(`연결 종료 - 소켓ID: ${socket.id}`);
     socket.rooms.forEach((room: any) => {
       socket.leave(room);
     });

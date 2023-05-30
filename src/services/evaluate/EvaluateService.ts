@@ -109,6 +109,7 @@ const getUserEvaluateInfo = async (
         const userInfo = {
           userId: evaluateInfoId,
           name: user.name,
+          profile: user.profile,
         };
         return userInfo;
       }),

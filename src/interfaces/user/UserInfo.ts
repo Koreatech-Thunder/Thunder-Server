@@ -11,4 +11,5 @@ export interface UserInfo {
   isAlarms?: [Boolean];
   isReport?: Boolean;
   reportCount?: number;
+  profile: string;
 }

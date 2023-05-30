@@ -76,6 +76,7 @@ const getChatRooms = async (userId: string): Promise<ChatRoomDto[]> => {
               // 채팅에서 보여질 유저 정보.
               userId: sender.id,
               name: sender.name as string,
+              profile: sender.profile as string,
             },
             createdAt: dayjs(lastChat.createdAt).format('MM/DD HH:mm'),
             state: state,
@@ -141,6 +142,7 @@ const getChatRoomDetail = async (
         userDto = {
           userId: '',
           name: '(알 수 없음)',
+          profile: '',
         };
       } else {
         // 아닐 시 보낸 유저 ID가 현재 유저 ID와 같으면 state = ME (오른쪽), 아니면 OTHER (왼쪽)
@@ -154,6 +156,7 @@ const getChatRoomDetail = async (
           // 채팅에서 보여질 유저 정보.
           userId: sender.id,
           name: sender.name as string,
+          profile: sender.profile as string,
         };
       }
 
