@@ -142,7 +142,7 @@ const getChatRoomDetail = async (
         userDto = {
           userId: '',
           name: '(알 수 없음)',
-          profile: '',
+          profile: 'RAIN',
         };
       } else {
         // 아닐 시 보낸 유저 ID가 현재 유저 ID와 같으면 state = ME (오른쪽), 아니면 OTHER (왼쪽)
