@@ -59,6 +59,7 @@ const getChatRooms = async (userId: string): Promise<ChatRoomDto[]> => {
 
         if (lastChat) {
           const sender = await User.findById(lastChat.sender);
+          console.log(sender);
 
           let cid;
           let cname;
