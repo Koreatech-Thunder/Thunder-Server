@@ -72,7 +72,7 @@ const getChatRooms = async (userId: string): Promise<ChatRoomDto[]> => {
             cprofile = sender.profile;
           } else if (sender.id == null) {
             state = 'OTHER';
-            cid = null;
+            cid = '';
             cname = '(알 수 없음)';
             cprofile = 'RAIN';
           } else {
