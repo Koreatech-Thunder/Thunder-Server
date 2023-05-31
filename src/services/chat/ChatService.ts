@@ -65,18 +65,18 @@ const getChatRooms = async (userId: string): Promise<ChatRoomDto[]> => {
           let cname;
           let cprofile;
 
-          if (sender.id == user.id) {
-            console.log(sender.id, user.id);
-            state = 'ME';
-            cid = sender.id;
-            cname = sender.name;
-            cprofile = sender.profile;
-          } else if (sender == null) {
+          if (sender == null) {
             console.log('null');
             state = 'OTHER';
             cid = '';
             cname = '(알 수 없음)';
             cprofile = 'RAIN';
+          } else if (sender.id == user.id) {
+            console.log(sender.id, user.id);
+            state = 'ME';
+            cid = sender.id;
+            cname = sender.name;
+            cprofile = sender.profile;
           } else {
             console.log(sender.id, user.id);
             state = 'OTHER';
