@@ -99,7 +99,7 @@ const getChatRooms = async (userId: string): Promise<ChatRoomDto[]> => {
             state: state,
           };
 
-          console.log(lastChat.id, cid);
+          //console.log(lastChat.id, cid);
         }
 
         const result: ChatRoomDto = {
