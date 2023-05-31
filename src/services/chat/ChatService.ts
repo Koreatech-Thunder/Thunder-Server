@@ -96,6 +96,8 @@ const getChatRooms = async (userId: string): Promise<ChatRoomDto[]> => {
             createdAt: dayjs(lastChat.createdAt).format('MM/DD HH:mm'),
             state: state,
           };
+
+          console.log(lastChat.id, cid);
         }
 
         const result: ChatRoomDto = {
