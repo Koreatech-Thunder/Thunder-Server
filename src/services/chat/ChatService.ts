@@ -60,12 +60,27 @@ const getChatRooms = async (userId: string): Promise<ChatRoomDto[]> => {
         if (lastChat) {
           const sender = await User.findById(lastChat.sender);
 
+          let cid;
+          let cname;
+          let cprofile;
+
           if (sender.id == user.id) {
             //console.log(sender.id, user.id);
             state = 'ME';
+            cid = sender.id;
+            cname = sender.name;
+            cprofile = sender.profile;
+          } else if (sender.id == null) {
+            state = 'OTHER';
+            cid = null;
+            cname = '(알 수 없음)';
+            cprofile = 'RAIN';
           } else {
             //console.log(sender.id, user.id);
             state = 'OTHER';
+            cid = sender.id;
+            cname = sender.name;
+            cprofile = sender.profile;
           }
 
           lastChatToSend = {
@@ -74,9 +89,9 @@ const getChatRooms = async (userId: string): Promise<ChatRoomDto[]> => {
             message: lastChat.message,
             user: {
               // 채팅에서 보여질 유저 정보.
-              userId: sender.id,
-              name: sender.name as string,
-              profile: sender.profile as string,
+              userId: cid,
+              name: cname as string,
+              profile: cprofile as string,
             },
             createdAt: dayjs(lastChat.createdAt).format('MM/DD HH:mm'),
             state: state,
