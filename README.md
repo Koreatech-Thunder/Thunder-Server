@@ -1,21 +1,20 @@
 ![스크린샷 2023-09-09 145437](https://github.com/Koreatech-Thunder/Thunder-Server/assets/74229148/7324b0a2-9472-44d4-8e35-a84cbb8effcf)
 
 
-🤔 한국기술교육대학교 학생들을 위한 즉석 모임 서비스
+⚡ 한국기술교육대학교 학생들을 위한 즉석 모임 서비스
+
 코로나 19 모임이 힘든 학생들을 위한, 신뢰성 있는 재학생들만을 위한 공간이 필요할 때, 어떻게 해야할까요?
 
-# [😎 muzily.app](https://muzily.app)
-Muzily는 카페, 여행, 동아리 등 모두가 듣고 싶은 노래를 즐기고 싶은 상황을 위한 실시간 플레이리스트 공유 서비스입니다. 유튜브 API를 활용해 접근성을 높였으며, QR코드로 빠르게 공유하고 웹/모바일 각자의 상황에 맞게 곡을 신청하고 반응할 수 있습니다.
+# 📘 HanBun 소개
+HanBun 한국기술교육대학교 학생들을 위한 즉석 모임 서비스입니다. 코로나 19 이후 즉석 모임을 구하기 쉽지 않은 상황과 기존 애플리케이션의 문제점을 고안하여 더 나은 서비스를 제공하기 위한 목적입니다. 한국기술교육대학교 학생들의 상황을 개선하고, 재학생들의 대학 생활 질과 만족도를 높이기 위한 목적을 추구합니다.
 
-지금 Muzily로 함께 플레이리스트를 만들어보세요!
-
-## 🏆 [HanBun](https://mash-up.kr) 12기 프로젝트 1등 수상
-<img width="400px" src="https://user-images.githubusercontent.com/61593290/190533444-34b3550d-7282-45ce-b9bb-4ff19e5176b1.jpeg">
+지금 HanBun으로 함께 간단한 모임을 즐겨보세요!
 
 ## ⭐️ 주요 기능
-| <img width="200px" src="C:\Users\한송이\Pictures\Screenshots\스크린샷 2023-09-09 145437.png"> |<img width="200px" src="https://user-images.githubusercontent.com/61593290/190435528-16559e99-dca2-4dc9-9a5a-9e569b40cb64.gif"> |
+| <img width="200px" src="![스크린샷 2023-09-09 151413](https://github.com/Koreatech-Thunder/Thunder-Server/assets/74229148/ee83d841-b560-4b5b-a114-f6a90ae8b920)
+"> |<img width="200px" src="https://user-images.githubusercontent.com/61593290/190435528-16559e99-dca2-4dc9-9a5a-9e569b40cb64.gif"> |
 | --- | --- |
-| 방 입장하기 | 곡 추가하기 |
+| 방 생하기 | 곡 추가하기 |
 |  <img width="200px" src="https://user-images.githubusercontent.com/61593290/190435554-b8a5f52a-fb15-4e64-8144-55f7b25a2e86.gif">  | <img width="200px" src="https://user-images.githubusercontent.com/61593290/190435571-78226e2a-1142-49c1-b4ea-dc14f40960e3.gif"> |
 | 이모지 보내기 | 방 공유하기 |
 | <img width="200px" src="https://user-images.githubusercontent.com/61593290/190435578-8a444249-5cf9-4a1a-a9ad-970637072e3f.gif"> | <img width="200px" src="https://user-images.githubusercontent.com/61593290/190435588-bb820b60-a74d-450d-be92-02748928f6a8.gif"> |
