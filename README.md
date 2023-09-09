@@ -23,11 +23,11 @@ HanBun 한국기술교육대학교 학생들을 위한 즉석 모임 서비스�
 
 ## 🛠 사용한 기술
 
-**메인:** react, typescript, node.js
+**메인:** typescript, node.js
 
 **스타일:** Kotlin
 
-**상태 관리:** react-query, pm2
+**상태 관리:** pm2
 
 **웹 소켓:** sock.js
 
