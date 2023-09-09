@@ -1,15 +1,14 @@
-![github_muzily-web_main](C:\Users\한송이\Pictures\Screenshots\스크린샷 2023-09-09 145437.png)
+<img width="200px" src="C:\Users\한송이\Pictures\Screenshots\스크린샷 2023-09-09 145437.png">
 
-🤔 모두의 의견을 반영하기 어려운 플레이리스트 
-
-여러 상황에서 사람들과 함께 플레이리스트를 만들며 모두가 만족할 수는 없을까요?
+🤔 한국기술교육대학교 학생들을 위한 즉석 모임 서비스
+코로나 19 모임이 힘든 학생들을 위한, 신뢰성 있는 재학생들만을 위한 공간이 필요할 때, 어떻게 해야할까요?
 
 # [😎 muzily.app](https://muzily.app)
 Muzily는 카페, 여행, 동아리 등 모두가 듣고 싶은 노래를 즐기고 싶은 상황을 위한 실시간 플레이리스트 공유 서비스입니다. 유튜브 API를 활용해 접근성을 높였으며, QR코드로 빠르게 공유하고 웹/모바일 각자의 상황에 맞게 곡을 신청하고 반응할 수 있습니다.
 
 지금 Muzily로 함께 플레이리스트를 만들어보세요!
 
-## 🏆 [Mash Up](https://mash-up.kr) 12기 프로젝트 1등 수상
+## 🏆 [HanBun](https://mash-up.kr) 12기 프로젝트 1등 수상
 <img width="400px" src="https://user-images.githubusercontent.com/61593290/190533444-34b3550d-7282-45ce-b9bb-4ff19e5176b1.jpeg">
 
 ## ⭐️ 주요 기능
