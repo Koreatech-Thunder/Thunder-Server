@@ -12,7 +12,7 @@ Muzily는 카페, 여행, 동아리 등 모두가 듣고 싶은 노래를 즐기
 <img width="400px" src="https://user-images.githubusercontent.com/61593290/190533444-34b3550d-7282-45ce-b9bb-4ff19e5176b1.jpeg">
 
 ## ⭐️ 주요 기능
-| <img width="200px" src="https://user-images.githubusercontent.com/61593290/190440234-ad2622a3-fb19-4fc0-8d72-032cbd03fcb1.gif"> |<img width="200px" src="https://user-images.githubusercontent.com/61593290/190435528-16559e99-dca2-4dc9-9a5a-9e569b40cb64.gif"> |
+| <img width="200px" src="C:\Users\한송이\Pictures\Screenshots\스크린샷 2023-09-09 145437.png"> |<img width="200px" src="https://user-images.githubusercontent.com/61593290/190435528-16559e99-dca2-4dc9-9a5a-9e569b40cb64.gif"> |
 | --- | --- |
 | 방 입장하기 | 곡 추가하기 |
 |  <img width="200px" src="https://user-images.githubusercontent.com/61593290/190435554-b8a5f52a-fb15-4e64-8144-55f7b25a2e86.gif">  | <img width="200px" src="https://user-images.githubusercontent.com/61593290/190435571-78226e2a-1142-49c1-b4ea-dc14f40960e3.gif"> |
