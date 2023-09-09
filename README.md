@@ -11,12 +11,14 @@ HanBun 한국기술교육대학교 학생들을 위한 즉석 모임 서비스�
 지금 HanBun으로 함께 간단한 모임을 즐겨보세요!
 
 ## ⭐️ 주요 기능
+| <img width="200px" src="https://github.com/Koreatech-Thunder/Thunder-Server/assets/74229148/ee83d841-b560-4b5b-a114-f6a90ae8b920"> |<img width="200px" src="https://user-images.githubusercontent.com/61593290/190435528-16559e99-dca2-4dc9-9a5a-9e569b40cb64.gif"> |
 | --- | --- |
 | 방 생하기 | 곡 추가하기 |
-|  <img width="200px" src="![스크린샷 2023-09-09 151413](https://github.com/Koreatech-Thunder/Thunder-Server/assets/74229148/ee83d841-b560-4b5b-a114-f6a90ae8b920)">  | <img width="200px" src="https://user-images.githubusercontent.com/61593290/190435571-78226e2a-1142-49c1-b4ea-dc14f40960e3.gif"> |
+|  <img width="200px" src="https://user-images.githubusercontent.com/61593290/190435554-b8a5f52a-fb15-4e64-8144-55f7b25a2e86.gif">  | <img width="200px" src="https://user-images.githubusercontent.com/61593290/190435571-78226e2a-1142-49c1-b4ea-dc14f40960e3.gif"> |
 | 이모지 보내기 | 방 공유하기 |
 | <img width="200px" src="https://user-images.githubusercontent.com/61593290/190435578-8a444249-5cf9-4a1a-a9ad-970637072e3f.gif"> | <img width="200px" src="https://user-images.githubusercontent.com/61593290/190435588-bb820b60-a74d-450d-be92-02748928f6a8.gif"> |
 | 곡 신청 수락 / 거절하기 | 곡 순서 변경하기 |
+
 
 
 ## 🛠 사용한 기술
