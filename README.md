@@ -1,4 +1,5 @@
-<img width="200px" src="C:\Users\한송이\Pictures\Screenshots\스크린샷 2023-09-09 145437.png">
+![스크린샷 2023-09-09 145437](https://github.com/Koreatech-Thunder/Thunder-Server/assets/74229148/7324b0a2-9472-44d4-8e35-a84cbb8effcf)
+
 
 🤔 한국기술교육대학교 학생들을 위한 즉석 모임 서비스
 코로나 19 모임이 힘든 학생들을 위한, 신뢰성 있는 재학생들만을 위한 공간이 필요할 때, 어떻게 해야할까요?
