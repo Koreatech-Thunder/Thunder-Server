@@ -13,7 +13,7 @@ HanBun 한국기술교육대학교 학생들을 위한 즉석 모임 서비스�
 ## ⭐️ 주요 기능
 | <img width="180px" src="https://github.com/Koreatech-Thunder/Thunder-Server/assets/74229148/ee83d841-b560-4b5b-a114-f6a90ae8b920"> |<img width="180px" src="https://github.com/Koreatech-Thunder/Thunder-Server/assets/74229148/0c2ab841-9b64-4dd1-8d8f-f1887ade501b"> |
 | --- | --- |
-| 방 생하기 | 채팅 목록 보기 |
+| 방 생성하기 | 채팅 목록 보기 |
 |  <img width="180px" src="https://github.com/Koreatech-Thunder/Thunder-Server/assets/74229148/3442ef60-7538-47e4-8ec7-c6e78861fc0b">  | <img width="180px" src="https://github.com/Koreatech-Thunder/Thunder-Server/assets/74229148/d75115f0-abb8-47c1-bc38-a53c0a027036"> |
 | 채팅하기 | 평가하기 |
 | <img width="180px" src="https://github.com/Koreatech-Thunder/Thunder-Server/assets/74229148/9906e427-6a96-448c-a768-d5510ca1bd29"> | <img width="180px" src="https://github.com/Koreatech-Thunder/Thunder-Server/assets/74229148/32e22351-44f2-4892-81be-d6b3c0f7e959"> |
@@ -33,12 +33,3 @@ HanBun 한국기술교육대학교 학생들을 위한 즉석 모임 서비스�
 
 **데이터베이스:** mongoDB
 
-
-### ℹ️ 배포 상태
-
-- 메인: [![Netlify Status](https://api.netlify.com/api/v1/badges/492f95ef-f05c-4e15-bb89-0435f1368c4c/deploy-status)](https://app.netlify.com/sites/musily/deploys) [muzily.app](https://muzily.app)
-- 개발: [![Netlify Status](https://api.netlify.com/api/v1/badges/616fc88b-d5ab-47f1-8f72-80f4dc274e29/deploy-status)](https://app.netlify.com/sites/developmusily/deploys) [dev.muzily.app](https://dev.muzily.app)
-
-### 🔗 연관 레포지토리
-
-- [muzily_backend_spring](https://github.com/mash-up-kr/ladder_backend_spring)
