@@ -11,25 +11,27 @@ HanBun 한국기술교육대학교 학생들을 위한 즉석 모임 서비스�
 지금 HanBun으로 함께 간단한 모임을 즐겨보세요!
 
 ## ⭐️ 주요 기능
-| <img width="180px" src="https://github.com/Koreatech-Thunder/Thunder-Server/assets/74229148/ee83d841-b560-4b5b-a114-f6a90ae8b920"> |<img width="180px" src="https://user-images.githubusercontent.com/61593290/190435528-16559e99-dca2-4dc9-9a5a-9e569b40cb64.gif"> |
+| <img width="180px" src="https://github.com/Koreatech-Thunder/Thunder-Server/assets/74229148/ee83d841-b560-4b5b-a114-f6a90ae8b920"> |<img width="180px" src="https://github.com/Koreatech-Thunder/Thunder-Server/assets/74229148/0c2ab841-9b64-4dd1-8d8f-f1887ade501b"> |
 | --- | --- |
-| 방 생하기 | 곡 추가하기 |
-|  <img width="180px" src="https://github.com/Koreatech-Thunder/Thunder-Server/assets/74229148/3442ef60-7538-47e4-8ec7-c6e78861fc0b">  | <img width="180px" src="https://user-images.githubusercontent.com/61593290/190435571-78226e2a-1142-49c1-b4ea-dc14f40960e3.gif"> |
-| 채팅하기 | 방 공유하기 |
-| <img width="180px" src="https://user-images.githubusercontent.com/61593290/190435578-8a444249-5cf9-4a1a-a9ad-970637072e3f.gif"> | <img width="180px" src="https://user-images.githubusercontent.com/61593290/190435588-bb820b60-a74d-450d-be92-02748928f6a8.gif"> |
-| 곡 신청 수락 / 거절하기 | 곡 순서 변경하기 |
+| 방 생하기 | 채팅 목록 보기 |
+|  <img width="180px" src="https://github.com/Koreatech-Thunder/Thunder-Server/assets/74229148/3442ef60-7538-47e4-8ec7-c6e78861fc0b">  | <img width="180px" src="https://github.com/Koreatech-Thunder/Thunder-Server/assets/74229148/d75115f0-abb8-47c1-bc38-a53c0a027036"> |
+| 채팅하기 | 평가하기 |
+| <img width="180px" src="https://github.com/Koreatech-Thunder/Thunder-Server/assets/74229148/9906e427-6a96-448c-a768-d5510ca1bd29"> | <img width="180px" src="https://github.com/Koreatech-Thunder/Thunder-Server/assets/74229148/32e22351-44f2-4892-81be-d6b3c0f7e959"> |
+| 참여한 채팅 목록 보기 | 알림 설정하기 |
 
 
 
 ## 🛠 사용한 기술
 
-**메인:** react, typescript, next.js
+**메인:** react, typescript, node.js
 
-**스타일:** emotion.js
+**스타일:** Kotlin
 
-**상태 관리:** react-query, recoil
+**상태 관리:** react-query, pm2
 
-**웹 소켓:** stomp.js, sock.js
+**웹 소켓:** sock.js
+
+**데이터베이스:** mongoDB
 
 
 ### ℹ️ 배포 상태
